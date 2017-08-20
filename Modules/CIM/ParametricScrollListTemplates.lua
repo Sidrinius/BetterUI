@@ -216,15 +216,18 @@ function BUI_HorizontalScrollList_Gamepad:Commit()
 end
 
 function BUI_HorizontalScrollList_Gamepad:SetActive(active)
+	dd("set active")
     if (self.active ~= active) or self.dirty then
         self.active = active
         self.dirty = false
 
         if self.active then
+	dd("set active11")
             DIRECTIONAL_INPUT:Activate(self)
             self.leftArrow:SetHidden(false)
             self.rightArrow:SetHidden(false)
         else
+	dd("set active22")
             DIRECTIONAL_INPUT:Deactivate(self)
             self.leftArrow:SetHidden(true)
             self.rightArrow:SetHidden(true)
@@ -325,13 +328,16 @@ function BUI_TabBarScrollList:New(control, leftIcon, rightIcon, data, onActivate
     list:InitializeKeybindStripDescriptors()
     list.control = control
     list:SetPlaySoundFunction(GamepadParametricScrollListPlaySound)
+	dd("tabbar inited")
     return list
 end
 function BUI_TabBarScrollList:Activate()
+	dd("activated")
     KEYBIND_STRIP:AddKeybindButtonGroup(self.keybindStripDescriptor)
     BUI_HorizontalParametricScrollList.Activate(self)
 end
 function BUI_TabBarScrollList:Deactivate()
+	dd("deactivated")
     KEYBIND_STRIP:RemoveKeybindButtonGroup(self.keybindStripDescriptor)
     BUI_HorizontalParametricScrollList.Deactivate(self)
 end
@@ -351,6 +357,7 @@ function BUI_TabBarScrollList:InitializeKeybindStripDescriptors()
             keybind = "UI_SHORTCUT_RIGHT_SHOULDER",
             ethereal = true,
             callback = function()
+				dd("shoulder right")
                 if self.active then
                     self:MoveNext(BUI.Settings.Modules["Inventory"].enableWrapping)
                 end
@@ -427,6 +434,7 @@ function BUI_TabBarScrollList:MovePrevious(allowWrapping, suppressFailSound)
     return succeeded
 end
 function BUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
+	dd("test")
     local succeeded = ZO_ParametricScrollList.MoveNext(self)
     if not succeeded and allowWrapping then
         ZO_ConveyorSceneFragment_ReverseAnimationDirectionForBehavior(ZO_ParametricScrollList.SetFirstIndexSelected, self) --Wrap
@@ -521,12 +529,9 @@ end
 
 
 BUI_Gamepad_ParametricList_Screen = ZO_Gamepad_ParametricList_Screen:Subclass()
-
-function BUI_Gamepad_ParametricList_Screen:New(...)
-    local object = ZO_Gamepad_ParametricList_Screen.New(self)
-    object:Initialize(...)
-    return object
+function BUI_Gamepad_ParametricList_Screen:PerformUpdate()
 end
+ 
 
 function BUI_Gamepad_ParametricList_Screen:Initialize(control, createTabBar, activateOnShow, scene)
     control.owner = self

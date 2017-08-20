@@ -216,7 +216,8 @@ function BUI.LoadModules()
 				BUI.Inventory.Setup()
 			end
 			if(BUI.Settings.Modules["Banking"].m_enabled) then
-				BUI.Banking.Setup()
+				--BUI.Banking.Setup()
+				BUI.Bank.Init()
 			end
 		end
 		if(BUI.Settings.Modules["Writs"].m_enabled) then

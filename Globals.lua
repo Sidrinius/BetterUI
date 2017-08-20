@@ -71,6 +71,12 @@ BUI.DefaultSettings = {
 	}
 }
 
+local isDebug = true
+function dd(str)
+	if isDebug then
+		d("|c0066ff[BUI]|r "..str)
+	end
+end
 
 function ddebug(str)
 	return d("|c0066ff[BUI]|r "..str)

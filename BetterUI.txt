@@ -111,6 +111,11 @@ Modules\Banking\WithdrawDeposit.lua
 Modules\Banking\Banking.lua
 Modules\Banking\Module.lua
 
+Modules\GeneralInterface\GeneralWindow.lua
+
+Modules\Banking\Templates\BankWindow.xml
+Modules\Banking\BankWindow.lua
+
 ; Module: Writ Unit
 Modules\WritUnit\Templates\WritsPanel.xml
 Modules\WritUnit\Writ.lua
