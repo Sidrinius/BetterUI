@@ -249,6 +249,7 @@ function BUI.Initialize(event, addon)
 		local m_Store = BUI.ModuleOptions(BUI.GuildStore, BUI.Settings.Modules["Store"])
 		local m_Tooltips = BUI.ModuleOptions(BUI.Tooltips, BUI.Settings.Modules["Tooltips"])
 
+		d("first install!")
 		BUI.Settings.firstInstall = false
 	end
 

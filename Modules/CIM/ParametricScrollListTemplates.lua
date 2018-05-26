@@ -415,7 +415,7 @@ function BUI_TabBarScrollList:MovePrevious(allowWrapping, suppressFailSound)
         self.onPlaySoundFunction(ZO_TABBAR_MOVEMENT_TYPES.PAGE_NAVIGATION_FAILED)
     end
     if(self.MovePrevCallback ~= nil) then self.MovePrevCallback(self.parent, succeeded) end
-    return succeeded
+        return succeeded
 end
 function BUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
     local succeeded = ZO_ParametricScrollList.MoveNext(self)
@@ -430,7 +430,7 @@ function BUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
         self.onPlaySoundFunction(ZO_TABBAR_MOVEMENT_TYPES.PAGE_NAVIGATION_FAILED)
     end
     if(self.MoveNextCallback ~= nil) then self.MoveNextCallback(self.parent, succeeded) end
-    return succeeded
+        return succeeded
 end
 
 

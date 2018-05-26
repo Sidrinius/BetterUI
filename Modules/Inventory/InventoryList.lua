@@ -60,6 +60,13 @@ local function GetCategoryFromItemType(itemType)
             ITEMTYPE_GLYPH_JEWELRY == itemType then
         return GAMEPAD_ITEM_CATEGORY_GLYPHS
 
+    -- Jewelry Crafting
+    elseif  ITEMTYPE_JEWELRYCRAFTING_RAW_MATERIAL == itemType or
+    		ITEMTYPE_JEWELRYCRAFTING_MATERIAL == itemType or
+            ITEMTYPE_JEWELRYCRAFTING_RAW_BOOSTER == itemType or
+            ITEMTYPE_JEWELRYCRAFTING_BOOSTER == itemType then
+        return GAMEPAD_ITEM_CATEGORY_JEWELRYCRAFTING
+
     -- Potion
     elseif  ITEMTYPE_POTION == itemType then
         return GAMEPAD_ITEM_CATEGORY_POTION

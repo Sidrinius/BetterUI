@@ -109,39 +109,6 @@ local function WrapValue(newValue, maxValue)
     return newValue
 end
 
-
-function BUI_TabBar_OnTabNext(parent, successful)
-    if(successful) then
-        parent:SaveListPosition()
-
-        parent.categoryList.targetSelectedIndex = WrapValue(parent.categoryList.targetSelectedIndex + 1, #parent.categoryList.dataList)
-        parent.categoryList.selectedIndex = parent.categoryList.targetSelectedIndex
-        parent.categoryList.selectedData = parent.categoryList.dataList[parent.categoryList.selectedIndex]
-        parent.categoryList.defaultSelectedIndex = parent.categoryList.selectedIndex
-
-        --parent:RefreshItemList()
-		BUI.GenericHeader.SetTitleText(parent.header, parent.categoryList.selectedData.text)
-
-        parent:ToSavedPosition()
-    end
-end
-function BUI_TabBar_OnTabPrev(parent, successful)
-    if(successful) then
-        parent:SaveListPosition()
-
-        parent.categoryList.targetSelectedIndex = WrapValue(parent.categoryList.targetSelectedIndex - 1, #parent.categoryList.dataList)
-        parent.categoryList.selectedIndex = parent.categoryList.targetSelectedIndex
-        parent.categoryList.selectedData = parent.categoryList.dataList[parent.categoryList.selectedIndex]
-        parent.categoryList.defaultSelectedIndex = parent.categoryList.selectedIndex
-
-        --parent:RefreshItemList()
-		BUI.GenericHeader.SetTitleText(parent.header, parent.categoryList.selectedData.text)
-
-        parent:ToSavedPosition()
-    end
-end
-
-
 function BUI.Inventory.Class:ToSavedPosition()
     if self.categoryList.selectedData ~= nil then
         if not self.categoryList:GetTargetData().onClickDirection then
@@ -184,13 +151,43 @@ function BUI.Inventory.Class:ToSavedPosition()
 
 end
 
+function BUI_TabBar_OnTabNext(parent, successful)
+    if(successful) then
+        parent:SaveListPosition()
+
+        parent.categoryList.targetSelectedIndex = WrapValue(parent.categoryList.targetSelectedIndex + 1, #parent.categoryList.dataList)
+        parent.categoryList.selectedIndex = parent.categoryList.targetSelectedIndex
+        parent.categoryList.selectedData = parent.categoryList.dataList[parent.categoryList.selectedIndex]
+        parent.categoryList.defaultSelectedIndex = parent.categoryList.selectedIndex
+
+        --parent:RefreshItemList()
+		BUI.GenericHeader.SetTitleText(parent.header, parent.categoryList.selectedData.text)
+
+        parent:ToSavedPosition()
+    end
+end
+function BUI_TabBar_OnTabPrev(parent, successful)
+    if(successful) then
+        parent:SaveListPosition()
+
+        parent.categoryList.targetSelectedIndex = WrapValue(parent.categoryList.targetSelectedIndex - 1, #parent.categoryList.dataList)
+        parent.categoryList.selectedIndex = parent.categoryList.targetSelectedIndex
+        parent.categoryList.selectedData = parent.categoryList.dataList[parent.categoryList.selectedIndex]
+        parent.categoryList.defaultSelectedIndex = parent.categoryList.selectedIndex
+
+        --parent:RefreshItemList()
+		BUI.GenericHeader.SetTitleText(parent.header, parent.categoryList.selectedData.text)
+
+        parent:ToSavedPosition()
+    end
+end
 
 function BUI.Inventory.Class:SaveListPosition()
 	if self:GetCurrentList() == self.itemList then
 	    self.categoryPositions[self.categoryList.selectedIndex] = self._currentList.selectedIndex
 	else
 		self.categoryCraftPositions[self.categoryList.selectedIndex] = self._currentList.selectedIndex
-	end
+	end 
 end
 
 function BUI.Inventory.Class:InitializeCategoryList()
@@ -373,24 +370,6 @@ function BUI.Inventory.Class:RefreshCategoryList()
 	    end
 
 		do
-			local name = "Blacksmithing"
-			local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_blacksmithing.dds"
-			local data = ZO_GamepadEntryData:New(name, iconFile)
-			data.onClickDirection = "CRAFTBAG"
-			data:SetIconTintOnSelection(true)
-
-			data.filterType = ITEMFILTERTYPE_BLACKSMITHING
-
-			if not HasCraftBagAccess() then
-				data.enabled = false
-			end
-
-			self.categoryList:AddEntry("BUI_GamepadItemEntryTemplate", data)
-			BUI.GenericHeader.AddToList(self.header, data)
-			if not self.populatedCraftPos then self.categoryCraftPositions[#self.categoryCraftPositions+1] = 1 end
-		end
-
-		do
 	        local name = "Alchemy"
 	        local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_alchemy.dds"
 	        local data = ZO_GamepadEntryData:New(name, iconFile)
@@ -409,6 +388,42 @@ function BUI.Inventory.Class:RefreshCategoryList()
 	    end
 
 		do
+			local name = "Blacksmithing"
+			local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_blacksmithing.dds"
+			local data = ZO_GamepadEntryData:New(name, iconFile)
+			data.onClickDirection = "CRAFTBAG"
+			data:SetIconTintOnSelection(true)
+
+			data.filterType = ITEMFILTERTYPE_BLACKSMITHING
+
+			if not HasCraftBagAccess() then
+				data.enabled = false
+			end
+
+			self.categoryList:AddEntry("BUI_GamepadItemEntryTemplate", data)
+			BUI.GenericHeader.AddToList(self.header, data)
+			if not self.populatedCraftPos then self.categoryCraftPositions[#self.categoryCraftPositions+1] = 1 end
+		end
+
+	    do
+			local name = "Clothing"
+			local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_clothing.dds"
+			local data = ZO_GamepadEntryData:New(name, iconFile)
+			data:SetIconTintOnSelection(true)
+			data.onClickDirection = "CRAFTBAG"
+
+			data.filterType = ITEMFILTERTYPE_CLOTHING
+
+			if not HasCraftBagAccess() then
+				data.enabled = false
+			end
+
+			self.categoryList:AddEntry("BUI_GamepadItemEntryTemplate", data)
+			BUI.GenericHeader.AddToList(self.header, data)
+			if not self.populatedCraftPos then self.categoryCraftPositions[#self.categoryCraftPositions+1] = 1 end
+		end
+
+		do
 	        local name = "Enchanting"
 	        local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_enchanting.dds"
 	        local data = ZO_GamepadEntryData:New(name, iconFile)
@@ -425,6 +440,24 @@ function BUI.Inventory.Class:RefreshCategoryList()
 	        BUI.GenericHeader.AddToList(self.header, data)
 	        if not self.populatedCraftPos then self.categoryCraftPositions[#self.categoryCraftPositions+1] = 1 end
 	    end
+
+		do
+			local name = "Jewelry Crafting"
+			local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_tabicon_craftbag_jewelrycrafting.dds"
+			local data = ZO_GamepadEntryData:New(name, iconFile)
+			data:SetIconTintOnSelection(true)
+			data.onClickDirection = "CRAFTBAG"
+
+			data.filterType = ITEMFILTERTYPE_JEWELRYCRAFTING
+
+			if not HasCraftBagAccess() then
+				data.enabled = false
+			end
+
+			self.categoryList:AddEntry("BUI_GamepadItemEntryTemplate", data)
+			BUI.GenericHeader.AddToList(self.header, data)
+			if not self.populatedCraftPos then self.categoryCraftPositions[#self.categoryCraftPositions+1] = 1 end
+		end
 
 		do
 	        local name = "Provisioning"
@@ -463,24 +496,6 @@ function BUI.Inventory.Class:RefreshCategoryList()
 		end
 
 		do
-			local name = "Clothing"
-			local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_clothing.dds"
-			local data = ZO_GamepadEntryData:New(name, iconFile)
-			data:SetIconTintOnSelection(true)
-			data.onClickDirection = "CRAFTBAG"
-
-			data.filterType = ITEMFILTERTYPE_CLOTHING
-
-			if not HasCraftBagAccess() then
-				data.enabled = false
-			end
-
-			self.categoryList:AddEntry("BUI_GamepadItemEntryTemplate", data)
-			BUI.GenericHeader.AddToList(self.header, data)
-			if not self.populatedCraftPos then self.categoryCraftPositions[#self.categoryCraftPositions+1] = 1 end
-		end
-
-		do
 			local name = "Trait/Style Gems"
 			local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_itemtrait.dds"
 			local data = ZO_GamepadEntryData:New(name, iconFile)
@@ -503,12 +518,16 @@ function BUI.Inventory.Class:RefreshCategoryList()
 	else
 		self:NewCategoryItem(SI_BUI_INV_ITEM_ALL, nil, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_all.dds", BUI_InventoryUtils_All)
 
-		self:NewCategoryItem(SI_BUI_INV_ITEM_CONSUMABLE, ITEMFILTERTYPE_CONSUMABLE, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_consumables.dds")
-
 	    self:NewCategoryItem(SI_BUI_INV_ITEM_WEAPONS, ITEMFILTERTYPE_WEAPONS, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_weapons.dds")
+
 	    self:NewCategoryItem(SI_BUI_INV_ITEM_APPAREL, ITEMFILTERTYPE_ARMOR, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_apparel.dds")
 
+	    self:NewCategoryItem(SI_BUI_INV_ITEM_JEWELRY, ITEMFILTERTYPE_JEWELRY, "EsoUI/Art/Currency/Gamepad/gp_crowns_mipmap.dds")
+
+		self:NewCategoryItem(SI_BUI_INV_ITEM_CONSUMABLE, ITEMFILTERTYPE_CONSUMABLE, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_consumables.dds")
+
 	    self:NewCategoryItem(SI_BUI_INV_ITEM_MATERIALS, ITEMFILTERTYPE_CRAFTING, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_materials.dds")
+
 	    self:NewCategoryItem(SI_BUI_INV_ITEM_MISC, ITEMFILTERTYPE_MISCELLANEOUS, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_miscellaneous.dds")
 
 	    self:NewCategoryItem(SI_BUI_INV_ITEM_QUICKSLOT, ITEMFILTERTYPE_QUICKSLOT, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_quickslot.dds")
@@ -791,7 +810,8 @@ function BUI.Inventory.Class:UpdateItemLeftTooltip(selectedData)
         else
         	local showRightTooltip = false
         	if ZO_InventoryUtils_DoesNewItemMatchFilterType(selectedData, ITEMFILTERTYPE_WEAPONS) or
-        		ZO_InventoryUtils_DoesNewItemMatchFilterType(selectedData, ITEMFILTERTYPE_ARMOR) then
+        		ZO_InventoryUtils_DoesNewItemMatchFilterType(selectedData, ITEMFILTERTYPE_ARMOR) or
+        			ZO_InventoryUtils_DoesNewItemMatchFilterType(selectedData, ITEMFILTERTYPE_JEWELRY) then
         		if self.switchInfo then
         			showRightTooltip = true        			
         		end
@@ -1701,7 +1721,7 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             		if isQuickslot then
             			--assign
             			return GetString(SI_BUI_INV_ACTION_QUICKSLOT_ASSIGN)
-            		elseif filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR then
+            		elseif filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
             			--switch compare
             			return GetString(SI_BUI_INV_SWITCH_INFO)
             		end 
@@ -1718,7 +1738,7 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             		local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
             		local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
             		
-            		if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR then
+            		if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
             			return false
             		end
             		return true
@@ -1732,7 +1752,7 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             		if isQuickslot then
             			--assign
             			self:ShowQuickslot()
-            		elseif filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR then
+            		elseif filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
             			--switch compare
             			self:SwitchInfo()
             		end 

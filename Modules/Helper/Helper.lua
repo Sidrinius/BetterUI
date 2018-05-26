@@ -31,7 +31,7 @@ function BUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)
 	return "";
 end
 
-function BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex)
+function BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, moduleName)
 	if GearChangerByIakoni and GearChangerByIakoni.savedVariables then
 		local itemType = GetItemType(bagId, slotIndex)
 		if itemType == ITEMTYPE_ARMOR or itemType == ITEMTYPE_WEAPON then
@@ -45,7 +45,7 @@ function BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex)
 						if itemID==a[i][u] then
 							--find gear in set i
 							result = result .. "|t24:24:/BetterUI/Modules/Helper/Images/icon_set_" .. i .. ".dds|t"
-							if not BUI.Settings.Modules["Inventory"].showIconIakoniGearChangerAllSets then
+							if not BUI.Settings.Modules[moduleName].showIconIakoniGearChangerAllSets then
 								return result							
 							else
 								break
@@ -53,6 +53,32 @@ function BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex)
 						end
 					end
 				end
+			end
+			return result			
+		end
+	end
+	return "";
+end
+
+function BUI.Helper.AlphaGear.GetGearSet(bagId, slotIndex, moduleName)
+	if AG then
+		local itemType = GetItemType(bagId, slotIndex)
+		if itemType == ITEMTYPE_ARMOR or itemType == ITEMTYPE_WEAPON then
+			local result = "" 
+			local itemID = Id64ToString(GetItemUniqueId(bagId, slotIndex))
+			for nr=1, 16 do
+				if AG.setdata[nr].Set.gear > 0 then
+					for slot = 1,14 do
+						if AG.setdata[AG.setdata[nr].Set.gear].Gear[slot].id == itemID then 
+							result = result .. "|t24:24:/BetterUI/Modules/Helper/Images/icon_set_" .. nr .. ".dds|t"  
+							if not BUI.Settings.Modules[moduleName].showIconIakoniGearChangerAllSets then
+								return result							
+							else
+								break
+							end
+						end
+					end
+				end 
 			end
 			return result			
 		end

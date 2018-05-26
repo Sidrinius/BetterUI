@@ -1,7 +1,7 @@
 BUI = {}
 
 BUI.name = "BetterUI"
-BUI.version = "2.49"
+BUI.version = "2.52"
 
 -- Program Global (scope of BUI, though) variable initialization
 BUI.WindowManager = GetWindowManager()
@@ -59,6 +59,7 @@ BUI.Helper = {
 	GamePadBuddy = {},
 	IokaniGearChanger = {},
 	AutoCategory = {},
+	AlphaGear = {},
 }
 
 BUI.DefaultSettings = {
@@ -91,7 +92,7 @@ function Init_ModulePanel(moduleName, moduleDesc)
 		type = "panel",
 		name = "|t24:24:/esoui/art/buttons/gamepad/xbox/nav_xbone_b.dds|t "..BUI.name.." ("..moduleName..")",
 		displayName = "|c0066ffBETTERUI|r :: "..moduleDesc,
-		author = "prasoc, RockingDice",
+		author = "prasoc, RockingDice, Goobsnake",
 		version = BUI.version,
 		slashCommand = "/bui",
 		registerForRefresh = true,

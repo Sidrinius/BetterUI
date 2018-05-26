@@ -19,7 +19,7 @@ local function Init(mId, moduleName)
 		},
 		{
 			type = "header",
-			name = "|c0066FF[Enhanced Inventory]|r Icon",
+			name = "|c0066FF[Enhanced Banking]|r Icon",
 			width = "full",
 		},
 		{
@@ -60,18 +60,30 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconIakoniGearChanger = value
 				changed = true end,
 			width = "full",
+			disabled = function() return BUI.Settings.Modules["Banking"].showIconAlphaGear end,
+			warning="Needs to reload UI."
+		},
+		{
+			type = "checkbox",
+			name = "Item Icon - Alpha Gear",
+			tooltip = "Show the first set number in Alpha Gear.",
+			getFunc = function () return BUI.Settings.Modules["Banking"].showIconAlphaGear end,
+			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconAlphaGear = value
+				changed = true end,
+			width = "full",
+			disabled = function() return BUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,
 			warning="Needs to reload UI."
 		},
 		{
 			type = "checkbox",
 			name = "            Show all sets instead",
-			tooltip = "Show all sets if in multiple Iakoni's settings.",
+			tooltip = "Show all sets if in multiple settings.",
 			getFunc = function () return BUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets end,
 			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets = value
 				changed = true end,
 			width = "full",
 			warning="Needs to reload UI.",
-			disabled = function() return not BUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,  
+			disabled = function() return not BUI.Settings.Modules["Banking"].showIconIakoniGearChanger and not BUI.Settings.Modules["Banking"].showIconAlphaGear end,  
 		},		
 		{
 			type = "checkbox",
@@ -102,7 +114,8 @@ function BUI.Banking.InitModule(m_options)
 	m_options["showIconSetGear"] = true
 	m_options["showIconUnboundItem"] = true
 	m_options["showIconIakoniGearChanger"] = true
-	m_options["showIconIakoniGearChangerAllSets"] = false
+	m_options["showIconIakoniGearChangerAllSets"] = true
+	m_options["showIconAlphaGear"] = true
 	m_options["showIconGamePadBuddyStatusIcon"] = true
 	return m_options
 end

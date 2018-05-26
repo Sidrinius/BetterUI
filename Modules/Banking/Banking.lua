@@ -5,6 +5,8 @@ local BANKING_ROW_TEMPLATE = "BUI_GenericEntry_Template"
 local LIST_WITHDRAW = 1
 local LIST_DEPOSIT  = 2
 
+_G.lastUsedBank = ""
+
 local function GetCategoryTypeFromWeaponType(bagId, slotIndex)
     local weaponType = GetItemWeaponType(bagId, slotIndex)
     if weaponType == WEAPONTYPE_AXE or weaponType == WEAPONTYPE_HAMMER or weaponType == WEAPONTYPE_SWORD or weaponType == WEAPONTYPE_DAGGER then
@@ -105,7 +107,8 @@ local function SetupListing(control, data)
 		   
 		if currentItemType == ITEMTYPE_RECIPE and not IsItemLinkRecipeKnown(itemLink) then fullItemName = fullItemName.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
 		if BUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon then fullItemName = fullItemName .. BUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
-		if BUI.Settings.Modules["Banking"].showIconIakoniGearChanger then fullItemName = fullItemName .. BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex)  end
+		if BUI.Settings.Modules["Banking"].showIconIakoniGearChanger then fullItemName = fullItemName .. BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, "Banking")  end
+		if BUI.Settings.Modules["Banking"].showIconAlphaGear then fullItemName = fullItemName .. BUI.Helper.AlphaGear.GetGearSet(bagId, slotIndex, "Banking")  end
          
     end
     control:GetNamedChild("ItemType"):SetText(string.upper(data.itemCategoryName))
@@ -150,16 +153,160 @@ function BUI.Banking.Class:New(...)
 	return BUI.Interface.Window.New(self, ...)
 end
 
+function BUI.Banking.Class:LastUsedBank()
+    if((GetBankingBag() == BAG_BANK) or (GetBankingBag() == BAG_SUBSCRIBER_BANK) or (IsHouseBankBag(GetBankingBag()) == false)) then
+        _G.lastUsedBank = "Normal Bank"
+    elseif (IsHouseBankBag(GetBankingBag()) == true) then
+        _G.lastUsedBank = "House Bank"
+    else
+        self:LastUsedBank()
+    end
+end
+
 function BUI.Banking.Class:RefreshFooter()
-    self.footer.footer:GetNamedChild("DepositButtonSpaceLabel"):SetText(zo_strformat("|t24:24:/esoui/art/inventory/gamepad/gp_inventory_icon_all.dds|t <<1>>",zo_strformat(SI_GAMEPAD_INVENTORY_CAPACITY_FORMAT, GetNumBagUsedSlots(BAG_BACKPACK), GetBagSize(BAG_BACKPACK))))
-    self.footer.footer:GetNamedChild("WithdrawButtonSpaceLabel"):SetText(zo_strformat("|t24:24:/esoui/art/icons/mapkey/mapkey_bank.dds|t <<1>>",zo_strformat(SI_GAMEPAD_INVENTORY_CAPACITY_FORMAT, GetNumBagUsedSlots(BAG_BANK) + GetNumBagUsedSlots(BAG_SUBSCRIBER_BANK), GetBagUseableSize(BAG_BANK) + GetBagUseableSize(BAG_SUBSCRIBER_BANK))))
-    if(self.currentMode == LIST_WITHDRAW) then
+
+    if(IsHouseBankBag(GetBankingBag()) == false) then
+            --d(IsHouseBankBag())
+            --IsBankOpen()
+        self.footer.footer:GetNamedChild("DepositButtonSpaceLabel"):SetText(zo_strformat("|t24:24:/esoui/art/inventory/gamepad/gp_inventory_icon_all.dds|t <<1>>",zo_strformat(SI_GAMEPAD_INVENTORY_CAPACITY_FORMAT, GetNumBagUsedSlots(BAG_BACKPACK), GetBagSize(BAG_BACKPACK))))
+        self.footer.footer:GetNamedChild("WithdrawButtonSpaceLabel"):SetText(zo_strformat("|t24:24:/esoui/art/icons/mapkey/mapkey_bank.dds|t <<1>>",zo_strformat(SI_GAMEPAD_INVENTORY_CAPACITY_FORMAT, GetNumBagUsedSlots(BAG_BANK) + GetNumBagUsedSlots(BAG_SUBSCRIBER_BANK), GetBagUseableSize(BAG_BANK) + GetBagUseableSize(BAG_SUBSCRIBER_BANK))))
+    else
+        self.footer.footer:GetNamedChild("DepositButtonSpaceLabel"):SetText(zo_strformat("|t24:24:/esoui/art/inventory/gamepad/gp_inventory_icon_all.dds|t <<1>>",zo_strformat(SI_GAMEPAD_INVENTORY_CAPACITY_FORMAT, GetNumBagUsedSlots(BAG_BACKPACK), GetBagSize(BAG_BACKPACK))))
+        self.footer.footer:GetNamedChild("WithdrawButtonSpaceLabel"):SetText(zo_strformat("|t24:24:/esoui/art/icons/mapkey/mapkey_bank.dds|t <<1>>",zo_strformat(SI_GAMEPAD_INVENTORY_CAPACITY_FORMAT, GetNumBagUsedSlots(GetBankingBag()), GetBagUseableSize(GetBankingBag()))))
+    end
+
+    if((self.currentMode == LIST_WITHDRAW) and (IsHouseBankBag(GetBankingBag()) == false)) then
         self.footerFragment.control:GetNamedChild("Data1Value"):SetText(BUI.DisplayNumber(GetBankedCurrencyAmount(CURT_MONEY)))
         self.footerFragment.control:GetNamedChild("Data2Value"):SetText(BUI.DisplayNumber(GetBankedCurrencyAmount(CURT_TELVAR_STONES)))
     else
         self.footerFragment.control:GetNamedChild("Data1Value"):SetText(BUI.DisplayNumber(GetCarriedCurrencyAmount(CURT_MONEY)))
         self.footerFragment.control:GetNamedChild("Data2Value"):SetText(BUI.DisplayNumber(GetCarriedCurrencyAmount(CURT_TELVAR_STONES)))
     end
+end
+
+function BUI.Banking.Class:RefreshList()
+    --d("tt refresh bank list")
+    self.list:OnUpdate()
+    self.list:Clear()
+
+    -- We have to add 2 rows to the list, one for Withdraw/Deposit GOLD and one for Withdraw/Deposit TEL-VAR
+    local wdString = self.currentMode == LIST_WITHDRAW and GetString(SI_BUI_BANKING_WITHDRAW) or GetString(SI_BUI_BANKING_DEPOSIT)
+    wdString = zo_strformat("<<Z:1>>", wdString)
+    if(IsHouseBankBag(GetBankingBag()) == false) then
+        self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_GOLD) ..  "|r", currencyType = CURT_MONEY})
+        self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_TEL_VAR) ..  "|r", currencyType = CURT_TELVAR_STONES})
+        self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_ALLIANCE_POINT) ..  "|r", currencyType = CURT_ALLIANCE_POINTS})
+        self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_WRIT_VOUCHER) ..  "|r", currencyType = CURT_WRIT_VOUCHERS})
+    elseif(IsHouseBankBag(GetBankingBag()) == true) then
+        if((GetNumBagUsedSlots(GetBankingBag()) == 0) and (self.currentMode == LIST_WITHDRAW)) then
+            self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK IS EMPTY!|r"})
+        elseif((GetNumBagUsedSlots(BAG_BACKPACK) == 0) and (self.currentMode == LIST_DEPOSIT)) then
+            self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG IS EMPTY!|r"})
+        elseif((GetNumBagUsedSlots(BAG_BACKPACK) ~= 0) and (self.currentMode == LIST_DEPOSIT)) then
+            self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG|r"})
+        else
+            self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK|r"})
+        end        
+    end
+    --fix subscriber bank bag issue
+    checking_bags = {}
+    local slotType
+    if(self.currentMode == LIST_WITHDRAW) then
+        if(IsHouseBankBag(GetBankingBag()) == false) then
+          checking_bags[1] = BAG_BANK
+          checking_bags[2] = BAG_SUBSCRIBER_BANK
+          slotType = SLOT_TYPE_BANK_ITEM
+        else
+            checking_bags[1] = GetBankingBag()
+            slotType = SLOT_TYPE_BANK_ITEM
+        end
+    else 
+        checking_bags[1] = BAG_BACKPACK
+        slotType = SLOT_TYPE_GAMEPAD_INVENTORY_ITEM
+    end
+    
+    local function IsNotStolenItem(itemData)
+        local isNotStolen = not itemData.stolen
+        return isNotStolen
+    end
+
+    --excludes stolen items
+    local filteredDataTable = SHARED_INVENTORY:GenerateFullSlotData(IsNotStolenItem, unpack(checking_bags))
+    --d("tt bank refreshed items: " .. #filteredDataTable)
+    local tempDataTable = {}
+    for i = 1, #filteredDataTable  do
+        local itemData = filteredDataTable[i]
+        --use custom categories
+        local customCategory, matched, catName, catPriority = BUI.Helper.AutoCategory:GetCustomCategory(itemData)
+        if customCategory and not matched then
+            itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
+            itemData.bestItemCategoryName = AC_UNGROUPED_NAME
+            itemData.sortPriorityName = string.format("%03d%s", 999 , catName) 
+        else
+            if customCategory then
+                itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
+                itemData.bestItemCategoryName = catName
+                itemData.sortPriorityName = string.format("%03d%s", 100 - catPriority , catName) 
+            else
+                itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
+                itemData.bestItemCategoryName = itemData.bestItemTypeName
+                itemData.sortPriorityName = itemData.bestItemCategoryName
+            end
+        end
+        local slotIndex = GetItemCurrentActionBarSlot(itemData.bagId, itemData.slotIndex)
+        itemData.isEquippedInCurrentCategory = slotIndex and true or nil
+
+        table.insert(tempDataTable, itemData)
+        ZO_InventorySlot_SetType(itemData, slotType)
+    end
+    filteredDataTable = tempDataTable
+    
+    table.sort(filteredDataTable, BUI_GamepadInventory_DefaultItemSortComparator)
+
+    local currentBestCategoryName = nil
+
+    for i, itemData in ipairs(filteredDataTable) do
+        local nextItemData = filteredDataTable[i + 1]
+
+        local data = ZO_GamepadEntryData:New(itemData.name, itemData.iconFile)
+        data.InitializeInventoryVisualData = BUI.Inventory.Class.InitializeInventoryVisualData
+        data:InitializeInventoryVisualData(itemData)
+
+        local remaining, duration
+  
+        remaining, duration = GetItemCooldownInfo(itemData.bagId, itemData.slotIndex)
+      
+
+        if remaining > 0 and duration > 0 then
+            data:SetCooldown(remaining, duration)
+        end
+
+        data.bestItemCategoryName = itemData.bestItemCategoryName
+        data.bestGamepadItemCategoryName = itemData.bestItemCategoryName
+        data.isEquippedInCurrentCategory = itemData.isEquippedInCurrentCategory
+        data.isEquippedInAnotherCategory = itemData.isEquippedInAnotherCategory
+        data.isJunk = itemData.isJunk
+
+        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) or not BUI.Settings.Modules["Inventory"].enableJunk then
+         
+            if data.bestGamepadItemCategoryName ~= currentBestCategoryName then
+                currentBestCategoryName = data.bestGamepadItemCategoryName
+                data:SetHeader(currentBestCategoryName)
+                if((AutoCategory) and (GetNumBagUsedSlots(GetBankingBag()) ~= 0)) then
+                    self.list:AddEntryWithHeader("BUI_GamepadItemSubEntryTemplate", data)
+                else
+                    self.list:AddEntry("BUI_GamepadItemSubEntryTemplate", data)
+                end
+            else
+                self.list:AddEntry("BUI_GamepadItemSubEntryTemplate", data)
+            end
+        end
+    end
+
+    self.list:Commit()
+    self:ReturnToSaved()
+    self:UpdateActions()
+    self:RefreshFooter()
 end
 
 function BUI.Banking.Class:RefreshCurrencyTooltip()
@@ -174,21 +321,32 @@ local function OnItemSelectedChange(self, list, selectedData)
 	if not SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() then
 		return
 	end
-    if(selectedData.label ~= nil) then
-        -- Yes! We are, so add the "withdraw/deposit gold/telvar" keybinds here
-        KEYBIND_STRIP:RemoveKeybindButtonGroup(self.withdrawDepositKeybinds)
-        KEYBIND_STRIP:AddKeybindButtonGroup(self.currencyKeybinds)
-        KEYBIND_STRIP:UpdateKeybindButtonGroup(self.currencyKeybinds)
+    if(IsHouseBankBag(GetBankingBag()) == false) then
+        if(selectedData.label ~= nil) then
+            -- Yes! We are, so add the "withdraw/deposit gold/telvar" keybinds here
+            KEYBIND_STRIP:RemoveKeybindButtonGroup(self.withdrawDepositKeybinds)
+            KEYBIND_STRIP:AddKeybindButtonGroup(self.currencyKeybinds)
+            KEYBIND_STRIP:UpdateKeybindButtonGroup(self.currencyKeybinds)
 
-        --GAMEPAD_TOOLTIPS:ClearTooltip(GAMEPAD_LEFT_TOOLTIP)
-		self:RefreshCurrencyTooltip()
-    else
-        -- We are not, add the "withdraw/deposit" keybinds here
-        KEYBIND_STRIP:RemoveKeybindButtonGroup(self.currencyKeybinds)
-        KEYBIND_STRIP:AddKeybindButtonGroup(self.withdrawDepositKeybinds)
-        KEYBIND_STRIP:UpdateKeybindButtonGroup(self.withdrawDepositKeybinds)
+            --GAMEPAD_TOOLTIPS:ClearTooltip(GAMEPAD_LEFT_TOOLTIP)
+    		self:RefreshCurrencyTooltip()
+        else
+            -- We are not, add the "withdraw/deposit" keybinds here
+            KEYBIND_STRIP:RemoveKeybindButtonGroup(self.currencyKeybinds)
+            KEYBIND_STRIP:AddKeybindButtonGroup(self.withdrawDepositKeybinds)
+            KEYBIND_STRIP:UpdateKeybindButtonGroup(self.withdrawDepositKeybinds)
 
-        GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
+            GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
+        end
+    end
+    if(IsHouseBankBag(GetBankingBag()) == true) then
+        if(selectedData.label ~= nil) then
+            KEYBIND_STRIP:RemoveKeybindButtonGroup(self.currencyKeybinds)
+            KEYBIND_STRIP:UpdateKeybindButtonGroup(self.withdrawDepositKeybinds)
+            self:RefreshCurrencyTooltip()
+        else
+            GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
+        end
     end
 	
 	self:UpdateActions()
@@ -213,9 +371,8 @@ function BUI.Banking.Class:Initialize(tlw_name, scene_name)
 		--refresh list
 		if SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() then
 			--d("tt bank split")
-			SHARED_INVENTORY:PerformFullUpdateOnBagCache(BAG_BANK)
-			SHARED_INVENTORY:PerformFullUpdateOnBagCache(BAG_SUBSCRIBER_BANK)
-			self:RefreshList()
+			SHARED_INVENTORY:PerformFullUpdateOnBagCache(GetBankingBag())
+            self:RefreshVisible()
 			self:ReturnToSaved()
 		end
 	end
@@ -281,9 +438,11 @@ function BUI.Banking.Class:Initialize(tlw_name, scene_name)
 
         self.control:RegisterForEvent(EVENT_INVENTORY_FULL_UPDATE, UpdateItems_Handler)
         self.control:RegisterForEvent(EVENT_INVENTORY_SINGLE_SLOT_UPDATE, UpdateSingle_Handler)
+        self:RefreshList()
     end
 
     local function OnEffectivelyHidden()
+        self:LastUsedBank()
         self.list:Deactivate()
         self.selector:Deactivate()
 
@@ -412,7 +571,7 @@ function BUI.Banking.Class:InitializeActionsDialog()
 			--refresh so keybinds react to newly selected item
 			--self:RefreshActiveKeybinds()
 
-			self:RefreshList()
+			self:UpdateItems_Handler()
 			--if self.actionMode == CATEGORY_ITEM_ACTION_MODE then
 			--	self:RefreshCategoryList()
 			--end
@@ -449,8 +608,7 @@ end
 -- Thanks to Ayantir for the following method to quickly return the next free slotIndex!
 local tinyBagCache = {
     [BAG_BACKPACK] = {},
-    [BAG_BANK] = {},
-	[BAG_SUBSCRIBER_BANK] = {},
+    [GetBankingBag()] = {},
 }
 
 -- Thanks Merlight & circonian, FindFirstEmptySlotInBag don't refresh in realtime.
@@ -469,15 +627,22 @@ local function FindEmptySlotInBag(bagId)
 end
 
 local function FindEmptySlotInBank()
-	local emptySlotIndex = FindEmptySlotInBag(BAG_BANK)
-	if emptySlotIndex ~= nil then
-		return BAG_BANK, emptySlotIndex
-	end
-	
-	emptySlotIndex = FindEmptySlotInBag(BAG_SUBSCRIBER_BANK)
-	if emptySlotIndex ~= nil then
-		return BAG_SUBSCRIBER_BANK, emptySlotIndex
-	end
+    if(IsHouseBankBag(GetBankingBag()) == false) then
+        local emptySlotIndex = FindEmptySlotInBag(BAG_BANK)
+        if(emptySlotIndex ~= nil) then
+            return BAG_BANK, emptySlotIndex
+        end
+
+        emptySlotIndex = FindEmptySlotInBag(BAG_SUBSCRIBER_BANK)
+        if(emptySlotIndex ~= nil) then
+            return BAG_SUBSCRIBER_BANK, emptySlotIndex
+        end
+    else
+        emptySlotIndex = FindEmptySlotInBag(GetBankingBag())
+        if(emptySlotIndex ~= nil) then
+            return GetBankingBag(), emptySlotIndex
+        end
+    end
 	return nil
 end
 
@@ -732,7 +897,12 @@ function BUI.Banking.Class:InitializeKeybind()
             disabledDuringSceneHiding = true,
             callback = function()				
                 if(self.currentMode == LIST_WITHDRAW) then
-                    StackBag(BAG_BANK)
+                    if((GetBankingBag() == BAG_BANK) or (GetBankingBag() == BAG_SUBSCRIBER_BANK) or (IsHouseBankBag(GetBankingBag()) == false)) then
+                        StackBag(BAG_BANK)
+                        StackBag(BAG_SUBSCRIBER_BANK)
+                    else
+                        StackBag(GetBankingBag())
+                    end
                 else
                     StackBag(BAG_BACKPACK)
                 end
@@ -747,7 +917,6 @@ function BUI.Banking.Class:InitializeKeybind()
                     callback = function()
                         self:SaveListPosition()
                         self:MoveItem(self.list)
-                        --self:RefreshList()
                     end,
                     visible = function()
                         return true
@@ -832,126 +1001,31 @@ function BUI.Banking.Class:InitializeKeybind()
 end
 
 function BUI.Banking.Class:SaveListPosition()
-	-- Able to return to the current position again!
-	self.lastPositions[self.currentMode] = self.list.selectedIndex
+    -- Able to return to the current position again!
+    self.lastPositions[self.currentMode] = self.list.selectedIndex
 end
 
 function BUI.Banking.Class:ReturnToSaved()
-    local lastPosition = self.lastPositions[self.currentMode]
-
-    self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
-end
-
-function BUI.Banking.Class:RefreshList()
-	--d("tt refresh bank list")
-	self.list:OnUpdate()
-	self.list:Clear()
-
-    -- We have to add 2 rows to the list, one for Withdraw/Deposit GOLD and one for Withdraw/Deposit TEL-VAR
-    local wdString = self.currentMode == LIST_WITHDRAW and GetString(SI_BUI_BANKING_WITHDRAW) or GetString(SI_BUI_BANKING_DEPOSIT)
-	wdString = zo_strformat("<<Z:1>>", wdString)
-    self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_GOLD) ..  "|r", currencyType = CURT_MONEY})
-    self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_TEL_VAR) ..  "|r", currencyType = CURT_TELVAR_STONES})
-    self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_ALLIANCE_POINT) ..  "|r", currencyType = CURT_ALLIANCE_POINTS})
-    self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_WRIT_VOUCHER) ..  "|r", currencyType = CURT_WRIT_VOUCHERS})
-
-	--fix subscriber bank bag issue
-	checking_bags = {}
-	local slotType
-	if self.currentMode == LIST_WITHDRAW then
-		checking_bags[1] = BAG_BANK
-		checking_bags[2] = BAG_SUBSCRIBER_BANK
-		slotType = SLOT_TYPE_BANK_ITEM
-	else 
-		checking_bags[1] = BAG_BACKPACK
-		slotType = SLOT_TYPE_GAMEPAD_INVENTORY_ITEM
-	end
-	
-	
-    local function IsNotStolenItem(itemData)
-        local isNotStolen = not itemData.stolen
-		return isNotStolen
-	end
-
-	--excludes stolen items
-    local filteredDataTable = SHARED_INVENTORY:GenerateFullSlotData(IsNotStolenItem, unpack(checking_bags))
-	--d("tt bank refreshed items: " .. #filteredDataTable)
-	local tempDataTable = {}
-	for i = 1, #filteredDataTable  do
-		local itemData = filteredDataTable[i]
-		--use custom categories
-		local customCategory, matched, catName, catPriority = BUI.Helper.AutoCategory:GetCustomCategory(itemData)
-		if customCategory and not matched then
-            itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
-            itemData.bestItemCategoryName = AC_UNGROUPED_NAME
-            itemData.sortPriorityName = string.format("%03d%s", 999 , catName) 
-		else
-			if customCategory then
-				itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
-				itemData.bestItemCategoryName = catName
-				itemData.sortPriorityName = string.format("%03d%s", 100 - catPriority , catName) 
-			else
-				itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
-				itemData.bestItemCategoryName = itemData.bestItemTypeName
-				itemData.sortPriorityName = itemData.bestItemCategoryName
-			end
-		end
-        local slotIndex = GetItemCurrentActionBarSlot(itemData.bagId, itemData.slotIndex)
-        itemData.isEquippedInCurrentCategory = slotIndex and true or nil
-
-        table.insert(tempDataTable, itemData)
-        ZO_InventorySlot_SetType(itemData, slotType)
-	end
-	filteredDataTable = tempDataTable
-	
-	table.sort(filteredDataTable, BUI_GamepadInventory_DefaultItemSortComparator)
-
-    local currentBestCategoryName = nil
-
-    for i, itemData in ipairs(filteredDataTable) do
-        local nextItemData = filteredDataTable[i + 1]
-
-        local data = ZO_GamepadEntryData:New(itemData.name, itemData.iconFile)
-		data.InitializeInventoryVisualData = BUI.Inventory.Class.InitializeInventoryVisualData
-        data:InitializeInventoryVisualData(itemData)
-
-        local remaining, duration
-  
-        remaining, duration = GetItemCooldownInfo(itemData.bagId, itemData.slotIndex)
-      
-
-        if remaining > 0 and duration > 0 then
-            data:SetCooldown(remaining, duration)
+  local lastPosition = self.lastPositions[self.currentMode]
+    if(_G.lastUsedBank ~= "[Empty String]") then
+        if((_G.lastUsedBank == "House Bank") and (IsHouseBankBag(GetBankingBag()) == false)) then
+            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
+            self:SaveListPosition()
+            self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
+        elseif((_G.lastUsedBank == "Normal Bank") and (IsHouseBankBag(GetBankingBag()) == true)) then
+            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
+            self:SaveListPosition()
+            self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
+        else
+            self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
         end
-
-		data.bestItemCategoryName = itemData.bestItemCategoryName
-		data.bestGamepadItemCategoryName = itemData.bestItemCategoryName
-        data.isEquippedInCurrentCategory = itemData.isEquippedInCurrentCategory
-        data.isEquippedInAnotherCategory = itemData.isEquippedInAnotherCategory
-        data.isJunk = itemData.isJunk
-
-        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) or not BUI.Settings.Modules["Inventory"].enableJunk then
-		 
-			if data.bestGamepadItemCategoryName ~= currentBestCategoryName then
-				currentBestCategoryName = data.bestGamepadItemCategoryName
-				data:SetHeader(currentBestCategoryName)
-				if AutoCategory then
-					self.list:AddEntryWithHeader("BUI_GamepadItemSubEntryTemplate", data)
-				else
-					self.list:AddEntry("BUI_GamepadItemSubEntryTemplate", data)
-				end
-			else
-				self.list:AddEntry("BUI_GamepadItemSubEntryTemplate", data)
-			end
-		end
+    else
+            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
+            self:SaveListPosition()
+            self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
     end
-
-    self.list:Commit()
-    self:ReturnToSaved()
-    self:RefreshFooter()
-	
-	self:UpdateActions()
 end
+
 
 -- Go through and get the item which has been passed to us through the event
 function BUI.Banking.Class:UpdateSingleItem(bagId, slotIndex)
@@ -1008,7 +1082,8 @@ end
 
 function BUI.Banking.Init()
     BUI.Banking.Window = BUI.Banking.Class:New("BUI_TestWindow", BUI_TEST_SCENE)
-    BUI.Banking.Window:SetTitle("|c0066FFBank|r")
+    BUI.Banking.Window:SetTitle("|c0066FFBanking Enhanced|r")
+
 
     -- Set the column headings up, maybe put them into a table?
     BUI.Banking.Window:AddColumn(GetString(SI_BUI_BANKING_COLUMN_NAME),87)
@@ -1024,6 +1099,5 @@ function BUI.Banking.Init()
 	if ((not USE_SHORT_CURRENCY_FORMAT ~= nil) and BUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
 		USE_SHORT_CURRENCY_FORMAT = BUI.Settings.Modules["Inventory"].useShortFormat
 	end
-
     --tw = BUI.Banking.Window --dev mode
 end

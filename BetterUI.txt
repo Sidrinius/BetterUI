@@ -1,10 +1,11 @@
 ## Title: BetterUI
 ## Description: Makes the gamepad interface usable!
-## APIVersion: 100020
+## APIVersion: 100023
 ## Author: |c0066FFprasoc|r & |cff5533RockingDice|r
-## Version: 2.49
+## Contributors: |cff5533Goobsnake|r
+## Version: 2.52
 ## DependsOn:
-## OptionalDependsOn: LibAddonMenu-2.0
+## OptionalDependsOn: LibAddonMenu-2.0, AlphaGear
 ## SavedVariables: BetterUISavedVars
  
 lib\LibStub\LibStub.lua
@@ -59,6 +60,12 @@ Modules\Helper\Images\icon_set_7.dds
 Modules\Helper\Images\icon_set_8.dds
 Modules\Helper\Images\icon_set_9.dds
 Modules\Helper\Images\icon_set_10.dds
+Modules\Helper\Images\icon_set_11dds
+Modules\Helper\Images\icon_set_12.dds
+Modules\Helper\Images\icon_set_13.dds
+Modules\Helper\Images\icon_set_14.dds
+Modules\Helper\Images\icon_set_15.dds
+Modules\Helper\Images\icon_set_16.dds
 Modules\Helper\Images\icon_quest_green.dds
 Modules\Helper\Images\icon_quest_white.dds
 Modules\Helper\Images\icon_quest_red.dds
