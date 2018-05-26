@@ -345,6 +345,8 @@ local function OnItemSelectedChange(self, list, selectedData)
             KEYBIND_STRIP:UpdateKeybindButtonGroup(self.withdrawDepositKeybinds)
             self:RefreshCurrencyTooltip()
         else
+            KEYBIND_STRIP:AddKeybindButtonGroup(self.withdrawDepositKeybinds)
+            KEYBIND_STRIP:UpdateKeybindButtonGroup(self.withdrawDepositKeybinds)
             GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
         end
     end
