@@ -1063,6 +1063,9 @@ function BUI.Banking.Class:UpdateSingleItem(bagId, slotIndex)
     if GetSlotStackSize(bagId, slotIndex) > 0 then
         self.list:RefreshVisible()
         return
+    else 
+        self:RefreshList()
+        self:RefreshFooter()
     end
     
     for index = 1, #self.list.dataList do
