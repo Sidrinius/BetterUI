@@ -127,6 +127,7 @@ function ZOS_GamepadInventory:OnDeferredInitialize()
                         KEYBIND_STRIP:UpdateKeybindButton(self.toggleCompareModeKeybindStripDescriptor)
                     end
                 end
+            end
             RefreshSelectedData() --dialog will refresh selected when it hides, so only do it if it's not showing
             self:RefreshHeader(BLOCK_TABBAR_CALLBACK)
         end

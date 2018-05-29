@@ -6,6 +6,7 @@ local LIST_WITHDRAW = 1
 local LIST_DEPOSIT  = 2
 
 _G.lastUsedBank = ""
+_G.currentUsedBank = ""
 
 local function GetCategoryTypeFromWeaponType(bagId, slotIndex)
     local weaponType = GetItemWeaponType(bagId, slotIndex)
@@ -153,13 +154,23 @@ function BUI.Banking.Class:New(...)
 	return BUI.Interface.Window.New(self, ...)
 end
 
+function BUI.Banking.Class:CurrentUsedBank()
+    if((GetBankingBag() == BAG_BANK) or (GetBankingBag() == BAG_SUBSCRIBER_BANK) or (IsHouseBankBag(GetBankingBag()) == false)) then
+        _G.currentUsedBank = "Normal Bank"
+    elseif (IsHouseBankBag(GetBankingBag()) == true) then
+        _G.currentUsedBank = "House Bank"
+    else
+        return
+    end
+end
+
 function BUI.Banking.Class:LastUsedBank()
     if((GetBankingBag() == BAG_BANK) or (GetBankingBag() == BAG_SUBSCRIBER_BANK) or (IsHouseBankBag(GetBankingBag()) == false)) then
         _G.lastUsedBank = "Normal Bank"
     elseif (IsHouseBankBag(GetBankingBag()) == true) then
         _G.lastUsedBank = "House Bank"
     else
-        self:LastUsedBank()
+        return
     end
 end
 
@@ -197,15 +208,19 @@ function BUI.Banking.Class:RefreshList()
         self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_TEL_VAR) ..  "|r", currencyType = CURT_TELVAR_STONES})
         self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_ALLIANCE_POINT) ..  "|r", currencyType = CURT_ALLIANCE_POINTS})
         self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_WRIT_VOUCHER) ..  "|r", currencyType = CURT_WRIT_VOUCHERS})
-    elseif(IsHouseBankBag(GetBankingBag()) == true) then
-        if((GetNumBagUsedSlots(GetBankingBag()) == 0) and (self.currentMode == LIST_WITHDRAW)) then
-            self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK IS EMPTY!|r"})
-        elseif((GetNumBagUsedSlots(BAG_BACKPACK) == 0) and (self.currentMode == LIST_DEPOSIT)) then
-            self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG IS EMPTY!|r"})
-        elseif((GetNumBagUsedSlots(BAG_BACKPACK) ~= 0) and (self.currentMode == LIST_DEPOSIT)) then
-            self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG|r"})
+    else
+        if(self.currentMode == LIST_WITHDRAW) then
+            if(GetNumBagUsedSlots(GetBankingBag()) == 0) then
+                self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK IS EMPTY!|r"})
+            else
+                self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK|r"})
+            end
         else
-            self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK|r"})
+            if(GetNumBagUsedSlots(BAG_BACKPACK) == 0) then
+                self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG IS EMPTY!|r"})
+            else
+                self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG|r"})
+            end
         end        
     end
     --fix subscriber bank bag issue
@@ -304,6 +319,7 @@ function BUI.Banking.Class:RefreshList()
     end
 
     self.list:Commit()
+    self:CurrentUsedBank()
     self:ReturnToSaved()
     self:UpdateActions()
     self:RefreshFooter()
@@ -338,19 +354,13 @@ local function OnItemSelectedChange(self, list, selectedData)
 
             GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
         end
+    else
+        KEYBIND_STRIP:RemoveKeybindButtonGroup(self.currencyKeybinds)
+        KEYBIND_STRIP:AddKeybindButtonGroup(self.withdrawDepositKeybinds)
+        KEYBIND_STRIP:UpdateKeybindButtonGroup(self.withdrawDepositKeybinds)
+        GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
+        self:RefreshCurrencyTooltip()
     end
-    if(IsHouseBankBag(GetBankingBag()) == true) then
-        if(selectedData.label ~= nil) then
-            KEYBIND_STRIP:RemoveKeybindButtonGroup(self.currencyKeybinds)
-            KEYBIND_STRIP:UpdateKeybindButtonGroup(self.withdrawDepositKeybinds)
-            self:RefreshCurrencyTooltip()
-        else
-            KEYBIND_STRIP:AddKeybindButtonGroup(self.withdrawDepositKeybinds)
-            KEYBIND_STRIP:UpdateKeybindButtonGroup(self.withdrawDepositKeybinds)
-            GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
-        end
-    end
-	
 	self:UpdateActions()
 end
 
@@ -899,7 +909,7 @@ function BUI.Banking.Class:InitializeKeybind()
             disabledDuringSceneHiding = true,
             callback = function()				
                 if(self.currentMode == LIST_WITHDRAW) then
-                    if((GetBankingBag() == BAG_BANK) or (GetBankingBag() == BAG_SUBSCRIBER_BANK) or (IsHouseBankBag(GetBankingBag()) == false)) then
+                    if(IsHouseBankBag(GetBankingBag()) == false) then
                         StackBag(BAG_BANK)
                         StackBag(BAG_SUBSCRIBER_BANK)
                     else
@@ -1008,23 +1018,42 @@ function BUI.Banking.Class:SaveListPosition()
 end
 
 function BUI.Banking.Class:ReturnToSaved()
-  local lastPosition = self.lastPositions[self.currentMode]
-    if(_G.lastUsedBank ~= "[Empty String]") then
-        if((_G.lastUsedBank == "House Bank") and (IsHouseBankBag(GetBankingBag()) == false)) then
+    self:CurrentUsedBank()
+    local lastPosition = self.lastPositions[self.currentMode]
+    if(self.currentMode == LIST_WITHDRAW) then
+        if((_G.lastUsedBank == "House Bank") and (_G.currentUsedBank == "Normal Bank")) then
             self.list:SetSelectedIndexWithoutAnimation(1, true, false)
             self:SaveListPosition()
-            self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
-        elseif((_G.lastUsedBank == "Normal Bank") and (IsHouseBankBag(GetBankingBag()) == true)) then
+            self.currentMode = LIST_DEPOSIT
+            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
+            self:ToggleList()
+        elseif((_G.lastUsedBank == "Normal Bank") and (_G.currentUsedBank == "House Bank")) then
             self.list:SetSelectedIndexWithoutAnimation(1, true, false)
             self:SaveListPosition()
-            self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
+            self.currentMode = LIST_DEPOSIT
+            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
+            self:ToggleList()
         else
             self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
         end
     else
+        if((_G.lastUsedBank == "House Bank") and (_G.currentUsedBank == "Normal Bank")) then
+            self:LastUsedBank()
             self.list:SetSelectedIndexWithoutAnimation(1, true, false)
             self:SaveListPosition()
+            self.currentMode = LIST_WITHDRAW
+            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
+            self:ToggleList()
+        elseif((_G.lastUsedBank == "Normal Bank") and (_G.currentUsedBank == "House Bank")) then
+            self:LastUsedBank()
+            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
+            self:SaveListPosition()
+            self.currentMode = LIST_WITHDRAW
+            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
+            self:ToggleList()
+        else
             self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
+        end
     end
 end
 

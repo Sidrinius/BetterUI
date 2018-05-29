@@ -37,7 +37,7 @@ local function AddInventoryPreInfo(tooltip, itemLink)
             local traitString
             if BUI.Player.IsResearchable(itemLink) then
                 -- If there's duplicates
-                if BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BACKPACK) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BANK) > 1 then
+                if BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BACKPACK) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BANK) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_SUBSCRIBER_BANK) > 1 then
                     traitString = "|cFF9900Duplicate|r"
                 else
                     traitString = "|c00FF00Researchable|r"
