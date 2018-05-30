@@ -291,7 +291,6 @@ function BUI.Banking.Class:RefreshList()
   
         remaining, duration = GetItemCooldownInfo(itemData.bagId, itemData.slotIndex)
       
-
         if remaining > 0 and duration > 0 then
             data:SetCooldown(remaining, duration)
         end
@@ -307,7 +306,7 @@ function BUI.Banking.Class:RefreshList()
             if data.bestGamepadItemCategoryName ~= currentBestCategoryName then
                 currentBestCategoryName = data.bestGamepadItemCategoryName
                 data:SetHeader(currentBestCategoryName)
-                if((AutoCategory) and (GetNumBagUsedSlots(GetBankingBag()) ~= 0)) then
+                if((AutoCategory) and ((GetNumBagUsedSlots(GetBankingBag()) ~= 0) or (GetNumBagUsedSlots(BAG_BACKPACK) ~= 0))) then
                     self.list:AddEntryWithHeader("BUI_GamepadItemSubEntryTemplate", data)
                 else
                     self.list:AddEntry("BUI_GamepadItemSubEntryTemplate", data)
@@ -1021,13 +1020,7 @@ function BUI.Banking.Class:ReturnToSaved()
     self:CurrentUsedBank()
     local lastPosition = self.lastPositions[self.currentMode]
     if(self.currentMode == LIST_WITHDRAW) then
-        if((_G.lastUsedBank == "House Bank") and (_G.currentUsedBank == "Normal Bank")) then
-            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
-            self:SaveListPosition()
-            self.currentMode = LIST_DEPOSIT
-            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
-            self:ToggleList()
-        elseif((_G.lastUsedBank == "Normal Bank") and (_G.currentUsedBank == "House Bank")) then
+        if(_G.lastUsedBank ~= _G.currentUsedBank) then
             self.list:SetSelectedIndexWithoutAnimation(1, true, false)
             self:SaveListPosition()
             self.currentMode = LIST_DEPOSIT
@@ -1037,14 +1030,7 @@ function BUI.Banking.Class:ReturnToSaved()
             self.list:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
         end
     else
-        if((_G.lastUsedBank == "House Bank") and (_G.currentUsedBank == "Normal Bank")) then
-            self:LastUsedBank()
-            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
-            self:SaveListPosition()
-            self.currentMode = LIST_WITHDRAW
-            self.list:SetSelectedIndexWithoutAnimation(1, true, false)
-            self:ToggleList()
-        elseif((_G.lastUsedBank == "Normal Bank") and (_G.currentUsedBank == "House Bank")) then
+        if(_G.lastUsedBank ~= _G.currentUsedBank) then
             self:LastUsedBank()
             self.list:SetSelectedIndexWithoutAnimation(1, true, false)
             self:SaveListPosition()
