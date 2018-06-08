@@ -577,7 +577,7 @@ function BUI.Banking.Class:InitializeActionsDialog()
 			--refresh so keybinds react to newly selected item
 			--self:RefreshActiveKeybinds()
 
-			self:UpdateItems_Handler()
+			self:RefreshList()
 			--if self.actionMode == CATEGORY_ITEM_ACTION_MODE then
 			--	self:RefreshCategoryList()
 			--end
