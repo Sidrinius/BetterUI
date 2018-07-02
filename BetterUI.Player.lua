@@ -106,8 +106,8 @@ end
 
 function BUI.Player.IsResearchable(itemLink)
 	local traitType, traitDescription, traitSubtype, traitSubtypeName, traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
-	local craftType,rIndex,traitIndex
-	
+	local craftType, rIndex, traitIndex
+
 	if(GetItemLinkItemType(itemLink) == ITEMTYPE_ARMOR) then
 		local armorType = GetItemLinkArmorType(itemLink)
 		if(armorType ~= nil) then

@@ -33,22 +33,31 @@ local function AddInventoryPreInfo(tooltip, itemLink)
     if itemLink and BUI.Settings.Modules["Tooltips"].showStyleTrait then
         local traitType, traitDescription, traitSubtype, traitSubtypeName, traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
 
-        if (traitType ~= ITEM_TRAIT_TYPE_NONE and(itemStyle) ~=("NONE")) then
+
+        if((traitType ~= ITEM_TRAIT_TYPE_NONE) and (itemStyle ~= ("NONE"))) then
             local traitString
             if BUI.Player.IsResearchable(itemLink) then
                 -- If there's duplicates
-                if BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BACKPACK) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BANK) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_SUBSCRIBER_BANK) > 1 then
-                    traitString = "|cFF9900Duplicate|r"
+                if(BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BACKPACK) > 0) then
+                    traitString = "|c00FF00Researchable|r - |cFF9900Found in Inventory|r"
+                elseif(BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BANK) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_SUBSCRIBER_BANK) > 0) then
+                    traitString = "|c00FF00Researchable|r - |cFF9900Found in Bank|r"
+                elseif(BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_ONE) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_TWO) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_THREE) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_FOUR) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_FIVE) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_SIX) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_SEVEN) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_EIGHT) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_NINE) + BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_HOUSE_BANK_TEN) > 0) then
+                    traitString = "|c00FF00Researchable|r - |cFF9900Found in House Bank|r"
+                elseif(BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_WORN) > 0) then
+                    traitString = "|c00FF00Researchable|r - |cFF9900Found Equipped|r"
                 else
                     traitString = "|c00FF00Researchable|r"
                 end
+            elseif((traitType == ITEM_TRAIT_TYPE_ARMOR_INTRICATE) or (traitType == ITEM_TRAIT_TYPE_ARMOR_ORNATE) or (traitType == ITEM_TRAIT_TYPE_JEWELRY_INTRICATE) or (traitType == ITEM_TRAIT_TYPE_JEWELRY_ORNATE) or (traitType == ITEM_TRAIT_TYPE_WEAPON_INTRICATE) or (traitType == ITEM_TRAIT_TYPE_WEAPON_ORNATE)) then
+                return
             else
                 traitString = "|cFF0000Known|r"
             end
-            tooltip:AddLine(zo_strformat("<<1>> (Trait: <<2>>)", itemStyle, traitString), { fontSize = 30, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+            tooltip:AddLine(zo_strformat("<<1>> Trait: <<2>>", itemStyle, traitString), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
         else
             if ((itemStyle) ~=("NONE")) then
-                tooltip:AddLine(zo_strformat("<<1>>", itemStyle), { fontSize = 30, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+                tooltip:AddLine(zo_strformat("<<1>>", itemStyle), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
             end
         end
     end
