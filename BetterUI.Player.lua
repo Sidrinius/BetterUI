@@ -29,7 +29,7 @@ function BUI.Player.GetNumberOfMatchingItems(itemLink, BAG)
  
     -- Iterate through BAG
     for i = 0, bagSize do
-    	
+
         -- Get current item
         local currentItem = GetItemLink(BAG, i)
  

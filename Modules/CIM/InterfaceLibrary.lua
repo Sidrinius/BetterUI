@@ -19,7 +19,8 @@ end
 function BUI.CIM.SetTooltipWidth(width)
     -- Setup the larger and offset LEFT_TOOLTIP and background fragment so that the new inventory fits!
     GAMEPAD_NAV_QUADRANT_1_BACKGROUND_FRAGMENT.control:SetWidth(width)
-    GAMEPAD_TOOLTIPS.tooltips.GAMEPAD_LEFT_TOOLTIP.control:SetAnchor(3,GuiRoot,3, width+66, 54)
+   -- GAMEPAD_LEFT_TOOLTIP_BACKGROUND_FRAGMENT.control:SetDimensions(50, 50)
+    GAMEPAD_TOOLTIPS.tooltips.GAMEPAD_LEFT_TOOLTIP.control:SetAnchor(3,GuiRoot,3, width+66, 52)
 end
 
 BUI.Interface.Window = ZO_Object:Subclass()

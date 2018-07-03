@@ -1326,7 +1326,32 @@ function ZOS_GamepadInventory:UpdateRightTooltip()
 end
 
 function ZOS_GamepadInventory:UpdateTooltipEquippedIndicatorText(tooltipType, equipSlot)
-    ZO_InventoryUtils_UpdateTooltipEquippedIndicatorText(tooltipType, equipSlot)
+    local isHidden, highestPriorityVisualLayerThatIsShowing = WouldEquipmentBeHidden(equipSlot or EQUIP_SLOT_NONE)
+    local equipSlotText = ""
+    local equipSlotTextHidden = ""
+    local equippedHeader = GetString(SI_GAMEPAD_EQUIPPED_ITEM_HEADER)
+
+    if equipSlot == EQUIP_SLOT_MAIN_HAND then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_MAIN_HAND_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_BACKUP_MAIN then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_BACKUP_MAIN_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_OFF_HAND then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_OFF_HAND_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_BACKUP_OFF then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_BACKUP_OFF_ITEM_HEADER)
+    end
+     
+    if isHidden and equipSlotText ~= "" then
+        equipSlotTextHidden = "(Hidden)"
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>>: ", equippedHeader), zo_strformat("<<1>> <<2>>", equipSlotText, equipSlotTextHidden))
+    elseif isHidden then
+        equipSlotTextHidden = "Hidden by Collection"
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>> - <<2>>", equippedHeader, equipSlotTextHidden))
+    elseif not isHidden and equipSlotText ~= "" then
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>>: ", equippedHeader), zo_strformat("<<1>>", equipSlotText))
+    else
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, GetString(SI_GAMEPAD_EQUIPPED_ITEM_HEADER), equipSlotText)
+    end
 end
 
 function ZOS_GamepadInventory:Select()

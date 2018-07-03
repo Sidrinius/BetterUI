@@ -29,7 +29,7 @@ local function AddInventoryPreInfo(tooltip, itemLink)
 
     if itemLink and BUI.Settings.Modules["Tooltips"].showStyleTrait then
         local traitString
-        if(CanItemLinkBeTraitResearched(itemLink)) then
+        if(CanItemLinkBeTraitResearched(itemLink))  then
             -- Find owned items that can be researchable
             if(BUI.Player.GetNumberOfMatchingItems(itemLink, BAG_BACKPACK) > 0) then
                 traitString = "|c00FF00Researchable|r - |cFF9900Found in Inventory|r"
@@ -44,8 +44,16 @@ local function AddInventoryPreInfo(tooltip, itemLink)
             end
         else
             return
+        end    
+
+        local style = GetItemLinkItemStyle(itemLink)
+        local itemStyle = string.upper(GetString("SI_ITEMSTYLE", style))                    
+
+        tooltip:AddLine(zo_strformat("<<1>> Trait: <<2>>", itemStyle, traitString), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+
+        if(itemStyle ~= ("NONE")) then
+            tooltip:AddLine(zo_strformat("<<1>>", itemStyle), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
         end
-        tooltip:AddLine(zo_strformat("Trait: <<1>>", traitString), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
     else
         return
     end
