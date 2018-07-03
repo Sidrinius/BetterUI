@@ -3,7 +3,7 @@
 ## APIVersion: 100023
 ## Author: |c0066FFprasoc|r & |cff5533RockingDice|r
 ## Contributors: |cff5533Goobsnake|r
-## Version: 2.55
+## Version: 2.56
 ## DependsOn:
 ## OptionalDependsOn: LibAddonMenu-2.0, AlphaGear
 ## SavedVariables: BetterUISavedVars
