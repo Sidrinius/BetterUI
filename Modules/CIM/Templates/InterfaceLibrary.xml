@@ -348,7 +348,7 @@
             <Controls>
 	            <Label name="$(parent)Data1Value" level="0" tier="2" layer="2" text="100,000" font="ZoFontGamepad36" wrapMode="ELLIPSIS" modifyTextType="UPPERCASE" color="FFBF00">
 		            <Dimensions y="36" />
-		            <Anchor point="BOTTOMRIGHT" relativeTo="GuiRoot" relativePoint="BOTTOMRIGHT" offsetX="-300" offsetY="-61" />
+		            <Anchor point="BOTTOMRIGHT" relativeTo="GuiRoot" relativePoint="BOTTOMRIGHT" offsetX="-300" offsetY="-65" />
 	            </Label>
                 <Label name="$(parent)Data1Header" level="0" tier="2" layer="2" text="|t32:32:esoui/art/currency/currency_gold_32.dds|t" font="ZoFontGamepad34" wrapMode="ELLIPSIS" modifyTextType="UPPERCASE">
                     <Dimensions y="32" />

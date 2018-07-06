@@ -460,7 +460,7 @@ function BUI.Inventory.Class:RefreshCategoryList()
 		end
 
 		do
-	        local name = "Provisioning"
+	        local name = "Provisioning/Fishing"
 	        local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds"
 	        local data = ZO_GamepadEntryData:New(name, iconFile)
 	        data.onClickDirection = "CRAFTBAG"
@@ -496,14 +496,31 @@ function BUI.Inventory.Class:RefreshCategoryList()
 		end
 
 		do
-			local name = "Trait/Style Gems"
+			local name = "Style Material"
+			local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_stylematerial.dds"
+			local data = ZO_GamepadEntryData:New(name, iconFile)
+			data:SetIconTintOnSelection(true)
+			data.onClickDirection = "CRAFTBAG"
+
+			data.filterType = ITEMFILTERTYPE_STYLE_MATERIALS
+
+			if not HasCraftBagAccess() then
+				data.enabled = false
+			end
+
+			self.categoryList:AddEntry("BUI_GamepadItemEntryTemplate", data)
+			BUI.GenericHeader.AddToList(self.header, data)
+			if not self.populatedCraftPos then self.categoryCraftPositions[#self.categoryCraftPositions+1] = 1 end
+		end
+
+		do
+			local name = "Trait Gems"
 			local iconFile = "/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_itemtrait.dds"
 			local data = ZO_GamepadEntryData:New(name, iconFile)
 			data:SetIconTintOnSelection(true)
 			data.onClickDirection = "CRAFTBAG"
 
-			data.filterType = { ITEMFILTERTYPE_TRAIT_ITEMS, ITEMFILTERTYPE_STYLE_MATERIALS, ITEMFILTERTYPE_MISCELLANEOUS }
-
+			data.filterType = ITEMFILTERTYPE_TRAIT_ITEMS
 
 			if not HasCraftBagAccess() then
 				data.enabled = false
@@ -522,11 +539,13 @@ function BUI.Inventory.Class:RefreshCategoryList()
 
 	    self:NewCategoryItem(SI_BUI_INV_ITEM_APPAREL, ITEMFILTERTYPE_ARMOR, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_apparel.dds")
 
-	    self:NewCategoryItem(SI_BUI_INV_ITEM_JEWELRY, ITEMFILTERTYPE_JEWELRY, "EsoUI/Art/Currency/Gamepad/gp_crowns_mipmap.dds")
+	    self:NewCategoryItem(SI_BUI_INV_ITEM_JEWELRY, ITEMFILTERTYPE_JEWELRY, "EsoUI/Art/Crafting/Gamepad/gp_jewelry_tabicon_icon.dds")
 
 		self:NewCategoryItem(SI_BUI_INV_ITEM_CONSUMABLE, ITEMFILTERTYPE_CONSUMABLE, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_consumables.dds")
 
 	    self:NewCategoryItem(SI_BUI_INV_ITEM_MATERIALS, ITEMFILTERTYPE_CRAFTING, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_materials.dds")
+
+		self:NewCategoryItem(SI_BUI_INV_ITEM_FURNISHING, ITEMFILTERTYPE_FURNISHING, "EsoUI/Art/Crafting/Gamepad/gp_crafting_menuicon_furnishings.dds")
 
 	    self:NewCategoryItem(SI_BUI_INV_ITEM_MISC, ITEMFILTERTYPE_MISCELLANEOUS, "EsoUI/Art/Inventory/Gamepad/gp_inventory_icon_miscellaneous.dds")
 
@@ -770,8 +789,8 @@ function BUI.Inventory.Class:RefreshItemList()
     end
 
     self.itemList:Commit()
-	
-	
+    self:RefreshCategoryList()
+    
 end
 
 
@@ -944,10 +963,12 @@ function BUI.Inventory.Class:InitializeActionsDialog()
 				local function MarkAsJunk()
 					local target = GAMEPAD_INVENTORY.itemList:GetTargetData()
 					SetItemIsJunk(target.bagId, target.slotIndex, true)
+					self:RefreshItemList()
 				end
 				local function UnmarkAsJunk()
 					local target = GAMEPAD_INVENTORY.itemList:GetTargetData()
 					SetItemIsJunk(target.bagId, target.slotIndex, false)
+					self:RefreshItemList()
 				end
 
 				local parametricList = dialog.info.parametricList

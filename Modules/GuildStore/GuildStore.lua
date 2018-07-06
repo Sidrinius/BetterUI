@@ -451,6 +451,10 @@ function BUI.GuildStore.BrowseResults:InitializeFooter()
 	    TVLabel = footerControl:GetNamedChild("TVLabel"),
 	    CWLabel = footerControl:GetNamedChild("CWLabel"),
 	    APLabel = footerControl:GetNamedChild("APLabel"),
+	    GemsLabel = footerControl:GetNamedChild("GemsLabel"),
+	    TCLabel = footerControl:GetNamedChild("TCLabel"),
+	    CrownsLabel = footerControl:GetNamedChild("CrownsLabel"),
+	    WritsLabel = footerControl:GetNamedChild("WritsLabel"),
 	}
 
     BUI.GenericFooter.Initialize(self)

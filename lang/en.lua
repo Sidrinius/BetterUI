@@ -7,6 +7,7 @@ ZO_CreateStringId("SI_BUI_INV_ITEM_JEWELRY","Jewelry")
 ZO_CreateStringId("SI_BUI_INV_ITEM_CONSUMABLE","Consumables")
 ZO_CreateStringId("SI_BUI_INV_ITEM_MISC","Miscellaneous")
 ZO_CreateStringId("SI_BUI_INV_ITEM_JUNK","Junk")
+ZO_CreateStringId("SI_BUI_INV_ITEM_FURNISHING","Furnishings")
 
 ZO_CreateStringId("SI_BUI_INV_EQUIPSLOT_TITLE","Equipping item...")
 ZO_CreateStringId("SI_BUI_INV_EQUIPSLOT_PROMPT","Which hand should it go into?")

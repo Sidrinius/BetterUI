@@ -42,22 +42,34 @@
             <Controls>
                 <Control name="$(parent)DividerBottom" inherits="BUI_GamepadFooterHorizontalDivider">
                     <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" />
-                    <Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-BUI_GAMEPAD_DEFAULT_HORIZ_PADDING_OTHER" offsetY="-10" />
+                    <Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-BUI_GAMEPAD_DEFAULT_HORIZ_PADDING_OTHER" offsetY="-15" />
                 </Control>
                 
-                 <Label name="$(parent)GoldLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Gold">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="20" offsetY="3" />
+                 <Label name="$(parent)CWLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Carry">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="3"  />
                  </Label>
-                 <Label name="$(parent)TVLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Tel Var">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="250" offsetY="3"  />
+                 <Label name="$(parent)GoldLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Gold">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="120" offsetY="3" />
                  </Label>
                  <Label name="$(parent)APLabel" inherits="BUI_GamepadScreenFooterTemplate" text="AP">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="550" offsetY="3"  />
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="320" offsetY="3"  />
                  </Label>
-                 <Label name="$(parent)CWLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Carry">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="710" offsetY="3"  />
+                 <Label name="$(parent)TVLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Tel Var">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="500" offsetY="3"  />
                  </Label>
-        
+                 <Label name="$(parent)TCLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Transmute Crystals">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="685" offsetY="3"  />
+                 </Label>
+                 <Label name="$(parent)CrownsLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Crowns">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="865" offsetY="3"  />
+                 </Label>  
+                 <Label name="$(parent)GemsLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Crown Gems">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1050" offsetY="3"  />
+                 </Label>   
+                 <Label name="$(parent)WritsLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Writs">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1190" offsetY="3"  />
+                 </Label>         
+
             </Controls>
         </Control>
         
