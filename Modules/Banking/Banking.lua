@@ -6,6 +6,7 @@ local LIST_WITHDRAW = 1
 local LIST_DEPOSIT  = 2
 local lastUsedBank = 0
 local currentUsedBank = 0
+local lastActionName
 
 local function GetCategoryTypeFromWeaponType(bagId, slotIndex)
     local weaponType = GetItemWeaponType(bagId, slotIndex)
@@ -195,6 +196,7 @@ function BUI.Banking.Class:RefreshFooter()
 end
 
 function BUI.Banking.Class:RefreshList()
+    lastActionName = nil
     --d("tt refresh bank list")
     self.list:OnUpdate()
     self.list:Clear()
@@ -556,9 +558,9 @@ function BUI.Banking.Class:InitializeActionsDialog()
 					entryData = entryData,
 				}
 				
+                lastActionName = actionName
 				--if actionName ~= "Use" and actionName ~= "Equip" and i ~= 1 then
 				table.insert(parametricList, listItem)
-				--end
 			end
 
 			dialog:setupFunc()
@@ -586,23 +588,27 @@ function BUI.Banking.Class:InitializeActionsDialog()
 	local function ActionDialogButtonConfirm(dialog)
 		if SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() then
 			--d(ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction))
-			
-			if (ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction) == GetString(SI_ITEM_ACTION_LINK_TO_CHAT)) then
-				--Also perform bag stack!
-				--StackBag(BAG_BACKPACK)
-				--link in chat
-				local targetData = self:GetList().selectedData
-				local itemLink
-				local bag, slot = ZO_Inventory_GetBagAndIndex(targetData)
-				if bag and slot then
-					itemLink = GetItemLink(bag, slot)
-				end
-				if itemLink then
-					ZO_LinkHandler_InsertLink(zo_strformat(SI_TOOLTIP_ITEM_NAME, itemLink))
-				end
-			else
-				self.itemActions:DoSelectedAction()
-			end
+            if (lastActionName ~= nil) then
+    			if ((ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction) == GetString(SI_ITEM_ACTION_LINK_TO_CHAT)) and (ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction) ~= nil)) then
+    				--Also perform bag stack!
+    				--StackBag(BAG_BACKPACK)
+    				--link in chat
+    				local targetData = self:GetList().selectedData
+    				local itemLink
+    				local bag, slot = ZO_Inventory_GetBagAndIndex(targetData)
+    				if bag and slot then
+    					itemLink = GetItemLink(bag, slot)
+    				end
+    				if itemLink then
+    					ZO_LinkHandler_InsertLink(zo_strformat(SI_TOOLTIP_ITEM_NAME, itemLink))
+    				end
+    			else
+    				self.itemActions:DoSelectedAction()
+    			end
+            else
+                return
+            end
+            lastActionName = nil
 		end
 	end
 	CALLBACK_MANAGER:RegisterCallback("BUI_EVENT_ACTION_DIALOG_SETUP", ActionDialogSetup)
