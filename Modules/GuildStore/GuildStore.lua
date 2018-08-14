@@ -465,42 +465,39 @@ function BUI.GuildStore.BrowseResults:InitializeFooter()
 end
 
 function BUI.GuildStore.BrowseResults:BuildList()
-	local numNonGuildItems = self.numItemsOnPage
-	
-	--[[
-		According to design, we need to add in guild specific items if the category filter is ALL_ITEMS
-		Guild specific items are different than items that are returned from a normal search query because they are not stored on the server and retrieved via the TradingHouseManager
-		Instead guild specific items are created in lua when specifically requested. A problem arises because search queries are returned to the client page by page and pre-sorted.
-		In order to insert the guild specific items in the correct sorted place, without knowing the full contents of the sorted list (it could be hundreds, even thousands, of items long),
-		we have to check entries as they are added to the list using a sort comparator and specifically insert in these guild items where needed, on a page by page basis
-	--]]
-	local displayGuildItems = not TRADING_HOUSE_GAMEPAD:GetSearchActiveFilter() -- TRADING_HOUSE_GAMEPAD:GetSearchActiveFilter() returns nil when the category filter combo box is set to ALL_ITEMS
-	if displayGuildItems then
-		local DONT_IGNORE_FILTERING = false
-		local CACHE_GUILD_ITEMS = true
-		self:AddGuildSpecificItemsToList(DONT_IGNORE_FILTERING, CACHE_GUILD_ITEMS) -- cache guild specific items in a table that will be removed from during the add entry block below
-	end
-	
-	for i = 1, numNonGuildItems do
-		local itemData = ZO_TradingHouse_CreateItemData(i, GetTradingHouseSearchResultItemInfo)
-		
-		if itemData then
-			itemData.itemLink = GetTradingHouseSearchResultItemLink(itemData.slotIndex)
-			self:FormatItemDataFields(itemData)
-			
-			if displayGuildItems then
-				-- Check the cached guild specific items to see if any items should be inserted between the current item and the last item added.
-				self:InsertCachedGuildSpecificItemsForSortPosition(self.cachedLastItemData, itemData)
-				self.cachedLastItemData = itemData
-			end
-			
-			self:AddEntryToList(itemData)
-		end
-	end
-	
-	if displayGuildItems and not self.hasMorePages then
-		self:InsertCachedGuildSpecificItemsForSortPosition(self.cachedLastItemData, nil) -- Check one last time to see if any guild specific items should be at the end of the list
-	end
+    local numNonGuildItems = self.numItemsOnPage
+
+    --[[
+        According to design, we need to add in guild specific items if the category filter is ALL_ITEMS
+        Guild specific items are different than items that are returned from a normal search query because they are not stored on the server and retrieved via the TradingHouseManager
+        Instead guild specific items are created in lua when specifically requested. A problem arises because search queries are returned to the client page by page and pre-sorted.
+        In order to insert the guild specific items in the correct sorted place, without knowing the full contents of the sorted list (it could be hundreds, even thousands, of items long),
+        we have to check entries as they are added to the list using a sort comparator and specifically insert in these guild items where needed, on a page by page basis
+    --]]
+    local displayGuildItems = not TRADING_HOUSE_GAMEPAD:GetSearchActiveFilter() -- TRADING_HOUSE_GAMEPAD:GetSearchActiveFilter() returns nil when the category filter combo box is set to ALL_ITEMS
+    if displayGuildItems then
+        local DONT_IGNORE_FILTERING = false
+        local CACHE_GUILD_ITEMS = true
+        self:AddGuildSpecificItemsToList(DONT_IGNORE_FILTERING, CACHE_GUILD_ITEMS) -- cache guild specific items in a table that will be removed from during the add entry block below
+    end
+
+    for i = 1, numNonGuildItems do
+        local itemData = ZO_TradingHouse_CreateSearchResultItemData(i)
+
+        if itemData then
+            itemData.itemLink = GetTradingHouseSearchResultItemLink(itemData.slotIndex)
+            self:FormatItemDataFields(itemData)
+            ZO_InventorySlot_SetType(itemData, SLOT_TYPE_TRADING_HOUSE_ITEM_RESULT)
+
+            if displayGuildItems then
+                -- Check the cached guild specific items to see if any items should be inserted between the current item and the last item added.
+                self:InsertCachedGuildSpecificItemsForSortPosition(self.cachedLastItemData, itemData)
+                self.cachedLastItemData = itemData
+            end
+
+            self:AddEntryToList(itemData)
+        end
+    end
 	
 	if (self.listResultCount == 0) then
 		if (self.nextPageCallLater ~= nil) then
@@ -629,7 +626,7 @@ end
 
 function BUI.GuildStore.Listings:BuildList()
     for i = 1, GetNumTradingHouseListings() do
-         local itemData = ZO_TradingHouse_CreateItemData(i, GetTradingHouseListingItemInfo)
+         local itemData = ZO_TradingHouse_CreateListingItemData(i)
         if(itemData) then
             itemData.name = zo_strformat(SI_TOOLTIP_ITEM_NAME, itemData.name)
             itemData.price = itemData.purchasePrice
