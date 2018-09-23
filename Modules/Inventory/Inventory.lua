@@ -1060,7 +1060,7 @@ function BUI.Inventory.Class:InitializeActionsDialog()
 				if itemLink then
 					ZO_LinkHandler_InsertLink(zo_strformat(SI_TOOLTIP_ITEM_NAME, itemLink))
 				end
-			else
+            else
 				self.itemActions:DoSelectedAction()
 			end
 		end
@@ -1072,15 +1072,22 @@ function BUI.Inventory.Class:InitializeActionsDialog()
 end
 
 function BUI.Inventory.HookDestroyItem()
-    -- -- Overwrite the destroy callback because everything called from GAMEPAD_INVENTORY will now be classed as "insecure"
     ZO_InventorySlot_InitiateDestroyItem = function(inventorySlot)
-        SetCursorItemSoundsEnabled(false)
         local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
-        CallSecureProtected("PickupInventoryItem",bag, index) -- > Here is the key change!
-        SetCursorItemSoundsEnabled(true)
-	
-        CallSecureProtected("PlaceInWorldLeftClick") -- DESTROY! (also needs to be a secure call)
-        return true
+        local itemLink = GetItemLink(bag, index)
+        local coloritemLinkText = ZO_ERROR_COLOR:Colorize(itemLink)
+        SetCursorItemSoundsEnabled(false)
+    	if (IsItemFromCrownCrate(bag, index) or IsItemFromCrownStore(bag, index)) then
+    		CHAT_SYSTEM:AddMessage(zo_strformat("[<<1>>] is protected. Please mark as junk then delete!", itemLink))
+    	elseif IsItemJunk(bag, index) then
+    		DestroyItem(bag, index)
+    		CHAT_SYSTEM:AddMessage(zo_strformat("You destroy: [<<1>>]", coloritemLinkText))
+    	else
+        	CallSecureProtected("PickupInventoryItem",bag, index) -- > Here is the key change!
+        	SetCursorItemSoundsEnabled(true)
+        	CallSecureProtected("PlaceInWorldLeftClick") -- DESTROY! (also needs to be a secure call)
+    		return true
+    	end
     end
 end
 
@@ -1161,7 +1168,18 @@ function BUI.Inventory.HookActionDialog()
             {
                 keybind = "DIALOG_PRIMARY",
                 text = GetString(SI_GAMEPAD_SELECT_OPTION),
-                callback = function(dialog)
+            	callback = function(dialog)    
+            		--if (ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction) == GetString(SI_ITEM_ACTION_DESTROY)) then
+						-- ZO_InventorySlot_InitiateDestroyItem = function(inventorySlot)
+						-- local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
+						-- local _, actualItemCount = GetItemInfo(bag, index)
+		    --     		if itemCount == 0 and actualItemCount > 1 then
+		    --         		itemCount = actualItemCount
+		    --     		end
+		    --     		local itemLink = GetItemLink(bag, index)
+		    --     		local dialogName = "DESTROY_ITEM_PROMPT"
+		    --     		ZO_Dialogs_ShowPlatformDialog(dialogName, nil, {mainTextParams = {itemLink, itemCount, GetString(SI_DESTROY_ITEM_CONFIRMATION)}})
+	     --    			end           	
 					if (BUI.Settings.Modules["Inventory"].m_enabled and SCENE_MANAGER.scenes['gamepad_inventory_root']:IsShowing() ) or
 					   (BUI.Settings.Modules["Banking"].m_enabled and SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() ) then
 						CALLBACK_MANAGER:FireCallbacks("BUI_EVENT_ACTION_DIALOG_BUTTON_CONFIRM", dialog)
