@@ -1074,18 +1074,26 @@ end
 function BUI.Inventory.HookDestroyItem()
     ZO_InventorySlot_InitiateDestroyItem = function(inventorySlot)
         local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
+        local _, stackCount, unitSellPrice = GetItemInfo(bag, index)
         local itemLink = GetItemLink(bag, index)
-        local coloritemLinkText = ZO_ERROR_COLOR:Colorize(itemLink)
+        local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("is protected - Please mark as junk then delete!"))
+        local destroyText = ZO_ERROR_COLOR:Colorize(zo_strformat("You destroy"))
+		local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_SMALL_TEXT)
         SetCursorItemSoundsEnabled(false)
-    	if (IsItemFromCrownCrate(bag, index) or IsItemFromCrownStore(bag, index)) then
-    		CHAT_SYSTEM:AddMessage(zo_strformat("[<<1>>] is protected. Please mark as junk then delete!", itemLink))
-    	elseif IsItemJunk(bag, index) then
+        if IsItemJunk(bag, index) then
     		DestroyItem(bag, index)
-    		CHAT_SYSTEM:AddMessage(zo_strformat("You destroy: [<<1>>]", coloritemLinkText))
+    		CHAT_SYSTEM:AddMessage(zo_strformat("<<1>> [<<2>>]", destroyText, itemLink))
+    		return true
+    	elseif (IsItemFromCrownCrate(bag, index) or IsItemFromCrownStore(bag, index) or unitSellPrice == 0) then
+    		messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
+			messageParams:SetText(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
+			CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+    		CHAT_SYSTEM:AddMessage(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
+    		return false
     	else
-        	CallSecureProtected("PickupInventoryItem",bag, index) -- > Here is the key change!
+        	CallSecureProtected("PickupInventoryItem",bag, index)
         	SetCursorItemSoundsEnabled(true)
-        	CallSecureProtected("PlaceInWorldLeftClick") -- DESTROY! (also needs to be a secure call)
+        	CallSecureProtected("PlaceInWorldLeftClick")
     		return true
     	end
     end
