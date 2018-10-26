@@ -20,10 +20,13 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Enable \"Junk\" feature",
-			tooltip = "Allows items to be marked as \"junk\" as a filter to de-clutter the inventory",
+			tooltip = "Allows items to be marked as \"junk\" to de-clutter the inventory and allow deletion of protected items",
 			getFunc = function() return BUI.Settings.Modules["Inventory"].enableJunk end,
-			setFunc = function(value) BUI.Settings.Modules["Inventory"].enableJunk = value end,
+			setFunc = function(value) BUI.Settings.Modules["Inventory"].enableJunk = value
+				changed = true
+				end,
 			width = "full",
+			warning="Needs to reload UI."
 		},
 		{
 			type = "checkbox",
@@ -177,7 +180,7 @@ function BUI.Inventory.InitModule(m_options)
     m_options["enableWrapping"] = true
     m_options["showMarketPrice"] = false
     m_options["useTriggersForSkip"] = false
-    m_options["enableJunk"] = false
+    m_options["enableJunk"] = true
 	m_options["displayCharAttributes"] = true
 	m_options["useShortFormat"] = true
 	m_options["bindOnEquipProtection"] = true

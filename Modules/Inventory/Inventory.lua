@@ -961,9 +961,18 @@ function BUI.Inventory.Class:InitializeActionsDialog()
 				end)
 
 				local function MarkAsJunk()
-					local target = GAMEPAD_INVENTORY.itemList:GetTargetData()
-					SetItemIsJunk(target.bagId, target.slotIndex, true)
-					self:RefreshItemList()
+        			local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Retrieve item from Craft Bag, then mark as junk!"))
+					local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_SMALL_TEXT)
+    				if self.actionMode == CRAFT_BAG_ACTION_MODE then
+    					messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
+						messageParams:SetText(zo_strformat("<<1>>", warningText))
+						CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+    					CHAT_SYSTEM:AddMessage(zo_strformat("<<1>>", warningText))
+    				else
+						local target = GAMEPAD_INVENTORY.itemList:GetTargetData()
+						SetItemIsJunk(target.bagId, target.slotIndex, true)
+						self:RefreshItemList()
+					end
 				end
 				local function UnmarkAsJunk()
 					local target = GAMEPAD_INVENTORY.itemList:GetTargetData()
@@ -1048,17 +1057,22 @@ function BUI.Inventory.Class:InitializeActionsDialog()
 			--d(ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction))
 			
 			if (ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction) == GetString(SI_ITEM_ACTION_LINK_TO_CHAT)) then
-				--Also perform bag stack!
-				--StackBag(BAG_BACKPACK)
-				--link in chat
-				local targetData = self.itemList:GetTargetData()
+				local targetData
+			    local actionMode = self.actionMode
+			    if actionMode == ITEM_LIST_ACTION_MODE then
+			        targetData = self.itemList:GetTargetData()
+			    elseif actionMode == CRAFT_BAG_ACTION_MODE then
+			        targetData = self.craftBagList:GetTargetData()
+			    else 
+			        targetData = self:GenerateItemSlotData(self.categoryList:GetTargetData())
+			    end
 				local itemLink
 				local bag, slot = ZO_Inventory_GetBagAndIndex(targetData)
 				if bag and slot then
 					itemLink = GetItemLink(bag, slot)
 				end
 				if itemLink then
-					ZO_LinkHandler_InsertLink(zo_strformat(SI_TOOLTIP_ITEM_NAME, itemLink))
+					ZO_LinkHandler_InsertLink(zo_strformat("[<<2>>]", SI_TOOLTIP_ITEM_NAME, itemLink))
 				end
             else
 				self.itemActions:DoSelectedAction()
@@ -1787,13 +1801,13 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             keybind = "UI_SHORTCUT_SECONDARY",
             visible = function()
             	if self.actionMode == ITEM_LIST_ACTION_MODE then
-            		local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
-            		local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+            		-- local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
+            		-- local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
             		
-            		if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
-            			return false
-            		end
-            		return true
+            		-- if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
+            		-- 	return false
+            		-- end
+            		return false
             	end
             end,
             callback = function()
@@ -1811,13 +1825,14 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             	elseif self.actionMode == CRAFT_BAG_ACTION_MODE then
             		--craftbag mode
             		local targetData = self.craftBagList:GetTargetData()
+            		d(targetData)
 					local itemLink
 					local bag, slot = ZO_Inventory_GetBagAndIndex(targetData)
 					if bag and slot then
 						itemLink = GetItemLink(bag, slot)
 					end
 					if itemLink then
-						ZO_LinkHandler_InsertLink(zo_strformat(SI_TOOLTIP_ITEM_NAME, itemLink))
+						ZO_LinkHandler_InsertLink(zo_strformat("[<<2>>]", SI_TOOLTIP_ITEM_NAME, itemLink))
 					end
             	end
             end,

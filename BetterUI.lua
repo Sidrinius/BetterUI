@@ -201,8 +201,6 @@ function BUI.LoadModules()
 		ddebug("Initializing BUI...")
 		BUI.GuildStore.FixMM() -- fix MM is independent of any module
 		BUI.Player.GetResearch()
-		BUI.Inventory.HookDestroyItem()
-		BUI.Inventory.HookActionDialog()
 
 		if(BUI.Settings.Modules["CIM"].m_enabled) then
 			BUI.CIM.Setup()
@@ -213,6 +211,8 @@ function BUI.LoadModules()
 			-- 	BUI.Store.Setup()
 			-- end
 			if(BUI.Settings.Modules["Inventory"].m_enabled) then
+				BUI.Inventory.HookDestroyItem()
+				BUI.Inventory.HookActionDialog()
 				BUI.Inventory.Setup()
 			end
 			if(BUI.Settings.Modules["Banking"].m_enabled) then

@@ -600,7 +600,7 @@ function BUI.Banking.Class:InitializeActionsDialog()
     					itemLink = GetItemLink(bag, slot)
     				end
     				if itemLink then
-    					ZO_LinkHandler_InsertLink(zo_strformat(SI_TOOLTIP_ITEM_NAME, itemLink))
+    					ZO_LinkHandler_InsertLink(zo_strformat("[<<2>>]", SI_TOOLTIP_ITEM_NAME, itemLink))
     				end
     			else
     				self.itemActions:DoSelectedAction()

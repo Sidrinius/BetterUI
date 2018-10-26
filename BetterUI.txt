@@ -1,9 +1,9 @@
 ## Title: BetterUI
 ## Description: Makes the gamepad interface usable!
-## APIVersion: 100024
+## APIVersion: 100025
 ## Author: |c0066FFprasoc|r & |cff5533RockingDice|r
 ## Contributors: |cff5533Goobsnake|r
-## Version: 2.58
+## Version: 2.59
 ## DependsOn:
 ## OptionalDependsOn: LibAddonMenu-2.0, AlphaGear
 ## SavedVariables: BetterUISavedVars
