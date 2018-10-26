@@ -27,6 +27,6 @@ function BUI.GenericFooter:Refresh()
 		self.footer:GetNamedChild("TCLabel"):SetText(zo_strformat("TRANSMUTE: |c00FF00<<1>>|r |t24:24:<<2>>|t",BUI.DisplayNumber(GetCurrencyAmount(CURT_CHAOTIC_CREATIA, CURRENCY_LOCATION_ACCOUNT)),GetCurrencyGamepadIcon(CURT_STYLE_STONES)))
 		--self.footer:GetNamedChild("CrownsLabel"):SetText(zo_strformat("CROWNS: |c00FF00<<1>>|r |t24:24:<<2>>|t",BUI.DisplayNumber(GetCurrencyAmount(CURT_CROWNS, CURRENCY_LOCATION_ACCOUNT)),GetCurrencyGamepadIcon(CURT_CROWNS)))
 		self.footer:GetNamedChild("WritsLabel"):SetText(zo_strformat("WRITS: |c00FF00<<1>>|r |t24:24:<<2>>|t",BUI.DisplayNumber(GetCurrencyAmount(CURT_WRIT_VOUCHERS)),GetCurrencyGamepadIcon(CURT_WRIT_VOUCHERS)))
-		self.footer:GetNamedChild("TicketsLabel"):SetText(zo_strformat("TICKETS: |c00FF00<<1>>|r |t24:24:<<2>>|t",BUI.DisplayNumber(GetCurrencyAmount(CURT_EVENT_TICKETS)),GetCurrencyGamepadIcon(CURT_EVENT_TICKETS)))
+		self.footer:GetNamedChild("TicketsLabel"):SetText(zo_strformat("TICKETS: |c00FF00<<1>>|r |t24:24:<<2>>|t",BUI.DisplayNumber(GetCurrencyAmount(CURT_EVENT_TICKETS, CURRENCY_LOCATION_ACCOUNT)),GetCurrencyGamepadIcon(CURT_EVENT_TICKETS)))
 	end
 end
