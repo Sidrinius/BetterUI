@@ -967,11 +967,19 @@ function BUI.Inventory.Class:InitializeActionsDialog()
     					messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
 						messageParams:SetText(zo_strformat("<<1>>", warningText))
 						CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
-    					CHAT_SYSTEM:AddMessage(zo_strformat("<<1>>", warningText))
     				else
 						local target = GAMEPAD_INVENTORY.itemList:GetTargetData()
-						SetItemIsJunk(target.bagId, target.slotIndex, true)
-						self:RefreshItemList()
+						local isjunk = IsItemPlayerLocked(target.bagId, target.slotIndex)
+						if(isjunk == false) then
+							SetItemIsJunk(target.bagId, target.slotIndex, true)
+							self:RefreshItemList()
+						else
+							warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Item is currently locked and cannot be marked as junk!"))
+    						messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
+							messageParams:SetText(zo_strformat("<<1>>", warningText))
+							CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+						end
+
 					end
 				end
 				local function UnmarkAsJunk()
