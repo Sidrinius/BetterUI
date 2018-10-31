@@ -1809,13 +1809,13 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             keybind = "UI_SHORTCUT_SECONDARY",
             visible = function()
             	if self.actionMode == ITEM_LIST_ACTION_MODE then
-            		-- local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
-            		-- local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+            		local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
+            		local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
             		
-            		-- if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
-            		-- 	return false
-            		-- end
-            		return false
+            		if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
+            			return false
+            		end
+            		return true
             	end
             end,
             callback = function()
@@ -1833,7 +1833,6 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             	elseif self.actionMode == CRAFT_BAG_ACTION_MODE then
             		--craftbag mode
             		local targetData = self.craftBagList:GetTargetData()
-            		d(targetData)
 					local itemLink
 					local bag, slot = ZO_Inventory_GetBagAndIndex(targetData)
 					if bag and slot then

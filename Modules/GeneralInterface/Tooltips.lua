@@ -3,12 +3,29 @@ local _
 local function AddInventoryPostInfo(tooltip, itemLink)
 	if itemLink then --and itemLink ~= tooltip.lastItemLink then
 		--tooltip.lastItemLink = itemLink
+        if TamrielTradeCentre ~= nil and BUI.Settings.Modules["GuildStore"].ttcIntegration then
+            local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
+            if(priceInfo == nil) then
+                tooltip:AddLine(string.format("|c0066ff[BUI]|r  TTC " .. GetString(TTC_PRICE_NOLISTINGDATA)), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
+            else
+                if(priceInfo.SuggestedPrice ~= nil) then
+                    tooltip:AddLine(string.format("|c0066ff[BUI]|r  TTC " .. GetString(TTC_PRICE_SUGGESTEDXTOY), 
+                        TamrielTradeCentre:FormatNumber(priceInfo.SuggestedPrice, 0), TamrielTradeCentre:FormatNumber(priceInfo.SuggestedPrice * 1.25, 0)), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
+                else
+                    tooltip:AddLine(string.format("|c0066ff[BUI]|r  TTC Suggested : NONE "), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
+                end
+                tooltip:AddLine(string.format(GetString(TTC_PRICE_AGGREGATEPRICESXYZ), TamrielTradeCentre:FormatNumber(priceInfo.Avg), 
+                TamrielTradeCentre:FormatNumber(priceInfo.Min), TamrielTradeCentre:FormatNumber(priceInfo.Max)), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }) 
+            end
+            --     tooltip:AddLine(zo_strformat("|c0066ff[BUI]|r <<1>>",priceInfo), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
+        end
+
 		if MasterMerchant ~= nil and BUI.Settings.Modules["GuildStore"].mmIntegration then
 			local tipLine, avePrice, graphInfo = MasterMerchant:itemPriceTip(itemLink, false, clickable)
 			if(tipLine ~= nil) then
-				tooltip:AddLine(zo_strformat("|c0066ff[BUI]|r <<1>>",tipLine), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
+				tooltip:AddLine(string.format("|c0066ff[BUI]|r  " .. tipLine), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
 			else
-				tooltip:AddLine(zo_strformat("|c0066ff[BUI]|r MM price (0 sales, 0 days): UNKNOWN"), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
+				tooltip:AddLine(string.format("|c0066ff[BUI]|r  MM price (0 sales, 0 days): UNKNOWN"), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
 			end
 		end
 
@@ -18,7 +35,7 @@ local function AddInventoryPostInfo(tooltip, itemLink)
                 if(ddData.wAvg ~= nil) then
                     --local dealPercent = (unitPrice/wAvg.wAvg*100)-100
                     local tipLine = "dataDaedra: wAvg="..ddData.wAvg
-                    tooltip:AddLine(zo_strformat("|c0066ff[BUI]|r <<1>>",tipLine), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
+                    tooltip:AddLine(string.format("|c0066ff[BUI]|r  " .. tipLine), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
                 end
             end
         end
