@@ -259,7 +259,7 @@
         </Control>
 
 
-        <Control name="BUI_GenericInterfaceFooter" resizeToFitDescendents="true" virtual="true">
+        <Control name="BUI_GenericInterfaceFooter" resizeToFitDescendents="false" virtual="true">
            <Anchor point="TOPLEFT" />
             <Anchor point="TOPRIGHT" />
 
@@ -267,10 +267,9 @@
 
                 <Texture name="$(parent)SelectBg" textureFile="BetterUI/Modules/Banking/Images/selectbg.dds">
                     <Dimensions x="BUI_GAMEPAD_DEFAULT_PANEL_WIDTH" y="90" />
-                    <Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER" offsetX="5" offsetY="0" />
+                    <Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER" offsetX="5" offsetY="210" />
                     <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT"/>
                 </Texture>
-
                 <Control name="$(parent)DividerCentre" inherits="BUI_VerticalDivider">
                     <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0"/>
                     <Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER" offsetY="6" />
@@ -293,7 +292,7 @@
                     <Controls>
                         <Button name="$(parent)Button">
                             <Dimensions x="250" y="30" />
-                            <Anchor point="LEFT" offsetX="70"/>
+                            <Anchor point="LEFT" offsetX="155"/>
                             <OnClicked>
                                 BUI.Banking.Window:ToggleList(true)
                             </OnClicked>
@@ -320,7 +319,7 @@
                     <Controls>
                         <Button name="$(parent)Button">
                             <Dimensions x="250" y="30" />
-                            <Anchor point="RIGHT" offsetX="-100"/>
+                            <Anchor point="RIGHT" offsetX="-205"/>
                             <OnClicked>
                                 BUI.Banking.Window:ToggleList(false)
                             </OnClicked>
