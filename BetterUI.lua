@@ -26,16 +26,6 @@ function BUI.InitModuleOptions()
 		},
 		{
 			type = "checkbox",
-			name = "Enable |c0066FFEnhanced Guild Store|r",
-			tooltip = "Complete overhaul of the guild store, and MaterMerchant/dataDaedra integration",
-			getFunc = function() return BUI.Settings.Modules["GuildStore"].m_enabled end,
-			setFunc = function(value) BUI.Settings.Modules["GuildStore"].m_enabled = value
-									dirtyModules = true end,
-			disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
-			width = "full",
-		},
-		{
-			type = "checkbox",
 			name = "Enable |c0066FFEnhanced Inventory|r",
 			tooltip = "Completely redesigns the gamepad's inventory interface",
 			getFunc = function() return BUI.Settings.Modules["Inventory"].m_enabled end,
@@ -55,16 +45,6 @@ function BUI.InitModuleOptions()
 			--disabled = function() return true end,
 			width = "full",
 		},
-		-- {
-		-- 	type = "checkbox",
-		-- 	name = "Enable |c0066FFEnhanced Store|r",
-		-- 	tooltip = "Completely redesigns the gamepad's store purchase interface",
-		-- 	getFunc = function() return BUI.Settings.Modules["Store"].m_enabled end,
-		-- 	setFunc = function(value) BUI.Settings.Modules["Store"].m_enabled = value
-		-- 							dirtyModules = true  end,
-		-- 	disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
-		-- 	width = "full",
-		-- },
 		{
 			type = "checkbox",
 			name = "Enable Daily Writ module",
@@ -199,17 +179,10 @@ function BUI.LoadModules()
 
 	if(not BUI._initialized) then
 		ddebug("Initializing BUI...")
-		BUI.GuildStore.FixMM() -- fix MM is independent of any module
 		BUI.Player.GetResearch()
 
 		if(BUI.Settings.Modules["CIM"].m_enabled) then
 			BUI.CIM.Setup()
-			if(BUI.Settings.Modules["GuildStore"].m_enabled) then
-				BUI.GuildStore.Setup()
-			end
-			-- if(BUI.Settings.Modules["Store"].m_enabled) then
-			-- 	BUI.Store.Setup()
-			-- end
 			if(BUI.Settings.Modules["Inventory"].m_enabled) then
 				BUI.Inventory.HookDestroyItem()
 				BUI.Inventory.HookActionDialog()
@@ -245,8 +218,6 @@ function BUI.Initialize(event, addon)
 		local m_Inventory = BUI.ModuleOptions(BUI.Inventory, BUI.Settings.Modules["Inventory"])
 		local m_Banking = BUI.ModuleOptions(BUI.Banking, BUI.Settings.Modules["Banking"])
 		local m_Writs = BUI.ModuleOptions(BUI.Writs, BUI.Settings.Modules["Writs"])
-		local m_GuildStore = BUI.ModuleOptions(BUI.GuildStore, BUI.Settings.Modules["GuildStore"])
-		local m_Store = BUI.ModuleOptions(BUI.GuildStore, BUI.Settings.Modules["Store"])
 		local m_Tooltips = BUI.ModuleOptions(BUI.Tooltips, BUI.Settings.Modules["Tooltips"])
 
 		d("first install!")
