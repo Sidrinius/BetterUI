@@ -1,8 +1,8 @@
 ## Title: BetterUI
 ## Description: Make the gamepad interface great again!
-## APIVersion: 100025
+## APIVersion: 100026
 ## Author: prasoc, RockingDice & Goobsnake
-## Version: 2.60
+## Version: 2.61
 ## DependsOn:
 ## OptionalDependsOn: LibAddonMenu-2.0, AlphaGear
 ## SavedVariables: BetterUISavedVars
@@ -84,27 +84,9 @@ Modules\Inventory\CraftList.lua
 Modules\Inventory\Inventory.lua
 Modules\Inventory\Module.lua
 
-; Module: Store Enhanced
-Modules\Store\Templates\StoreWindow.xml
-Modules\Store\Shrinkwrap\storewindow_gamepad_util.lua
-Modules\Store\Shrinkwrap\storewindowcomponent_gamepad.lua
-Modules\Store\Parametric.lua
-Modules\Store\StoreHeader.lua
-Modules\Store\StoreManager.lua
-Modules\Store\StoreBuy.lua
-Modules\Store\Module.lua
-
 ; Module: General Interface Improvements
 Modules\GeneralInterface\Tooltips.lua
 Modules\GeneralInterface\Module.lua
-
-; Module: Guild Store (+MM)
-Modules\GuildStore\Templates\InventoryRow.xml
-Modules\GuildStore\Templates\BrowseResults.xml
-Modules\GuildStore\Templates\Listings.xml
-Modules\GuildStore\Templates\CreateListing.xml
-Modules\GuildStore\GuildStore.lua
-Modules\GuildStore\Module.lua
 
 ; Module: Banking
 Modules\Banking\Images\nav_vert.dds

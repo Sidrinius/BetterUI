@@ -1,7 +1,7 @@
 BUI = {}
 
 BUI.name = "BetterUI"
-BUI.version = "2.60"
+BUI.version = "2.61"
 
 -- Program Global (scope of BUI, though) variable initialization
 BUI.WindowManager = GetWindowManager()
@@ -17,29 +17,15 @@ BUI.GenericFooter = {}
 BUI.Interface = {}
 BUI.Interface.Window = {}
 
-BUI.Store = {
-	Class = {},
-	Window = {},
-
-	List = {},
-	Buy = {}
-}
-
 BUI.Inventory = {
 	List = {},
-	Class = {}
+	Class = {},
 }
 
 BUI.Writs = {
 	List = {}
 }
 
-BUI.GuildStore = {
-	Browse = {},
-	BrowseResults = {},
-	Listings = {},
-	Sell = {}
-}
 
 BUI.Banking = {
 	Class = {}

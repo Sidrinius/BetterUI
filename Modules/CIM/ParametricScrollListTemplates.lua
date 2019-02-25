@@ -403,8 +403,10 @@ function BUI_TabBarScrollList:SetSelectedIndex(selectedIndex, allowEvenIfDisable
     self:RefreshPips()
 end
 function BUI_TabBarScrollList:MovePrevious(allowWrapping, suppressFailSound)
-    local succeeded = ZO_ConveyorSceneFragment_ReverseAnimationDirectionForBehavior(ZO_ParametricScrollList.MovePrevious, self)
+    ZO_ConveyorSceneFragment_SetMovingBackward()
+    local succeeded = ZO_ParametricScrollList.MovePrevious(self)
     if not succeeded and allowWrapping then
+        ZO_ConveyorSceneFragment_SetMovingForward()
         self:SetLastIndexSelected() --Wrap
         succeeded = true
     end
@@ -417,10 +419,13 @@ function BUI_TabBarScrollList:MovePrevious(allowWrapping, suppressFailSound)
     if(self.MovePrevCallback ~= nil) then self.MovePrevCallback(self.parent, succeeded) end
         return succeeded
 end
+
 function BUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
+    ZO_ConveyorSceneFragment_SetMovingForward()
     local succeeded = ZO_ParametricScrollList.MoveNext(self)
     if not succeeded and allowWrapping then
-        ZO_ConveyorSceneFragment_ReverseAnimationDirectionForBehavior(ZO_ParametricScrollList.SetFirstIndexSelected, self) --Wrap
+        ZO_ConveyorSceneFragment_SetMovingBackward()
+        ZO_ParametricScrollList.SetFirstIndexSelected(self)
         succeeded = true
     end
     if succeeded then
@@ -432,14 +437,6 @@ function BUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
     if(self.MoveNextCallback ~= nil) then self.MoveNextCallback(self.parent, succeeded) end
         return succeeded
 end
-
-
-
-
-
-
-
-
 
 
 
