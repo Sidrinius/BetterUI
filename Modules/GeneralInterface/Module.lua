@@ -75,6 +75,38 @@ local function Init(mId, moduleName)
 					end,
 			width = "full",
 		},
+		{
+			type = "checkbox",
+			name = "MasterMerchant integration",
+			tooltip = "Hooks MasterMerchant into the guild store and item tooltips",
+			getFunc = function() return BUI.Settings.Modules["Tooltips"].mmIntegration end,
+			setFunc = function(value) BUI.Settings.Modules["Tooltips"].mmIntegration = value
+					end,
+			disabled = function() return MasterMerchant == nil end,
+			width = "full",
+			requiresReload = true,
+		},
+		{
+			type = "checkbox",
+			name = "Tamriel Trade Centre integration",
+			tooltip = "Hooks TTC Price info into the guild store if MM is not presented",
+			getFunc = function() return BUI.Settings.Modules["Tooltips"].ttcIntegration end,
+			setFunc = function(value) BUI.Settings.Modules["Tooltips"].ttcIntegration = value
+					end,
+			disabled = function() return TamrielTradeCentre == nil end,
+			width = "full",
+			requiresReload = true,
+		},
+		{
+			type = "checkbox",
+			name = "Short Currency Format",
+			tooltip = "Automatically formats the value column to shorten large numbers and to display the currency with commas.",
+			getFunc = function() return BUI.Settings.Modules["Tooltips"].useShortFormat end,
+			setFunc = function(value) BUI.Settings.Modules["Tooltips"].useShortFormat = value
+					end,
+			width = "full",
+			requiresReload = true,
+		},
 	}
 	LAM:RegisterAddonPanel("BUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BUI_"..mId, optionsTable)
@@ -122,6 +154,9 @@ function BUI.Tooltips.InitModule(m_options)
     m_options["showCharacterColor"] = {1, 0.95, 0.5, 1}
 	m_options["showAccountColor"] = {1, 1, 1, 1}
 	m_options["removeDeleteDialog"] = false
+	m_options["mmIntegration"] = true
+	m_options["ttcIntegration"] = true
+	m_options["useShortFormat"] = true
 
     return m_options
 end

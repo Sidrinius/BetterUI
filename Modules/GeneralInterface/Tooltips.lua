@@ -3,7 +3,7 @@ local _
 local function AddInventoryPostInfo(tooltip, itemLink)
 	if itemLink then --and itemLink ~= tooltip.lastItemLink then
 		--tooltip.lastItemLink = itemLink
-        if TamrielTradeCentre ~= nil and BUI.Settings.Modules["GuildStore"].ttcIntegration then
+        if TamrielTradeCentre ~= nil and BUI.Settings.Modules["Tooltips"].ttcIntegration then
             local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
             if(priceInfo == nil) then
                 tooltip:AddLine(string.format("|c0066ff[BUI]|r  TTC " .. GetString(TTC_PRICE_NOLISTINGDATA)), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
@@ -20,7 +20,7 @@ local function AddInventoryPostInfo(tooltip, itemLink)
             --     tooltip:AddLine(zo_strformat("|c0066ff[BUI]|r <<1>>",priceInfo), { fontSize = 28, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
         end
 
-		if MasterMerchant ~= nil and BUI.Settings.Modules["GuildStore"].mmIntegration then
+		if MasterMerchant ~= nil and BUI.Settings.Modules["Tooltips"].mmIntegration then
 			local tipLine, avePrice, graphInfo = MasterMerchant:itemPriceTip(itemLink, false, clickable)
 			if(tipLine ~= nil) then
 				tooltip:AddLine(string.format("|c0066ff[BUI]|r  " .. tipLine), { fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("bodySection"))
@@ -29,7 +29,7 @@ local function AddInventoryPostInfo(tooltip, itemLink)
 			end
 		end
 
-        if ddDataDaedra ~= nil and BUI.Settings.Modules["GuildStore"].ddIntegration then
+        if ddDataDaedra ~= nil and BUI.Settings.Modules["Tooltips"].ddIntegration then
             local ddData = ddDataDaedra:GetKeyedItem(itemLink)
             if(ddData ~= nil) then
                 if(ddData.wAvg ~= nil) then

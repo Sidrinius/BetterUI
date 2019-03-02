@@ -2,7 +2,7 @@
 ## Description: Make the gamepad interface great again!
 ## APIVersion: 100026
 ## Author: prasoc, RockingDice & Goobsnake
-## Version: 2.61
+## Version: 2.62
 ## DependsOn:
 ## OptionalDependsOn: LibAddonMenu-2.0, AlphaGear
 ## SavedVariables: BetterUISavedVars

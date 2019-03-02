@@ -126,7 +126,7 @@ end
 local function GetMarketPrice(itemLink, stackCount)
     if(stackCount == nil) then stackCount = 1 end
 
-    if(BUI.Settings.Modules["GuildStore"].ddIntegration and ddDataDaedra ~= nil) then
+    if(BUI.Settings.Modules["Tooltips"].ddIntegration and ddDataDaedra ~= nil) then
         local dData = ddDataDaedra:GetKeyedItem(itemLink)
         if(dData ~= nil) then
             if(dData.wAvg ~= nil) then
@@ -134,13 +134,13 @@ local function GetMarketPrice(itemLink, stackCount)
             end
         end
     end
-    if (BUI.Settings.Modules["GuildStore"].mmIntegration and MasterMerchant ~= nil) then
+    if (BUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
         local mmData = MasterMerchant:itemStats(itemLink, false)
         if(mmData.avgPrice ~= nil) then
             return mmData.avgPrice*stackCount
         end
     end
-    if BUI.Settings.Modules["GuildStore"].ttcIntegration and TamrielTradeCentre ~= nil then
+    if BUI.Settings.Modules["Tooltips"].ttcIntegration and TamrielTradeCentre ~= nil then
         local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
 		if priceInfo then
 			if priceInfo.SuggestedPrice then
