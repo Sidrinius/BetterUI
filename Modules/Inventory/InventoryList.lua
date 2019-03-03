@@ -126,14 +126,6 @@ end
 local function GetMarketPrice(itemLink, stackCount)
     if(stackCount == nil) then stackCount = 1 end
 
-    if(BUI.Settings.Modules["Tooltips"].ddIntegration and ddDataDaedra ~= nil) then
-        local dData = ddDataDaedra:GetKeyedItem(itemLink)
-        if(dData ~= nil) then
-            if(dData.wAvg ~= nil) then
-                return dData.wAvg*stackCount
-            end
-        end
-    end
     if (BUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
         local mmData = MasterMerchant:itemStats(itemLink, false)
         if(mmData.avgPrice ~= nil) then
@@ -451,10 +443,10 @@ function GetBestItemCategoryDescription(itemData)
 	return fullDesc
 end
 
-BUI.Inventory.List = ZOS_GamepadInventoryList:Subclass()
+BUI.Inventory.List = ZO_GamepadInventoryList:Subclass()
 
 function BUI.Inventory.List:New(...)
-    local object = ZOS_GamepadInventoryList.New(self, ...)
+    local object = ZO_GamepadInventoryList.New(self, ...)
     return object
 end
 

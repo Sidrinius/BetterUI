@@ -3,7 +3,6 @@ local _
 local BLOCK_TABBAR_CALLBACK = true
 ZO_GAMEPAD_INVENTORY_SCENE_NAME = "gamepad_inventory_root"
 
--- Note: "ZOS_*" functions correspond to the shrinkwrapped modules
 BUI.Inventory.Class = ZO_GamepadInventory:Subclass()
 
 local NEW_ICON_TEXTURE = "EsoUI/Art/Miscellaneous/Gamepad/gp_icon_new.dds"
@@ -844,11 +843,7 @@ function BUI.Inventory.Class:UpdateItemLeftTooltip(selectedData)
         end
         if selectedData.isEquippedInCurrentCategory or selectedData.isEquippedInAnotherCategory or selectedData.equipSlot then
             local slotIndex = selectedData.bagId == BAG_WORN and selectedData.slotIndex or nil --equipped quickslottables slotIndex is not the same as slot index's in BAG_WORN
-         	--if(IsEquipSlotVisualCategoryHidden(EQUIP_SLOT_VISUAL_CATEGORY_APPAREL)) then
-        	--	GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_EQUIPPED_ITEM_HEADER), ZO_SELECTED_TEXT:Colorize(equipSlotText))
-        	--end
-        	-- Function altered In Shrinkwrapped files
-        	ZOS_GamepadInventory:UpdateTooltipEquippedIndicatorText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
+        	ZO_GamepadInventory:UpdateTooltipEquippedIndicatorText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
         else
             GAMEPAD_TOOLTIPS:ClearStatusLabel(GAMEPAD_LEFT_TOOLTIP)
         end
@@ -874,8 +869,7 @@ function BUI.Inventory.Class:UpdateRightTooltip()
         GAMEPAD_TOOLTIPS:LayoutItemStatComparison(GAMEPAD_LEFT_TOOLTIP, selectedItemData.bagId, selectedItemData.slotIndex, selectedEquipSlot)
         GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_INVENTORY_ITEM_COMPARE_TOOLTIP_TITLE))
     elseif GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, BAG_WORN, selectedEquipSlot) then
-    	-- Function altered In Shrinkwrapped files
-    	ZOS_GamepadInventory:UpdateTooltipEquippedIndicatorText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
+    	ZO_GamepadInventory:UpdateTooltipEquippedIndicatorText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
     end
 
 	if selectedItemData ~= nil and selectedItemData.dataSource ~= nil and selectedData ~= nil then

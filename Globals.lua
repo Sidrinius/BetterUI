@@ -1,4 +1,6 @@
-BUI = {}
+BUI = {
+	ResearchTraits = {}
+}
 
 BUI.name = "BetterUI"
 BUI.version = "2.62"
@@ -33,10 +35,6 @@ BUI.Banking = {
 
 BUI.Tooltips = {
 
-}
-
-BUI.Player = {
-	ResearchTraits = {}
 }
 
 BUI.Settings = {}

@@ -76,8 +76,6 @@ Modules\Helper\Helper.lua
 
 ; Module: Inventory Enhanced
 Modules\Inventory\Templates\GamepadInventory.xml
-Modules\Inventory\Shrinkwrap\ZO_GamepadList.lua
-Modules\Inventory\Shrinkwrap\ZO_GamepadInventory.lua
 Modules\Inventory\InventoryList.lua
 Modules\Inventory\InventorySlot.lua
 Modules\Inventory\CraftList.lua
@@ -102,5 +100,4 @@ Modules\WritUnit\Writ.lua
 Modules\WritUnit\Module.lua
 
 bindings.xml
-BetterUI.Player.lua
 BetterUI.lua

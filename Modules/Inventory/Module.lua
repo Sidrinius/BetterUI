@@ -13,11 +13,6 @@ local function Init(mId, moduleName)
 
 	local optionsTable = {
 		{
-			type = "header",
-			name = "|c0066FF[Enhanced Banking]|r Behaviour",
-			width = "full",
-		},
-		{
 			type = "checkbox",
 			name = "Enable \"Junk\" feature",
 			tooltip = "Allows items to be marked as \"junk\" to de-clutter the inventory and allow deletion of protected items",
@@ -26,7 +21,7 @@ local function Init(mId, moduleName)
 				changed = true
 				end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -74,7 +69,7 @@ local function Init(mId, moduleName)
 				changed = true
 				end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
             type = "checkbox",
@@ -93,12 +88,7 @@ local function Init(mId, moduleName)
 				changed = true
 				end,
 			width = "full",
-			warning="Needs to reload UI."
-		},
-		{
-			type = "header",
-			name = "|c0066FF[Enhanced Inventory]|r Icon",
-			width = "full",
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -108,7 +98,7 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconUnboundItem = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -118,7 +108,7 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconEnchantment = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -128,7 +118,7 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconSetGear = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -138,7 +128,7 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconIakoniGearChanger = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -148,7 +138,7 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconIakoniGearChangerAllSets = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI.",
+			requiresReload = true,
 			disabled = function() return not BUI.Settings.Modules["Inventory"].showIconIakoniGearChanger end,  
 		},		
 		{
@@ -159,17 +149,11 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{ 			
 			type = "header", 		
-		},		         
-		{             
-			type = "button",             
-			name = "Apply Changes",             
-			func = function() ReloadUI() end, 			
-			disabled = function() return not changed end,         
-		},		 	
+		},		         	 	
 	}
 	LAM:RegisterAddonPanel("BUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BUI_"..mId, optionsTable)

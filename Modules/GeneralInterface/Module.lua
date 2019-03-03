@@ -10,11 +10,6 @@ local function Init(mId, moduleName)
 
 	local optionsTable = {
 		{
-			type = "header",
-			name = "Module Settings",
-			width = "full",
-		},
-		{
 		type = "checkbox",
 			name = "Display item style and trait knowledge",
 			tooltip = "On items, displays the style of the item and whether the trait can be researched",
@@ -34,14 +29,14 @@ local function Init(mId, moduleName)
 		},
 		{
 			type = "colorpicker",
-			name = "Character name colour",
+			name = "Character name color",
 			getFunc = function() return unpack(BUI.Settings.Modules["Tooltips"].showCharacterColor) end,
 			setFunc = function(r,g,b,a) BUI.Settings.Modules["Tooltips"].showCharacterColor={r,g,b,a} end,
 			width = "full",	--or "half" (optional)
 		},
 		{
 			type = "colorpicker",
-			name = "Account name colour",
+			name = "Account name color",
 			getFunc = function() return unpack(BUI.Settings.Modules["Tooltips"].showAccountColor) end,
 			setFunc = function(r,g,b,a) BUI.Settings.Modules["Tooltips"].showAccountColor={r,g,b,a} end,
 			width = "full",	--or "half" (optional)
@@ -97,16 +92,6 @@ local function Init(mId, moduleName)
 			width = "full",
 			requiresReload = true,
 		},
-		{
-			type = "checkbox",
-			name = "Short Currency Format",
-			tooltip = "Automatically formats the value column to shorten large numbers and to display the currency with commas.",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].useShortFormat end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].useShortFormat = value
-					end,
-			width = "full",
-			requiresReload = true,
-		},
 	}
 	LAM:RegisterAddonPanel("BUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BUI_"..mId, optionsTable)
@@ -156,11 +141,8 @@ function BUI.Tooltips.InitModule(m_options)
 	m_options["removeDeleteDialog"] = false
 	m_options["mmIntegration"] = true
 	m_options["ttcIntegration"] = true
-	m_options["useShortFormat"] = true
-
     return m_options
 end
-
 
 function BUI.Tooltips.Setup()
 
@@ -175,63 +157,6 @@ function BUI.Tooltips.Setup()
 	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_LEFT_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
 	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_RIGHT_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
 	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_MOVABLE_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
-
-	--[[
-	-- ZOS have released a buggy tooltip which is blind to the stackCount of the item being displayed, let's fix that
-	local LEFT_TOOLTIP = GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_LEFT_TOOLTIP)
-	LEFT_TOOLTIP.LayoutBagItem = function(self, bagId, slotIndex, enchantMode, showInventoryAndBagCount)
-	    local itemLink = GetItemLink(bagId, slotIndex)
-	    local _,stack,_,_,_,_,_,_ = GetItemInfo(bagId, slotIndex)
-	    local equipped = bagId == BAG_WORN
-	    local showInventoryCount = ZO_ITEM_TOOLTIP_SHOW_INVENTORY_BODY_COUNT
-	    local showBankCount = ZO_ITEM_TOOLTIP_SHOW_BANK_BODY_COUNT
-	    local stackCount = ZO_ITEM_TOOLTIP_INVENTORY_TITLE_COUNT
-	    if showInventoryAndBagCount then
-	        stackCount = ZO_ITEM_TOOLTIP_INVENTORY_AND_BANK_TITLE_COUNT
-	    else
-	        if bagId == BAG_BANK then
-	            showBankCount = ZO_ITEM_TOOLTIP_HIDE_BANK_BODY_COUNT
-	            stackCount = ZO_ITEM_TOOLTIP_BANK_TITLE_COUNT
-	        elseif bagId == BAG_BACKPACK then
-	            showInventoryCount = ZO_ITEM_TOOLTIP_HIDE_INVENTORY_BODY_COUNT
-	            stackCount = ZO_ITEM_TOOLTIP_INVENTORY_TITLE_COUNT
-	        elseif equipped then
-	            showInventoryCount = ZO_ITEM_TOOLTIP_HIDE_INVENTORY_BODY_COUNT
-	            stackCount = 1
-	        end
-	    end
-	    self.currentStack = stack
-	    return self:LayoutItemWithStackCount(itemLink, equipped, GetItemCreatorName(bagId, slotIndex), nil, enchantMode, nil, stackCount, showInventoryCount, showBankCount)
-	end
-	LEFT_TOOLTIP.LayoutItemWithStackCount = function(self, itemLink, equipped, creatorName, forceFullDurability, enchantMode, previewValueToAdd, customOrBagStackCount, showInventoryCount, showBankCount)
-	    local isValidItemLink = itemLink ~= ""
-	    if isValidItemLink then
-	        local stackCount
-	        if customOrBagStackCount == ZO_ITEM_TOOLTIP_INVENTORY_TITLE_COUNT then
-	            local bagCount, bankCount = GetItemLinkStacks(itemLink)
-	            stackCount = bagCount
-	        elseif customOrBagStackCount == ZO_ITEM_TOOLTIP_BANK_TITLE_COUNT then
-	            local bagCount, bankCount = GetItemLinkStacks(itemLink)
-	            stackCount = bankCount
-	        elseif customOrBagStackCount == ZO_ITEM_TOOLTIP_INVENTORY_AND_BANK_TITLE_COUNT then
-	            local bagCount, bankCount = GetItemLinkStacks(itemLink)
-	            stackCount = bagCount + bankCount
-	        else
-	            stackCount = customOrBagStackCount
-	        end
-	        local itemName = GetItemLinkName(itemLink)
-	        if stackCount and stackCount > 1 then
-	        	if(self.currentStack ~= nil) then
-	        		itemName = zo_strformat(SI_TOOLTIP_ITEM_NAME_WITH_QUANTITY, itemName, self.currentStack)
-	        	else
-		            itemName = zo_strformat(SI_TOOLTIP_ITEM_NAME_WITH_QUANTITY, itemName, stackCount)
-		        end
-	        end
-	        return self:LayoutItem(itemLink, equipped, creatorName, forceFullDurability, enchantMode, previewValueToAdd, itemName, showInventoryCount, showBankCount)
-	    end
-	end
-	]]
-
 	ZO_PreHook(UNIT_FRAMES,"UpdateGroupAnchorFrames", BUI.Tooltips.UpdateGroupAnchorFrames)
 	UNIT_FRAMES.staticFrames.reticleover.RefreshControls = BUI.Tooltips.RefreshControls
 
