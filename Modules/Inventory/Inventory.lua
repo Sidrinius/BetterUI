@@ -51,6 +51,35 @@ local function BUI_GetEquipSlotForEquipType(equipType)
     return equipSlot
 end
 
+function BUI.Inventory.UpdateTooltipEquippedText(tooltipType, equipSlot)
+    ZO_InventoryUtils_UpdateTooltipEquippedIndicatorText(tooltipType, equipSlot)
+    local isHidden, highestPriorityVisualLayerThatIsShowing = WouldEquipmentBeHidden(equipSlot or EQUIP_SLOT_NONE)
+    local equipSlotText = ""
+    local equipSlotTextHidden = ""
+    local equippedHeader = GetString(SI_GAMEPAD_EQUIPPED_ITEM_HEADER)
+
+    if equipSlot == EQUIP_SLOT_MAIN_HAND then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_MAIN_HAND_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_BACKUP_MAIN then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_BACKUP_MAIN_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_OFF_HAND then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_OFF_HAND_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_BACKUP_OFF then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_BACKUP_OFF_ITEM_HEADER)
+    end
+     
+    if isHidden and equipSlotText ~= "" then
+        equipSlotTextHidden = "(Hidden)"
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>>: ", equippedHeader), zo_strformat("<<1>> <<2>>", equipSlotText, equipSlotTextHidden))
+    elseif isHidden then
+        equipSlotTextHidden = "Hidden by Collection"
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>> - <<2>>", equippedHeader, equipSlotTextHidden))
+    elseif not isHidden and equipSlotText ~= "" then
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>>: ", equippedHeader), zo_strformat("<<1>>", equipSlotText))
+    else
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, GetString(SI_GAMEPAD_EQUIPPED_ITEM_HEADER), equipSlotText)
+    end
+end
 
 -- The below functions are included from ZO_GamepadInventory.lua
 local function MenuEntryTemplateEquality(left, right)
@@ -843,7 +872,7 @@ function BUI.Inventory.Class:UpdateItemLeftTooltip(selectedData)
         end
         if selectedData.isEquippedInCurrentCategory or selectedData.isEquippedInAnotherCategory or selectedData.equipSlot then
             local slotIndex = selectedData.bagId == BAG_WORN and selectedData.slotIndex or nil --equipped quickslottables slotIndex is not the same as slot index's in BAG_WORN
-        	ZO_GamepadInventory:UpdateTooltipEquippedIndicatorText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
+        	BUI.Inventory.UpdateTooltipEquippedText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
         else
             GAMEPAD_TOOLTIPS:ClearStatusLabel(GAMEPAD_LEFT_TOOLTIP)
         end
@@ -869,7 +898,7 @@ function BUI.Inventory.Class:UpdateRightTooltip()
         GAMEPAD_TOOLTIPS:LayoutItemStatComparison(GAMEPAD_LEFT_TOOLTIP, selectedItemData.bagId, selectedItemData.slotIndex, selectedEquipSlot)
         GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_INVENTORY_ITEM_COMPARE_TOOLTIP_TITLE))
     elseif GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, BAG_WORN, selectedEquipSlot) then
-    	ZO_GamepadInventory:UpdateTooltipEquippedIndicatorText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
+    	BUI.Inventory.UpdateTooltipEquippedText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
     end
 
 	if selectedItemData ~= nil and selectedItemData.dataSource ~= nil and selectedData ~= nil then
