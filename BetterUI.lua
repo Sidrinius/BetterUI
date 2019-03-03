@@ -17,12 +17,13 @@ function BUI.InitModuleOptions()
 		},
 		{
 			type = "checkbox",
-			name = "Enable Common Interface Module (CIM)",
-			tooltip = "Enables the use of the completely redesigned \"Enhanced\" interfaces!",
-			getFunc = function() return BUI.Settings.Modules["CIM"].m_enabled end,
-			setFunc = function(value) BUI.Settings.Modules["CIM"].m_enabled = value
-									dirtyModules = true end,
+			name = "Enable |c0066FFGeneral Interface Improvements|r",
+			tooltip = "Vast improvements to the ingame tooltips and unit frames",
+			getFunc = function() return BUI.Settings.Modules["Tooltips"].m_enabled end,
+			setFunc = function(value) BUI.Settings.Modules["Tooltips"].m_enabled = value
+									dirtyModules = true  end,
 			width = "full",
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -30,9 +31,15 @@ function BUI.InitModuleOptions()
 			tooltip = "Completely redesigns the gamepad's inventory interface",
 			getFunc = function() return BUI.Settings.Modules["Inventory"].m_enabled end,
 			setFunc = function(value) BUI.Settings.Modules["Inventory"].m_enabled = value
-									dirtyModules = true  end,
-			disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+						dirtyModules = true
+						if value == true then
+		                    BUI.Settings.Modules["CIM"].m_enabled = true
+		              	elseif not BUI.Settings.Modules["Inventory"].m_enabled and not BUI.Settings.Modules["Banking"].m_enabled then
+		                    BUI.Settings.Modules["CIM"].m_enabled = false
+		                end
+		            end,
 			width = "full",
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -40,26 +47,38 @@ function BUI.InitModuleOptions()
 			tooltip = "Completely redesigns the gamepad's banking interface (and has \"Mobile Banking\")",
 			getFunc = function() return BUI.Settings.Modules["Banking"].m_enabled end,
 			setFunc = function(value) BUI.Settings.Modules["Banking"].m_enabled = value
-									dirtyModules = true  end,
-			disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+						dirtyModules = true
+						if value == true then
+		                    BUI.Settings.Modules["CIM"].m_enabled = true
+		                elseif not BUI.Settings.Modules["Inventory"].m_enabled and not BUI.Settings.Modules["Banking"].m_enabled then
+		                    BUI.Settings.Modules["CIM"].m_enabled = false
+		                end
+		            end,
 			width = "full",
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
-			name = "Enable Daily Writ module",
+			name = "Enable |c0066FFDaily Writ module|r",
 			tooltip = "Displays the daily writ, and progress, at each crafting station",
 			getFunc = function() return BUI.Settings.Modules["Writs"].m_enabled end,
 			setFunc = function(value) BUI.Settings.Modules["Writs"].m_enabled = value
 									dirtyModules = true  end,
 			width = "full",
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
-			name = "Enable General Interface Improvements",
-			tooltip = "Vast improvements to the ingame tooltips and unit frames",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].m_enabled end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].m_enabled = value
-									dirtyModules = true  end,
+			name = "Common Interface Module",
+			tooltip = "Enables added functionality to the completely redesigned \"Enhanced\" interfaces!",
+			getFunc = function() return BUI.Settings.Modules["CIM"].m_enabled end,
+			setFunc = function(value) BUI.Settings.Modules["CIM"].m_enabled = value
+						dirtyModules = true
+						if BUI.Settings.Modules["Inventory"].m_enabled == false and BUI.Settings.Modules["Banking"].m_enabled == false then
+		                    BUI.Settings.Modules["CIM"].m_enabled = false
+		                end
+		            end,
+            disabled = function() return BUI.Settings.Modules["CIM"].m_enabled or not BUI.Settings.Modules["CIM"].m_enabled end,
 			width = "full",
 		},
 		{

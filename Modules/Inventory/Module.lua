@@ -23,14 +23,6 @@ local function Init(mId, moduleName)
 			width = "full",
 			requiresReload = true,
 		},
-		{
-			type = "checkbox",
-			name = "Save inventory position",
-			tooltip = "Keeps track of the list position on each category for quicker browsing",
-			getFunc = function() return BUI.Settings.Modules["Inventory"].savePosition end,
-			setFunc = function(value) BUI.Settings.Modules["Inventory"].savePosition = value end,
-			width = "full",
-		},
         {
             type = "checkbox",
             name = "Enable category wrapping",
@@ -52,6 +44,14 @@ local function Init(mId, moduleName)
 			name = "|c0066FF[Enhanced Inventory]|r Display",
 			width = "full",
 		},
+		{
+            type = "checkbox",
+            name = "Display character attributes when switching tooltip",
+            tooltip = "Show the character attributes on the switching tooltip rather than seeing the current equipped item",
+            getFunc = function() return BUI.Settings.Modules["Inventory"].displayCharAttributes end,
+            setFunc = function(value) BUI.Settings.Modules["Inventory"].displayCharAttributes = value end,
+            width = "full",
+        },
         {
             type = "checkbox",
             name = "Replace \"Value\" with the market's price",
@@ -71,14 +71,6 @@ local function Init(mId, moduleName)
 			width = "full",
 			requiresReload = true,
 		},
-		{
-            type = "checkbox",
-            name = "Display character attributes on the switching tooltip?",
-            tooltip = "Show the character attributes on the switching tooltip rather than seeing the current equipped item",
-            getFunc = function() return BUI.Settings.Modules["Inventory"].displayCharAttributes end,
-            setFunc = function(value) BUI.Settings.Modules["Inventory"].displayCharAttributes = value end,
-            width = "full",
-        },
 		{
 			type = "checkbox",
 			name = "Bind on Equip Protection",
@@ -160,7 +152,6 @@ local function Init(mId, moduleName)
 end
 
 function BUI.Inventory.InitModule(m_options)
-    m_options["savePosition"] = true
     m_options["enableWrapping"] = true
     m_options["showMarketPrice"] = false
     m_options["useTriggersForSkip"] = false

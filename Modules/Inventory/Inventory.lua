@@ -148,35 +148,7 @@ function BUI.Inventory.Class:ToSavedPosition()
             self:RefreshCraftBagList()
         end
     end
-
-	if(BUI.Settings.Modules["Inventory"].savePosition) then
-		local lastPosition
-
-		if self:GetCurrentList() == self.itemList then
-			lastPosition = self.categoryPositions[self.categoryList.selectedIndex]
-		else
-			lastPosition = self.categoryCraftPositions[self.categoryList.selectedIndex]
-		end
-
-		if lastPosition ~= nil and self._currentList.dataList ~= nil then
-			lastPosition = (#self._currentList.dataList > lastPosition) and lastPosition or #self._currentList.dataList
-
-			if lastPosition ~= nil and #self._currentList.dataList > 0 then
-				self._currentList:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
-				
-				GAMEPAD_TOOLTIPS:Reset(GAMEPAD_LEFT_TOOLTIP)
-				if self.callLaterLeftToolTip ~= nil then
-					EVENT_MANAGER:UnregisterForUpdate(self.callLaterLeftToolTip)
-				end
-				
-				local callLaterId = zo_callLater(function() self:UpdateItemLeftTooltip(self._currentList.selectedData) end, INVENTORY_LEFT_TOOL_TIP_REFRESH_DELAY_MS)
-				self.callLaterLeftToolTip = "CallLaterFunction"..callLaterId
-			end
-		end
-	else
-		self._currentList:SetSelectedIndexWithoutAnimation(1, true, false)
-	end
-
+    self._currentList:SetSelectedIndexWithoutAnimation(1, true, false)
 end
 
 function BUI_TabBar_OnTabNext(parent, successful)

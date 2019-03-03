@@ -3,7 +3,7 @@ BUI = {
 }
 
 BUI.name = "BetterUI"
-BUI.version = "2.62"
+BUI.version = "2.63"
 
 -- Program Global (scope of BUI, though) variable initialization
 BUI.WindowManager = GetWindowManager()

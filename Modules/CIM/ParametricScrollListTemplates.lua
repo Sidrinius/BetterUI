@@ -105,25 +105,12 @@ function BUI_VerticalParametricScrollList:Initialize(control)
     self.alignToScreenCenterExpectedEntryHalfHeight = 30
 end
 
-
-
-
-
 BUI_VerticalItemParametricScrollList = BUI_VerticalParametricScrollList:Subclass()
 function BUI_VerticalItemParametricScrollList:New(control)
     local list = BUI_VerticalParametricScrollList.New(self, control)
     list:SetUniversalPostPadding(GAMEPAD_DEFAULT_POST_PADDING)
     return list
 end
-
-
-
-
-
-
-
-
-
 
 BUI_HorizontalScrollList_Gamepad = ZO_HorizontalScrollList:Subclass()
 
@@ -244,17 +231,6 @@ function BUI_HorizontalScrollList_Gamepad:UpdateDirectionalInput()
     end
 end
 
-
-
-
-
-
-
-
-
-
-
-
 BUI_HorizontalParametricScrollList = ZO_ParametricScrollList:Subclass()
 function BUI_HorizontalParametricScrollList:New(control, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
     onActivatedChangedFunction = onActivatedChangedFunction or ZO_GamepadOnDefaultScrollListActivatedChanged
@@ -280,16 +256,6 @@ function BUI_HorizontalListRow_Initialize(self, setupFunction, equalityFunction)
     self.horizontalListObject = BUI_HorizontalScrollList_Gamepad:New(self.horizontalListControl, "ZO_GamepadHorizontalListEntry", 1, setupFunction, equalityFunction)
     self.horizontalListObject:SetAllowWrapping(true)
 end
-
-
-
-
-
-
-
-
-
-
 
 BUI_TabBarScrollList = BUI_HorizontalParametricScrollList:Subclass()
 function BUI_TabBarScrollList:New(control, leftIcon, rightIcon, data, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
@@ -438,11 +404,6 @@ function BUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
         return succeeded
 end
 
-
-
-
-
-
 local SUB_LIST_CENTER_OFFSET = -50
 BUI_VerticalParametricScrollListSubList = BUI_VerticalParametricScrollList:Subclass()
 function BUI_VerticalParametricScrollListSubList:New(control, parentList, parentKeybinds, onDataChosen)
@@ -505,8 +466,6 @@ function BUI_VerticalParametricScrollListSubList:Deactivate()
     KEYBIND_STRIP:AddKeybindButtonGroup(self.parentKeybinds)
     self.control:SetHidden(true)
 end
-
-
 
 BUI_Gamepad_ParametricList_Screen = ZO_Gamepad_ParametricList_Screen:Subclass()
 
