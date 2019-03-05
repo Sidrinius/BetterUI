@@ -148,7 +148,9 @@ function BUI.Inventory.Class:ToSavedPosition()
             self:RefreshCraftBagList()
         end
     end
-    self._currentList:SetSelectedIndexWithoutAnimation(1, true, false)
+    if not self.itemList:IsEmpty() then
+        self._currentList:SetSelectedIndexWithoutAnimation(1, true, false)
+    end
 end
 
 function BUI_TabBar_OnTabNext(parent, successful)
@@ -1804,14 +1806,18 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             keybind = "UI_SHORTCUT_SECONDARY",
             visible = function()
             	if self.actionMode == ITEM_LIST_ACTION_MODE then
-            		local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
-            		local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
-            		
-            		if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
-            			return false
-            		end
-            		return true
-            	end
+                    if self.itemList.selectedData then
+                        local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
+                        local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+                    
+                        if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
+                            return false
+                        end
+                        return true
+                    else
+                        return false
+                    end
+                end
             end,
             callback = function()
             	if self.actionMode == ITEM_LIST_ACTION_MODE then
