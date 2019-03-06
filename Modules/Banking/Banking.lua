@@ -7,6 +7,7 @@ local LIST_DEPOSIT  = 2
 local lastUsedBank = 0
 local currentUsedBank = 0
 local lastActionName
+local esoSubscriber
 
 local function GetCategoryTypeFromWeaponType(bagId, slotIndex)
     local weaponType = GetItemWeaponType(bagId, slotIndex)
@@ -632,22 +633,23 @@ end
 
 local function FindEmptySlotInBank()
     if(IsHouseBankBag(GetBankingBag()) == false) then
-        local emptySlotIndex = FindEmptySlotInBag(BAG_BANK)
-        if(emptySlotIndex ~= nil) then
-            return BAG_BANK, emptySlotIndex
-        end
-
-        emptySlotIndex = FindEmptySlotInBag(BAG_SUBSCRIBER_BANK)
-        if(emptySlotIndex ~= nil) then
-            return BAG_SUBSCRIBER_BANK, emptySlotIndex
+        local emptySlotIndexBank = FindEmptySlotInBag(BAG_BANK)
+        local emptySlotIndexSubscriber = FindEmptySlotInBag(BAG_SUBSCRIBER_BANK)
+        if emptySlotIndexBank ~= nil then
+            return BAG_BANK, emptySlotIndexBank
+        elseif esoSubscriber and emptySlotIndexSubscriber ~= nil then
+            return BAG_SUBSCRIBER_BANK, emptySlotIndexSubscriber
+        else
+            return nil
         end
     else
-        emptySlotIndex = FindEmptySlotInBag(currentUsedBank)
-        if(emptySlotIndex ~= nil) then
+        local emptySlotIndex = FindEmptySlotInBag(currentUsedBank)
+        if emptySlotIndex ~= nil then
             return currentUsedBank, emptySlotIndex
+        else
+            return currentUsedBank, nil
         end
     end
-	return nil
 end
 
 function BUI.Banking.Class:ActivateSpinner()
@@ -675,18 +677,26 @@ end
 
 
 function BUI.Banking.Class:MoveItem(list, quantity)
-	local movingItemBag, index = ZO_Inventory_GetBagAndIndex(list:GetSelectedData())
-    local stackCount = GetSlotStackSize(movingItemBag, index)
+	local fromBag, fromBagIndex = ZO_Inventory_GetBagAndIndex(list:GetSelectedData())
+    local fromBagStackCount = GetSlotStackSize(fromBag, fromBagIndex)
+    local fromBagItemLink = GetItemLink(fromBag, fromBagIndex)
+    local toBag
+    local toBagEmptyIndex
+    local toBagIndex
+    local toBagItemLink
+    local toBagStackCount
+    local toBagStackCountMax
+    local isToBagItemStackable
 	local inSpinner = false
 	if quantity ~= nil then
 		--in spinner
 		inSpinner = true
 	else 
 		--not in spinner
-		if(stackCount > 1) then
+		if(fromBagStackCount > 1) then
 			-- display the spinner
 			self:UpdateSpinnerConfirmation(true, self.list)
-			self:SetSpinnerValue(list:GetSelectedData().stackCount, list:GetSelectedData().stackCount)
+			self:SetSpinnerValue(list:GetSelectedData().fromBagStackCount, list:GetSelectedData().fromBagStackCount)
 			return
 		else
 		--since stackcount = 1
@@ -694,27 +704,86 @@ function BUI.Banking.Class:MoveItem(list, quantity)
 		end
 	end
 	 
-	-- We're in the spinner! Confirm the move here :)
-	local fromBag = movingItemBag
-	local toBag, emptySlotIndex
 	if self.currentMode == LIST_WITHDRAW then
 		--we are withdrawing item from bank/subscriber bank bag
 		toBag = BAG_BACKPACK
-		emptySlotIndex = FindEmptySlotInBag(toBag)
+		toBagEmptyIndex = FindEmptySlotInBag(toBag)
 	else
 		--we are depositing item to bank/subscriber bank bag
-		toBag, emptySlotIndex = FindEmptySlotInBank()
+		toBag, toBagEmptyIndex = FindEmptySlotInBank()
 	end
-	if emptySlotIndex ~= nil then
-		--good to move
-		CallSecureProtected("RequestMoveItem", fromBag, index, toBag, emptySlotIndex, quantity)
-		if inSpinner then
-			self:UpdateSpinnerConfirmation(false, self.list)
-		end
+
+    if toBagEmptyIndex ~= nil then
+        --good to move
+        CallSecureProtected("RequestMoveItem", fromBag, fromBagIndex, toBag, toBagEmptyIndex, quantity)
+       if inSpinner then
+           self:UpdateSpinnerConfirmation(false, self.list)
+       end
+    -- Accomodates full banks with stackable item slots available   
     else
-        local errorStringId = (toBag == BAG_BACKPACK) and SI_INVENTORY_ERROR_INVENTORY_FULL or SI_INVENTORY_ERROR_BANK_FULL
-        ZO_Alert(UI_ALERT_CATEGORY_ERROR, SOUNDS.NEGATIVE_CLICK, errorStringId)
-	end
+        if toBag ~= nil then
+            local errorStringId = (toBag == BAG_BACKPACK) and SI_INVENTORY_ERROR_INVENTORY_FULL or SI_INVENTORY_ERROR_BANK_FULL
+             -- Get bag size
+            local bagSize = GetBagSize(toBag)
+            -- Iterate through BAG
+            for i = 0, bagSize do
+                local currentItemLink = GetItemLink(toBag, i)
+                -- Matches items from origin bag to destination bag
+                if currentItemLink == fromBagItemLink then
+                    toBagItemLink = currentItemLink
+                    isToBagItemStackable = IsItemLinkStackable(toBagItemLink)
+                    -- Confirms item matched is stackable
+                    if isToBagItemStackable then
+                        toBagStackCount, toBagStackCountMax = GetSlotStackSize(toBag, fromBagIndex)
+                        if toBagStackCount < toBagStackCountMax then
+                            toBagIndex = i
+                        end
+                    end                    
+                end
+            end
+            if toBagIndex then
+                --good to move item that already has a non-full stack in the destination bag
+                CallSecureProtected("RequestMoveItem", fromBag, fromBagIndex, toBag, toBagIndex, quantity)
+                if inSpinner then
+                    self:UpdateSpinnerConfirmation(false, self.list)
+                end
+            else 
+                ZO_Alert(UI_ALERT_CATEGORY_ERROR, SOUNDS.NEGATIVE_CLICK, errorStringId)
+            end
+        else
+            local banks = {BAG_BANK, BAG_SUBSCRIBER_BANK}
+            for bankBags = 1, 2 do
+                local bank = banks[bankBags]
+                -- Get bag size
+                local bagSize = GetBagSize(bank)
+                -- Iterate through BAG
+                for i = 0, bagSize do
+                local currentItemLink = GetItemLink(bank, i)
+                -- Matches items from origin bag to destination bag
+                if currentItemLink == fromBagItemLink then
+                    toBagItemLink = currentItemLink
+                    isToBagItemStackable = IsItemLinkStackable(toBagItemLink)
+                    -- Confirms item matched is stackable
+                    if isToBagItemStackable then
+                        toBagStackCount, toBagStackCountMax = GetSlotStackSize(bank, i)
+                        if toBagStackCount < toBagStackCountMax then
+                            toBagIndex = i
+                            toBag = bank
+                        end
+                    end                    
+                end
+            end
+            if toBagIndex and toBag then
+                CallSecureProtected("RequestMoveItem", fromBag, fromBagIndex, toBag, toBagIndex, quantity)
+                if inSpinner then
+                    self:UpdateSpinnerConfirmation(false, self.list)
+                end
+            else 
+                local errorStringId = (toBag == BAG_BACKPACK) and SI_INVENTORY_ERROR_INVENTORY_FULL or SI_INVENTORY_ERROR_BANK_FULL
+                ZO_Alert(UI_ALERT_CATEGORY_ERROR, SOUNDS.NEGATIVE_CLICK, errorStringId)
+            end
+        end
+    end
 end
 
 function BUI.Banking.Class:CancelWithdrawDeposit(list)
@@ -1112,5 +1181,7 @@ function BUI.Banking.Init()
 	if ((not USE_SHORT_CURRENCY_FORMAT ~= nil) and BUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
 		USE_SHORT_CURRENCY_FORMAT = BUI.Settings.Modules["Inventory"].useShortFormat
 	end
+
+    esoSubscriber = IsESOPlusSubscriber()
     --tw = BUI.Banking.Window --dev mode
 end
