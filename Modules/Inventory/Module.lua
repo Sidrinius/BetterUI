@@ -55,7 +55,7 @@ local function Init(mId, moduleName)
         {
             type = "checkbox",
             name = "Replace \"Value\" with the market's price",
-            tooltip = "Replaces the item \"Value\" with either MasterMerchant's price or dataDaedra's market price",
+            tooltip = "Replaces the item \"Value\" with either Master Merchant's price or TTC's market price",
             getFunc = function() return BUI.Settings.Modules["Inventory"].showMarketPrice end,
             setFunc = function(value) BUI.Settings.Modules["Inventory"].showMarketPrice = value end,
             width = "full",
@@ -63,7 +63,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Short Currency Format",
-			tooltip = "Automatically formats the value column to shorten large numbers and to display the currency with commas.",
+			tooltip = "Automatically formats the value column to shorten large numbers and to display the currency with commas",
 			getFunc = function() return BUI.Settings.Modules["Inventory"].useShortFormat end,
 			setFunc = function(value) BUI.Settings.Modules["Inventory"].useShortFormat = value
 				changed = true
@@ -74,7 +74,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Bind on Equip Protection",
-			tooltip = "Show a dialog before equipping Bind on Equip items.",
+			tooltip = "Show a dialog before equipping Bind on Equip items",
 			getFunc = function () return BUI.Settings.Modules["Inventory"].bindOnEquipProtection end,
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].bindOnEquipProtection = value
 				changed = true
@@ -85,7 +85,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Item Icon - Unbound Items",
-			tooltip = "Show an icon after unbound items.",
+			tooltip = "Show an icon after unbound items",
 			getFunc = function () return BUI.Settings.Modules["Inventory"].showIconUnboundItem end,
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconUnboundItem = value
 				changed = true end,
@@ -95,7 +95,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Item Icon - Enchantment",
-			tooltip = "Show an icon after enchanted item.",
+			tooltip = "Show an icon after enchanted item",
 			getFunc = function () return BUI.Settings.Modules["Inventory"].showIconEnchantment end,
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconEnchantment = value
 				changed = true end,
@@ -105,7 +105,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Item Icon - Set Gear",
-			tooltip = "Show an icon after set gears.",
+			tooltip = "Show an icon after set gears",
 			getFunc = function () return BUI.Settings.Modules["Inventory"].showIconSetGear end,
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconSetGear = value
 				changed = true end,
@@ -115,7 +115,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Item Icon - Iakoni's Gear Changer",
-			tooltip = "Show the first set number in Iakoni's settings.",
+			tooltip = "Show the first set number in Iakoni's settings",
 			getFunc = function () return BUI.Settings.Modules["Inventory"].showIconIakoniGearChanger end,
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconIakoniGearChanger = value
 				changed = true end,
@@ -124,8 +124,8 @@ local function Init(mId, moduleName)
 		},
 		{
 			type = "checkbox",
-			name = "            Show all sets instead",
-			tooltip = "Show all sets if in multiple Iakoni's settings.",
+			name = "Show all sets instead",
+			tooltip = "Show all sets if in multiple Iakoni's settings",
 			getFunc = function () return BUI.Settings.Modules["Inventory"].showIconIakoniGearChangerAllSets end,
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconIakoniGearChangerAllSets = value
 				changed = true end,
@@ -136,7 +136,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Item Icon - GamePadBuddy's Status Indicator",
-			tooltip = "Show an icon to indicate gear's researchable/known/duplicated/researching/ornate/intricate status.",
+			tooltip = "Show an icon to indicate gear's researchable/known/duplicated/researching/ornate/intricate status",
 			getFunc = function () return BUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon end,
 			setFunc = function (value) BUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon = value
 				changed = true end,

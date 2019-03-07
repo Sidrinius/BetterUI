@@ -11,8 +11,8 @@ local function Init(mId, moduleName)
 	local optionsTable = {
 		{
 			type = "checkbox",
-			name = "MasterMerchant integration",
-			tooltip = "Hooks MasterMerchant into the guild store and item tooltips",
+			name = "Master Merchant integration",
+			tooltip = "Hooks Master Merchant into the item tooltips",
 			getFunc = function() return BUI.Settings.Modules["Tooltips"].mmIntegration end,
 			setFunc = function(value) BUI.Settings.Modules["Tooltips"].mmIntegration = value
 					end,
@@ -23,7 +23,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Tamriel Trade Centre integration",
-			tooltip = "Hooks TTC Price info into the guild store if MM is not presented",
+			tooltip = "Hooks TTC Price info into the item tooltips",
 			getFunc = function() return BUI.Settings.Modules["Tooltips"].ttcIntegration end,
 			setFunc = function(value) BUI.Settings.Modules["Tooltips"].ttcIntegration = value
 					end,
@@ -51,7 +51,7 @@ local function Init(mId, moduleName)
         },
 		{
 			type = "checkbox",
-			name = "Remove the 'delete' dialog in the Mail inbox?",
+			name = "Remove delete dialog confirmation when deleting mail",
 			getFunc = function() return BUI.Settings.Modules["Tooltips"].removeDeleteDialog end,
 			setFunc = function(value)
 						BUI.Settings.Modules["Tooltips"].removeDeleteDialog = value
@@ -99,7 +99,7 @@ local function Init(mId, moduleName)
         },
         {
             type = "checkbox",
-            name = "Use bigger font size in item lists.",
+            name = "Use bigger font size in the inventory and banking item lists",
             tooltip = "Changed the font size of item lists bigger.",
             getFunc = function() return BUI.Settings.Modules["CIM"].biggerSkin end,
             setFunc = function(value) BUI.Settings.Modules["CIM"].biggerSkin = value

@@ -18,7 +18,7 @@ function BUI.InitModuleOptions()
 		{
 			type = "checkbox",
 			name = "Enable |c0066FFGeneral Interface Improvements|r",
-			tooltip = "Vast improvements to the ingame tooltips and unit frames",
+			tooltip = "Vast improvements to the ingame tooltips and UI",
 			getFunc = function() return BUI.Settings.Modules["Tooltips"].m_enabled end,
 			setFunc = function(value) BUI.Settings.Modules["Tooltips"].m_enabled = value
 						dirtyModules = true
