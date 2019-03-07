@@ -444,7 +444,7 @@ function BUI.Banking.Class:Initialize(tlw_name, scene_name)
 
     local function OnEffectivelyHidden()
         self:LastUsedBank()
-        self:UpdateSpinnerConfirmation(false, self.list)
+        self:CancelWithdrawDeposit(self.list)
         self.list:Deactivate()
         self.selector:Deactivate()
 
