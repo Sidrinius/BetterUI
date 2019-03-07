@@ -6,75 +6,9 @@ local ZO_ITEM_TOOLTIP_BANK_TITLE_COUNT = "bank"
 local ZO_ITEM_TOOLTIP_INVENTORY_AND_BANK_TITLE_COUNT = "inventoryAndBank"
 
 local function Init(mId, moduleName)
-	local panelData = Init_ModulePanel(moduleName, "General Interface Improvement Settings")
+	local panelData = Init_ModulePanel(moduleName, "General Interface Settings")
 
 	local optionsTable = {
-		{
-			type = "header",
-			name = "Module Settings",
-			width = "full",
-		},
-		{
-		type = "checkbox",
-			name = "Display item style and trait knowledge",
-			tooltip = "On items, displays the style of the item and whether the trait can be researched",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].showStyleTrait end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].showStyleTrait = value end,
-			width = "full",
-		},
-		{
-			type = "checkbox",
-			name = "Display the account name next to the character name?",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].showAccountName end,
-			setFunc = function(value)
-						BUI.Settings.Modules["Tooltips"].showAccountName = value
-						UNIT_FRAMES.firstDirtyGroupIndex = 1
-					end,
-			width = "full",
-		},
-		{
-			type = "colorpicker",
-			name = "Character name colour",
-			getFunc = function() return unpack(BUI.Settings.Modules["Tooltips"].showCharacterColor) end,
-			setFunc = function(r,g,b,a) BUI.Settings.Modules["Tooltips"].showCharacterColor={r,g,b,a} end,
-			width = "full",	--or "half" (optional)
-		},
-		{
-			type = "colorpicker",
-			name = "Account name colour",
-			getFunc = function() return unpack(BUI.Settings.Modules["Tooltips"].showAccountColor) end,
-			setFunc = function(r,g,b,a) BUI.Settings.Modules["Tooltips"].showAccountColor={r,g,b,a} end,
-			width = "full",	--or "half" (optional)
-		},
-		{
-			type = "checkbox",
-			name = "Display the health value (text) on the target?",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].showHealthText end,
-			setFunc = function(value)
-						BUI.Settings.Modules["Tooltips"].showHealthText = value
-						UNIT_FRAMES.firstDirtyGroupIndex = 1
-						end,
-			width = "full",
-		},
-		{
-            type = "editbox",
-            name = "Chat window history size",
-            tooltip = "Alters how many lines to store in the chat buffer, default=200",
-            getFunc = function() return BUI.Settings.Modules["Tooltips"].chatHistory end,
-            setFunc = function(value) BUI.Settings.Modules["Tooltips"].chatHistory = tonumber(value)
-            							if(ZO_ChatWindowTemplate1Buffer ~= nil) then ZO_ChatWindowTemplate1Buffer:SetMaxHistoryLines(BUI.Settings.Modules["Tooltips"].chatHistory) end end,
-            default=200,
-            width = "full",
-        },
-		{
-			type = "checkbox",
-			name = "Remove the 'delete' dialog in the Mail inbox?",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].removeDeleteDialog end,
-			setFunc = function(value)
-						BUI.Settings.Modules["Tooltips"].removeDeleteDialog = value
-					end,
-			width = "full",
-		},
 		{
 			type = "checkbox",
 			name = "MasterMerchant integration",
@@ -98,69 +32,95 @@ local function Init(mId, moduleName)
 			requiresReload = true,
 		},
 		{
+		type = "checkbox",
+			name = "Display item style and trait knowledge",
+			tooltip = "On items, displays the style of the item and whether the trait can be researched",
+			getFunc = function() return BUI.Settings.Modules["Tooltips"].showStyleTrait end,
+			setFunc = function(value) BUI.Settings.Modules["Tooltips"].showStyleTrait = value end,
+			width = "full",
+		},
+		{
+            type = "editbox",
+            name = "Chat window history size",
+            tooltip = "Alters how many lines to store in the chat buffer, default=200",
+            getFunc = function() return BUI.Settings.Modules["Tooltips"].chatHistory end,
+            setFunc = function(value) BUI.Settings.Modules["Tooltips"].chatHistory = tonumber(value)
+            							if(ZO_ChatWindowTemplate1Buffer ~= nil) then ZO_ChatWindowTemplate1Buffer:SetMaxHistoryLines(BUI.Settings.Modules["Tooltips"].chatHistory) end end,
+            default=200,
+            width = "full",
+        },
+		{
 			type = "checkbox",
-			name = "Short Currency Format",
-			tooltip = "Automatically formats the value column to shorten large numbers and to display the currency with commas.",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].useShortFormat end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].useShortFormat = value
+			name = "Remove the 'delete' dialog in the Mail inbox?",
+			getFunc = function() return BUI.Settings.Modules["Tooltips"].removeDeleteDialog end,
+			setFunc = function(value)
+						BUI.Settings.Modules["Tooltips"].removeDeleteDialog = value
 					end,
 			width = "full",
 			requiresReload = true,
 		},
+		{
+            type = "editbox",
+            name = "Mouse Scrolling speed on Left Hand tooltip",
+            tooltip = "Change how quickly the menu skips when pressing the triggers.",
+            getFunc = function() return BUI.Settings.Modules["CIM"].rhScrollSpeed end,
+            setFunc = function(value) BUI.Settings.Modules["CIM"].rhScrollSpeed = value end,
+            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            width = "full",
+        },
+        {
+            type = "editbox",
+            name = "Number of lines to skip on trigger",
+            tooltip = "Change how quickly the menu skips when pressing the triggers.",
+            getFunc = function() return BUI.Settings.Modules["CIM"].triggerSpeed end,
+            setFunc = function(value) BUI.Settings.Modules["CIM"].triggerSpeed = value end,
+            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            width = "full",
+        },
+		{
+			type = "checkbox",
+			name = "Display attribute icons next to the item name",
+			tooltip = "Allows you to see enchanted, set and stolen items quickly",
+			getFunc = function() return BUI.Settings.Modules["CIM"].attributeIcons end,
+			setFunc = function(value) BUI.Settings.Modules["CIM"].attributeIcons = value end,
+			disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+			width = "full",
+		},
+        {
+            type = "checkbox",
+            name = "Reduce the font size of the item tooltip",
+            tooltip = "Allows much more item information to be displayed at once on the tooltips",
+            getFunc = function() return BUI.Settings.Modules["CIM"].condenseLTooltip end,
+            setFunc = function(value) BUI.Settings.Modules["CIM"].condenseLTooltip = value
+                      end,
+            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            width = "full",
+            requiresReload = true,
+        },
+        {
+            type = "checkbox",
+            name = "Use bigger font size in item lists.",
+            tooltip = "Changed the font size of item lists bigger.",
+            getFunc = function() return BUI.Settings.Modules["CIM"].biggerSkin end,
+            setFunc = function(value) BUI.Settings.Modules["CIM"].biggerSkin = value
+                      end,
+            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            width = "full",
+            requiresReload = true,
+        },
 	}
 	LAM:RegisterAddonPanel("BUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BUI_"..mId, optionsTable)
 end
 
-function BUI.Tooltips.UpdateText(self, updateBarType, updateValue)
-    if(self.showBarText == SHOW_BAR_TEXT or self.showBarText == SHOW_BAR_TEXT_MOUSE_OVER) then
-        local visible = GetVisibility(self)
-        if(self.leftText and self.rightText) then
-            self.leftText:SetHidden(not visible)
-            self.rightText:SetHidden(not visible)
-            if visible then
-                if updateBarType then
-                    self.leftText:SetText(zo_strformat(SI_UNIT_FRAME_BARTYPE, self.barTypeName))
-                end
-                if updateValue then
-                    self.rightText:SetText(zo_strformat(SI_UNIT_FRAME_BARVALUE, self.currentValue, self.maxValue))
-                end
-            end
-        elseif(self.leftText) then
-            if visible then
-                self.leftText:SetHidden(false)
-                if updateValue then
-                    self.leftText:SetText(zo_strformat(SI_UNIT_FRAME_BARVALUE, self.currentValue, self.maxValue))
-                end
-            else
-                self.leftText:SetHidden(true)
-            end
-        end
-    end
-
-    if BUI.Settings.Modules["Tooltips"].showHealthText and self.BUI_labelRef ~= nil then
-        self.BUI_labelRef:SetText(BUI.DisplayNumber(self.currentValue).." ("..string.format("%.0f",100*self.currentValue/self.maxValue).."%)")
-    	self.BUI_labelRef:SetHidden(false)
-    else
-    end
-
-end
-
 function BUI.Tooltips.InitModule(m_options)
     m_options["chatHistory"] = 200
     m_options["showStyleTrait"] = true
-    m_options["showHealthText"] = true
-    m_options["showAccountName"] = true
-    m_options["showCharacterColor"] = {1, 0.95, 0.5, 1}
-	m_options["showAccountColor"] = {1, 1, 1, 1}
 	m_options["removeDeleteDialog"] = false
 	m_options["mmIntegration"] = true
 	m_options["ttcIntegration"] = true
-	m_options["useShortFormat"] = true
-
     return m_options
 end
-
 
 function BUI.Tooltips.Setup()
 
@@ -175,65 +135,6 @@ function BUI.Tooltips.Setup()
 	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_LEFT_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
 	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_RIGHT_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
 	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_MOVABLE_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
-
-	--[[
-	-- ZOS have released a buggy tooltip which is blind to the stackCount of the item being displayed, let's fix that
-	local LEFT_TOOLTIP = GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_LEFT_TOOLTIP)
-	LEFT_TOOLTIP.LayoutBagItem = function(self, bagId, slotIndex, enchantMode, showInventoryAndBagCount)
-	    local itemLink = GetItemLink(bagId, slotIndex)
-	    local _,stack,_,_,_,_,_,_ = GetItemInfo(bagId, slotIndex)
-	    local equipped = bagId == BAG_WORN
-	    local showInventoryCount = ZO_ITEM_TOOLTIP_SHOW_INVENTORY_BODY_COUNT
-	    local showBankCount = ZO_ITEM_TOOLTIP_SHOW_BANK_BODY_COUNT
-	    local stackCount = ZO_ITEM_TOOLTIP_INVENTORY_TITLE_COUNT
-	    if showInventoryAndBagCount then
-	        stackCount = ZO_ITEM_TOOLTIP_INVENTORY_AND_BANK_TITLE_COUNT
-	    else
-	        if bagId == BAG_BANK then
-	            showBankCount = ZO_ITEM_TOOLTIP_HIDE_BANK_BODY_COUNT
-	            stackCount = ZO_ITEM_TOOLTIP_BANK_TITLE_COUNT
-	        elseif bagId == BAG_BACKPACK then
-	            showInventoryCount = ZO_ITEM_TOOLTIP_HIDE_INVENTORY_BODY_COUNT
-	            stackCount = ZO_ITEM_TOOLTIP_INVENTORY_TITLE_COUNT
-	        elseif equipped then
-	            showInventoryCount = ZO_ITEM_TOOLTIP_HIDE_INVENTORY_BODY_COUNT
-	            stackCount = 1
-	        end
-	    end
-	    self.currentStack = stack
-	    return self:LayoutItemWithStackCount(itemLink, equipped, GetItemCreatorName(bagId, slotIndex), nil, enchantMode, nil, stackCount, showInventoryCount, showBankCount)
-	end
-	LEFT_TOOLTIP.LayoutItemWithStackCount = function(self, itemLink, equipped, creatorName, forceFullDurability, enchantMode, previewValueToAdd, customOrBagStackCount, showInventoryCount, showBankCount)
-	    local isValidItemLink = itemLink ~= ""
-	    if isValidItemLink then
-	        local stackCount
-	        if customOrBagStackCount == ZO_ITEM_TOOLTIP_INVENTORY_TITLE_COUNT then
-	            local bagCount, bankCount = GetItemLinkStacks(itemLink)
-	            stackCount = bagCount
-	        elseif customOrBagStackCount == ZO_ITEM_TOOLTIP_BANK_TITLE_COUNT then
-	            local bagCount, bankCount = GetItemLinkStacks(itemLink)
-	            stackCount = bankCount
-	        elseif customOrBagStackCount == ZO_ITEM_TOOLTIP_INVENTORY_AND_BANK_TITLE_COUNT then
-	            local bagCount, bankCount = GetItemLinkStacks(itemLink)
-	            stackCount = bagCount + bankCount
-	        else
-	            stackCount = customOrBagStackCount
-	        end
-	        local itemName = GetItemLinkName(itemLink)
-	        if stackCount and stackCount > 1 then
-	        	if(self.currentStack ~= nil) then
-	        		itemName = zo_strformat(SI_TOOLTIP_ITEM_NAME_WITH_QUANTITY, itemName, self.currentStack)
-	        	else
-		            itemName = zo_strformat(SI_TOOLTIP_ITEM_NAME_WITH_QUANTITY, itemName, stackCount)
-		        end
-	        end
-	        return self:LayoutItem(itemLink, equipped, creatorName, forceFullDurability, enchantMode, previewValueToAdd, itemName, showInventoryCount, showBankCount)
-	    end
-	end
-	]]
-
-	ZO_PreHook(UNIT_FRAMES,"UpdateGroupAnchorFrames", BUI.Tooltips.UpdateGroupAnchorFrames)
-	UNIT_FRAMES.staticFrames.reticleover.RefreshControls = BUI.Tooltips.RefreshControls
 
 	if(ZO_ChatWindowTemplate1Buffer ~= nil) then ZO_ChatWindowTemplate1Buffer:SetMaxHistoryLines(BUI.Settings.Modules["Tooltips"].chatHistory) end
 end

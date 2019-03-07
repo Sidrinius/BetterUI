@@ -1,7 +1,9 @@
-BUI = {}
+BUI = {
+	ResearchTraits = {}
+}
 
 BUI.name = "BetterUI"
-BUI.version = "2.62"
+BUI.version = "2.63"
 
 -- Program Global (scope of BUI, though) variable initialization
 BUI.WindowManager = GetWindowManager()
@@ -33,10 +35,6 @@ BUI.Banking = {
 
 BUI.Tooltips = {
 
-}
-
-BUI.Player = {
-	ResearchTraits = {}
 }
 
 BUI.Settings = {}

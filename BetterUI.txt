@@ -1,27 +1,12 @@
 ## Title: BetterUI
-## Description: Make the gamepad interface great again!
-## APIVersion: 100026
+## Description: Making the gamepad interface great!
+## APIVersion: 100026 100027
 ## Author: prasoc, RockingDice & Goobsnake
-## Version: 2.62
+## Version: 2.63
 ## DependsOn:
 ## OptionalDependsOn: LibAddonMenu-2.0, AlphaGear
 ## SavedVariables: BetterUISavedVars
  
-lib\LibStub\LibStub.lua
-lib\LibAddonMenu-2.0\LibAddonMenu-2.0.lua
-lib\LibAddonMenu-2.0\controls\panel.lua
-lib\LibAddonMenu-2.0\controls\submenu.lua
-lib\LibAddonMenu-2.0\controls\button.lua
-lib\LibAddonMenu-2.0\controls\checkbox.lua
-lib\LibAddonMenu-2.0\controls\colorpicker.lua
-lib\LibAddonMenu-2.0\controls\custom.lua
-lib\LibAddonMenu-2.0\controls\description.lua
-lib\LibAddonMenu-2.0\controls\dropdown.lua
-lib\LibAddonMenu-2.0\controls\editbox.lua
-lib\LibAddonMenu-2.0\controls\header.lua
-lib\LibAddonMenu-2.0\controls\slider.lua
-lib\LibAddonMenu-2.0\controls\texture.lua
-lib\LibAddonMenu-2.0\controls\iconpicker.lua
 Globals.lua
 
 lang\en.lua
@@ -76,8 +61,6 @@ Modules\Helper\Helper.lua
 
 ; Module: Inventory Enhanced
 Modules\Inventory\Templates\GamepadInventory.xml
-Modules\Inventory\Shrinkwrap\ZO_GamepadList.lua
-Modules\Inventory\Shrinkwrap\ZO_GamepadInventory.lua
 Modules\Inventory\InventoryList.lua
 Modules\Inventory\InventorySlot.lua
 Modules\Inventory\CraftList.lua
@@ -101,6 +84,4 @@ Modules\WritUnit\Templates\WritsPanel.xml
 Modules\WritUnit\Writ.lua
 Modules\WritUnit\Module.lua
 
-bindings.xml
-BetterUI.Player.lua
 BetterUI.lua

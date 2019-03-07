@@ -3,7 +3,6 @@ local _
 local BLOCK_TABBAR_CALLBACK = true
 ZO_GAMEPAD_INVENTORY_SCENE_NAME = "gamepad_inventory_root"
 
--- Note: "ZOS_*" functions correspond to the shrinkwrapped modules
 BUI.Inventory.Class = ZO_GamepadInventory:Subclass()
 
 local NEW_ICON_TEXTURE = "EsoUI/Art/Miscellaneous/Gamepad/gp_icon_new.dds"
@@ -52,6 +51,35 @@ local function BUI_GetEquipSlotForEquipType(equipType)
     return equipSlot
 end
 
+function BUI.Inventory.UpdateTooltipEquippedText(tooltipType, equipSlot)
+    ZO_InventoryUtils_UpdateTooltipEquippedIndicatorText(tooltipType, equipSlot)
+    local isHidden, highestPriorityVisualLayerThatIsShowing = WouldEquipmentBeHidden(equipSlot or EQUIP_SLOT_NONE)
+    local equipSlotText = ""
+    local equipSlotTextHidden = ""
+    local equippedHeader = GetString(SI_GAMEPAD_EQUIPPED_ITEM_HEADER)
+
+    if equipSlot == EQUIP_SLOT_MAIN_HAND then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_MAIN_HAND_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_BACKUP_MAIN then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_BACKUP_MAIN_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_OFF_HAND then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_OFF_HAND_ITEM_HEADER)
+    elseif equipSlot == EQUIP_SLOT_BACKUP_OFF then
+        equipSlotText = GetString(SI_GAMEPAD_EQUIPPED_BACKUP_OFF_ITEM_HEADER)
+    end
+     
+    if isHidden and equipSlotText ~= "" then
+        equipSlotTextHidden = "(Hidden)"
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>>: ", equippedHeader), zo_strformat("<<1>> <<2>>", equipSlotText, equipSlotTextHidden))
+    elseif isHidden then
+        equipSlotTextHidden = "Hidden by Collection"
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>> - <<2>>", equippedHeader, equipSlotTextHidden))
+    elseif not isHidden and equipSlotText ~= "" then
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, zo_strformat("<<1>>: ", equippedHeader), zo_strformat("<<1>>", equipSlotText))
+    else
+        GAMEPAD_TOOLTIPS:SetStatusLabelText(tooltipType, GetString(SI_GAMEPAD_EQUIPPED_ITEM_HEADER), equipSlotText)
+    end
+end
 
 -- The below functions are included from ZO_GamepadInventory.lua
 local function MenuEntryTemplateEquality(left, right)
@@ -120,35 +148,9 @@ function BUI.Inventory.Class:ToSavedPosition()
             self:RefreshCraftBagList()
         end
     end
-
-	if(BUI.Settings.Modules["Inventory"].savePosition) then
-		local lastPosition
-
-		if self:GetCurrentList() == self.itemList then
-			lastPosition = self.categoryPositions[self.categoryList.selectedIndex]
-		else
-			lastPosition = self.categoryCraftPositions[self.categoryList.selectedIndex]
-		end
-
-		if lastPosition ~= nil and self._currentList.dataList ~= nil then
-			lastPosition = (#self._currentList.dataList > lastPosition) and lastPosition or #self._currentList.dataList
-
-			if lastPosition ~= nil and #self._currentList.dataList > 0 then
-				self._currentList:SetSelectedIndexWithoutAnimation(lastPosition, true, false)
-				
-				GAMEPAD_TOOLTIPS:Reset(GAMEPAD_LEFT_TOOLTIP)
-				if self.callLaterLeftToolTip ~= nil then
-					EVENT_MANAGER:UnregisterForUpdate(self.callLaterLeftToolTip)
-				end
-				
-				local callLaterId = zo_callLater(function() self:UpdateItemLeftTooltip(self._currentList.selectedData) end, INVENTORY_LEFT_TOOL_TIP_REFRESH_DELAY_MS)
-				self.callLaterLeftToolTip = "CallLaterFunction"..callLaterId
-			end
-		end
-	else
-		self._currentList:SetSelectedIndexWithoutAnimation(1, true, false)
-	end
-
+    if not self.itemList:IsEmpty() then
+        self._currentList:SetSelectedIndexWithoutAnimation(1, true, false)
+    end
 end
 
 function BUI_TabBar_OnTabNext(parent, successful)
@@ -844,11 +846,7 @@ function BUI.Inventory.Class:UpdateItemLeftTooltip(selectedData)
         end
         if selectedData.isEquippedInCurrentCategory or selectedData.isEquippedInAnotherCategory or selectedData.equipSlot then
             local slotIndex = selectedData.bagId == BAG_WORN and selectedData.slotIndex or nil --equipped quickslottables slotIndex is not the same as slot index's in BAG_WORN
-         	--if(IsEquipSlotVisualCategoryHidden(EQUIP_SLOT_VISUAL_CATEGORY_APPAREL)) then
-        	--	GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_EQUIPPED_ITEM_HEADER), ZO_SELECTED_TEXT:Colorize(equipSlotText))
-        	--end
-        	-- Function altered In Shrinkwrapped files
-        	ZOS_GamepadInventory:UpdateTooltipEquippedIndicatorText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
+        	BUI.Inventory.UpdateTooltipEquippedText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
         else
             GAMEPAD_TOOLTIPS:ClearStatusLabel(GAMEPAD_LEFT_TOOLTIP)
         end
@@ -874,8 +872,7 @@ function BUI.Inventory.Class:UpdateRightTooltip()
         GAMEPAD_TOOLTIPS:LayoutItemStatComparison(GAMEPAD_LEFT_TOOLTIP, selectedItemData.bagId, selectedItemData.slotIndex, selectedEquipSlot)
         GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_INVENTORY_ITEM_COMPARE_TOOLTIP_TITLE))
     elseif GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, BAG_WORN, selectedEquipSlot) then
-    	-- Function altered In Shrinkwrapped files
-    	ZOS_GamepadInventory:UpdateTooltipEquippedIndicatorText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
+    	BUI.Inventory.UpdateTooltipEquippedText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
     end
 
 	if selectedItemData ~= nil and selectedItemData.dataSource ~= nil and selectedData ~= nil then
@@ -1809,14 +1806,18 @@ function BUI.Inventory.Class:InitializeKeybindStrip()
             keybind = "UI_SHORTCUT_SECONDARY",
             visible = function()
             	if self.actionMode == ITEM_LIST_ACTION_MODE then
-            		local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
-            		local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
-            		
-            		if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
-            			return false
-            		end
-            		return true
-            	end
+                    if self.itemList.selectedData then
+                        local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
+                        local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+                    
+                        if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
+                            return false
+                        end
+                        return true
+                    else
+                        return false
+                    end
+                end
             end,
             callback = function()
             	if self.actionMode == ITEM_LIST_ACTION_MODE then

@@ -7,22 +7,6 @@ local function Init(mId, moduleName)
 
 	local optionsTable = {
 		{
-			type = "header",
-			name = "|c0066FF[Enhanced Banking]|r Behaviour Settings",
-			width = "full",
-		},
-
-		{
-			type = "header",
-			name = "|c0066FF[Enhanced Banking]|r Display Settings",
-			width = "full",
-		},
-		{
-			type = "header",
-			name = "|c0066FF[Enhanced Banking]|r Icon",
-			width = "full",
-		},
-		{
 			type = "checkbox",
 			name = "Item Icon - Unbound Items",
 			tooltip = "Show an icon after unbound items.",
@@ -30,7 +14,7 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconUnboundItem = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -40,7 +24,7 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconEnchantment = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -50,7 +34,7 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconSetGear = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -61,7 +45,7 @@ local function Init(mId, moduleName)
 				changed = true end,
 			width = "full",
 			disabled = function() return BUI.Settings.Modules["Banking"].showIconAlphaGear end,
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
@@ -72,17 +56,17 @@ local function Init(mId, moduleName)
 				changed = true end,
 			width = "full",
 			disabled = function() return BUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,
-			warning="Needs to reload UI."
+			requiresReload = true,
 		},
 		{
 			type = "checkbox",
-			name = "            Show all sets instead",
+			name = "Show all sets instead",
 			tooltip = "Show all sets if in multiple settings.",
 			getFunc = function () return BUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets end,
 			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI.",
+			requiresReload = true,
 			disabled = function() return not BUI.Settings.Modules["Banking"].showIconIakoniGearChanger and not BUI.Settings.Modules["Banking"].showIconAlphaGear end,  
 		},		
 		{
@@ -93,17 +77,8 @@ local function Init(mId, moduleName)
 			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon = value
 				changed = true end,
 			width = "full",
-			warning="Needs to reload UI."
-		},
-		{ 			
-			type = "header", 		
-		},		         
-		{             
-			type = "button",             
-			name = "Apply Changes",             
-			func = function() ReloadUI() end, 			
-			disabled = function() return not changed end,         
-		},	
+			requiresReload = true,
+		},	         
 	}
 	LAM:RegisterAddonPanel("BUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BUI_"..mId, optionsTable)
