@@ -10,6 +10,28 @@ local function Init(mId, moduleName)
 
 	local optionsTable = {
 		{
+			type = "checkbox",
+			name = "MasterMerchant integration",
+			tooltip = "Hooks MasterMerchant into the guild store and item tooltips",
+			getFunc = function() return BUI.Settings.Modules["Tooltips"].mmIntegration end,
+			setFunc = function(value) BUI.Settings.Modules["Tooltips"].mmIntegration = value
+					end,
+			disabled = function() return MasterMerchant == nil end,
+			width = "full",
+			requiresReload = true,
+		},
+		{
+			type = "checkbox",
+			name = "Tamriel Trade Centre integration",
+			tooltip = "Hooks TTC Price info into the guild store if MM is not presented",
+			getFunc = function() return BUI.Settings.Modules["Tooltips"].ttcIntegration end,
+			setFunc = function(value) BUI.Settings.Modules["Tooltips"].ttcIntegration = value
+					end,
+			disabled = function() return TamrielTradeCentre == nil end,
+			width = "full",
+			requiresReload = true,
+		},
+		{
 		type = "checkbox",
 			name = "Display item style and trait knowledge",
 			tooltip = "On items, displays the style of the item and whether the trait can be researched",
@@ -38,27 +60,54 @@ local function Init(mId, moduleName)
 			requiresReload = true,
 		},
 		{
-			type = "checkbox",
-			name = "MasterMerchant integration",
-			tooltip = "Hooks MasterMerchant into the guild store and item tooltips",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].mmIntegration end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].mmIntegration = value
-					end,
-			disabled = function() return MasterMerchant == nil end,
-			width = "full",
-			requiresReload = true,
-		},
+            type = "editbox",
+            name = "Mouse Scrolling speed on Left Hand tooltip",
+            tooltip = "Change how quickly the menu skips when pressing the triggers.",
+            getFunc = function() return BUI.Settings.Modules["CIM"].rhScrollSpeed end,
+            setFunc = function(value) BUI.Settings.Modules["CIM"].rhScrollSpeed = value end,
+            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            width = "full",
+        },
+        {
+            type = "editbox",
+            name = "Number of lines to skip on trigger",
+            tooltip = "Change how quickly the menu skips when pressing the triggers.",
+            getFunc = function() return BUI.Settings.Modules["CIM"].triggerSpeed end,
+            setFunc = function(value) BUI.Settings.Modules["CIM"].triggerSpeed = value end,
+            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            width = "full",
+        },
 		{
 			type = "checkbox",
-			name = "Tamriel Trade Centre integration",
-			tooltip = "Hooks TTC Price info into the guild store if MM is not presented",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].ttcIntegration end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].ttcIntegration = value
-					end,
-			disabled = function() return TamrielTradeCentre == nil end,
+			name = "Display attribute icons next to the item name",
+			tooltip = "Allows you to see enchanted, set and stolen items quickly",
+			getFunc = function() return BUI.Settings.Modules["CIM"].attributeIcons end,
+			setFunc = function(value) BUI.Settings.Modules["CIM"].attributeIcons = value end,
+			disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
 			width = "full",
-			requiresReload = true,
 		},
+        {
+            type = "checkbox",
+            name = "Reduce the font size of the item tooltip",
+            tooltip = "Allows much more item information to be displayed at once on the tooltips",
+            getFunc = function() return BUI.Settings.Modules["CIM"].condenseLTooltip end,
+            setFunc = function(value) BUI.Settings.Modules["CIM"].condenseLTooltip = value
+                      end,
+            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            width = "full",
+            requiresReload = true,
+        },
+        {
+            type = "checkbox",
+            name = "Use bigger font size in item lists.",
+            tooltip = "Changed the font size of item lists bigger.",
+            getFunc = function() return BUI.Settings.Modules["CIM"].biggerSkin end,
+            setFunc = function(value) BUI.Settings.Modules["CIM"].biggerSkin = value
+                      end,
+            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            width = "full",
+            requiresReload = true,
+        },
 	}
 	LAM:RegisterAddonPanel("BUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BUI_"..mId, optionsTable)

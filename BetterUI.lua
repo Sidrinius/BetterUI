@@ -21,7 +21,13 @@ function BUI.InitModuleOptions()
 			tooltip = "Vast improvements to the ingame tooltips and unit frames",
 			getFunc = function() return BUI.Settings.Modules["Tooltips"].m_enabled end,
 			setFunc = function(value) BUI.Settings.Modules["Tooltips"].m_enabled = value
-									dirtyModules = true  end,
+						dirtyModules = true
+						if value == true then
+		                    BUI.Settings.Modules["CIM"].m_enabled = true
+		              	elseif not BUI.Settings.Modules["Tooltips"].m_enabled and not BUI.Settings.Modules["Inventory"].m_enabled and not BUI.Settings.Modules["Banking"].m_enabled then
+		                    BUI.Settings.Modules["CIM"].m_enabled = false
+		                end
+					end,
 			width = "full",
 			requiresReload = true,
 		},
@@ -34,7 +40,7 @@ function BUI.InitModuleOptions()
 						dirtyModules = true
 						if value == true then
 		                    BUI.Settings.Modules["CIM"].m_enabled = true
-		              	elseif not BUI.Settings.Modules["Inventory"].m_enabled and not BUI.Settings.Modules["Banking"].m_enabled then
+		              	elseif not BUI.Settings.Modules["Tooltips"].m_enabled and not BUI.Settings.Modules["Inventory"].m_enabled and not BUI.Settings.Modules["Banking"].m_enabled then
 		                    BUI.Settings.Modules["CIM"].m_enabled = false
 		                end
 		            end,
@@ -44,13 +50,13 @@ function BUI.InitModuleOptions()
 		{
 			type = "checkbox",
 			name = "Enable |c0066FFEnhanced Banking|r",
-			tooltip = "Completely redesigns the gamepad's banking interface (and has \"Mobile Banking\")",
+			tooltip = "Completely redesigns the gamepad's banking interface",
 			getFunc = function() return BUI.Settings.Modules["Banking"].m_enabled end,
 			setFunc = function(value) BUI.Settings.Modules["Banking"].m_enabled = value
 						dirtyModules = true
 						if value == true then
 		                    BUI.Settings.Modules["CIM"].m_enabled = true
-		                elseif not BUI.Settings.Modules["Inventory"].m_enabled and not BUI.Settings.Modules["Banking"].m_enabled then
+		                elseif not BUI.Settings.Modules["Tooltips"].m_enabled and not BUI.Settings.Modules["Inventory"].m_enabled and not BUI.Settings.Modules["Banking"].m_enabled then
 		                    BUI.Settings.Modules["CIM"].m_enabled = false
 		                end
 		            end,
@@ -74,63 +80,13 @@ function BUI.InitModuleOptions()
 			getFunc = function() return BUI.Settings.Modules["CIM"].m_enabled end,
 			setFunc = function(value) BUI.Settings.Modules["CIM"].m_enabled = value
 						dirtyModules = true
-						if BUI.Settings.Modules["Inventory"].m_enabled == false and BUI.Settings.Modules["Banking"].m_enabled == false then
+						if not BUI.Settings.Modules["Tooltips"].m_enabled and not BUI.Settings.Modules["Inventory"].m_enabled and not BUI.Settings.Modules["Banking"].m_enabled then
 		                    BUI.Settings.Modules["CIM"].m_enabled = false
 		                end
 		            end,
             disabled = function() return BUI.Settings.Modules["CIM"].m_enabled or not BUI.Settings.Modules["CIM"].m_enabled end,
 			width = "full",
 		},
-		{
-            type = "editbox",
-            name = "Mouse Scrolling speed on Left Hand tooltip",
-            tooltip = "Change how quickly the menu skips when pressing the triggers.",
-            getFunc = function() return BUI.Settings.Modules["CIM"].rhScrollSpeed end,
-            setFunc = function(value) BUI.Settings.Modules["CIM"].rhScrollSpeed = value end,
-            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
-            width = "full",
-        },
-        {
-            type = "editbox",
-            name = "Number of lines to skip on trigger",
-            tooltip = "Change how quickly the menu skips when pressing the triggers.",
-            getFunc = function() return BUI.Settings.Modules["CIM"].triggerSpeed end,
-            setFunc = function(value) BUI.Settings.Modules["CIM"].triggerSpeed = value end,
-            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
-            width = "full",
-        },
-		{
-			type = "checkbox",
-			name = "Display attribute icons next to the item name",
-			tooltip = "Allows you to see enchanted, set and stolen items quickly",
-			getFunc = function() return BUI.Settings.Modules["CIM"].attributeIcons end,
-			setFunc = function(value) BUI.Settings.Modules["CIM"].attributeIcons = value end,
-			disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
-			width = "full",
-		},
-        {
-            type = "checkbox",
-            name = "Reduce the font size of the item tooltip",
-            tooltip = "Allows much more item information to be displayed at once on the tooltips",
-            getFunc = function() return BUI.Settings.Modules["CIM"].condenseLTooltip end,
-            setFunc = function(value) BUI.Settings.Modules["CIM"].condenseLTooltip = value
-                      end,
-            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
-            width = "full",
-            requiresReload = true,
-        },
-        {
-            type = "checkbox",
-            name = "Use bigger font size in item lists.",
-            tooltip = "Changed the font size of item lists bigger.",
-            getFunc = function() return BUI.Settings.Modules["CIM"].biggerSkin end,
-            setFunc = function(value) BUI.Settings.Modules["CIM"].biggerSkin = value
-                      end,
-            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
-            width = "full",
-            requiresReload = true,
-        },
-
 	}
 
 	LAM:RegisterAddonPanel("BUI_".."Modules", panelData)
