@@ -51,7 +51,7 @@ local function Init(mId, moduleName)
         },
 		{
 			type = "checkbox",
-			name = "Remove delete dialog confirmation when deleting mail",
+			name = "Remove confirmation screen when deleting mail",
 			getFunc = function() return BUI.Settings.Modules["Tooltips"].removeDeleteDialog end,
 			setFunc = function(value)
 						BUI.Settings.Modules["Tooltips"].removeDeleteDialog = value
