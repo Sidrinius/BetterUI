@@ -13,8 +13,8 @@ local function Init(mId, moduleName)
 			type = "checkbox",
 			name = "Master Merchant integration",
 			tooltip = "Hooks Master Merchant into the item tooltips",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].mmIntegration end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].mmIntegration = value
+			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].mmIntegration end,
+			setFunc = function(value) BETTERUI.Settings.Modules["Tooltips"].mmIntegration = value
 					end,
 			disabled = function() return MasterMerchant == nil end,
 			width = "full",
@@ -24,8 +24,8 @@ local function Init(mId, moduleName)
 			type = "checkbox",
 			name = "Tamriel Trade Centre integration",
 			tooltip = "Hooks TTC Price info into the item tooltips",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].ttcIntegration end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].ttcIntegration = value
+			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].ttcIntegration end,
+			setFunc = function(value) BETTERUI.Settings.Modules["Tooltips"].ttcIntegration = value
 					end,
 			disabled = function() return TamrielTradeCentre == nil end,
 			width = "full",
@@ -35,26 +35,26 @@ local function Init(mId, moduleName)
 		type = "checkbox",
 			name = "Display item style and trait knowledge",
 			tooltip = "On items, displays the style of the item and whether the trait can be researched",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].showStyleTrait end,
-			setFunc = function(value) BUI.Settings.Modules["Tooltips"].showStyleTrait = value end,
+			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].showStyleTrait end,
+			setFunc = function(value) BETTERUI.Settings.Modules["Tooltips"].showStyleTrait = value end,
 			width = "full",
 		},
 		{
             type = "editbox",
             name = "Chat window history size",
             tooltip = "Alters how many lines to store in the chat buffer, default=200",
-            getFunc = function() return BUI.Settings.Modules["Tooltips"].chatHistory end,
-            setFunc = function(value) BUI.Settings.Modules["Tooltips"].chatHistory = tonumber(value)
-            							if(ZO_ChatWindowTemplate1Buffer ~= nil) then ZO_ChatWindowTemplate1Buffer:SetMaxHistoryLines(BUI.Settings.Modules["Tooltips"].chatHistory) end end,
+            getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].chatHistory end,
+            setFunc = function(value) BETTERUI.Settings.Modules["Tooltips"].chatHistory = tonumber(value)
+            							if(ZO_ChatWindowTemplate1Buffer ~= nil) then ZO_ChatWindowTemplate1Buffer:SetMaxHistoryLines(BETTERUI.Settings.Modules["Tooltips"].chatHistory) end end,
             default=200,
             width = "full",
         },
 		{
 			type = "checkbox",
 			name = "Remove confirmation screen when deleting mail",
-			getFunc = function() return BUI.Settings.Modules["Tooltips"].removeDeleteDialog end,
+			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].removeDeleteDialog end,
 			setFunc = function(value)
-						BUI.Settings.Modules["Tooltips"].removeDeleteDialog = value
+						BETTERUI.Settings.Modules["Tooltips"].removeDeleteDialog = value
 					end,
 			width = "full",
 			requiresReload = true,
@@ -63,37 +63,37 @@ local function Init(mId, moduleName)
             type = "editbox",
             name = "Mouse Scrolling speed on Left Hand tooltip",
             tooltip = "Change how quickly the menu skips when pressing the triggers.",
-            getFunc = function() return BUI.Settings.Modules["CIM"].rhScrollSpeed end,
-            setFunc = function(value) BUI.Settings.Modules["CIM"].rhScrollSpeed = value end,
-            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            getFunc = function() return BETTERUI.Settings.Modules["CIM"].rhScrollSpeed end,
+            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].rhScrollSpeed = value end,
+            disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
         },
         {
             type = "editbox",
             name = "Number of lines to skip on trigger",
             tooltip = "Change how quickly the menu skips when pressing the triggers.",
-            getFunc = function() return BUI.Settings.Modules["CIM"].triggerSpeed end,
-            setFunc = function(value) BUI.Settings.Modules["CIM"].triggerSpeed = value end,
-            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            getFunc = function() return BETTERUI.Settings.Modules["CIM"].triggerSpeed end,
+            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].triggerSpeed = value end,
+            disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
         },
 		{
 			type = "checkbox",
 			name = "Display attribute icons next to the item name",
 			tooltip = "Allows you to see enchanted, set and stolen items quickly",
-			getFunc = function() return BUI.Settings.Modules["CIM"].attributeIcons end,
-			setFunc = function(value) BUI.Settings.Modules["CIM"].attributeIcons = value end,
-			disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+			getFunc = function() return BETTERUI.Settings.Modules["CIM"].attributeIcons end,
+			setFunc = function(value) BETTERUI.Settings.Modules["CIM"].attributeIcons = value end,
+			disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
 			width = "full",
 		},
         {
             type = "checkbox",
             name = "Reduce the font size of the item tooltip",
             tooltip = "Allows much more item information to be displayed at once on the tooltips",
-            getFunc = function() return BUI.Settings.Modules["CIM"].condenseLTooltip end,
-            setFunc = function(value) BUI.Settings.Modules["CIM"].condenseLTooltip = value
+            getFunc = function() return BETTERUI.Settings.Modules["CIM"].condenseLTooltip end,
+            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].condenseLTooltip = value
                       end,
-            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
             requiresReload = true,
         },
@@ -101,19 +101,19 @@ local function Init(mId, moduleName)
             type = "checkbox",
             name = "Use bigger font size in the inventory and banking item lists",
             tooltip = "Changed the font size of item lists bigger.",
-            getFunc = function() return BUI.Settings.Modules["CIM"].biggerSkin end,
-            setFunc = function(value) BUI.Settings.Modules["CIM"].biggerSkin = value
+            getFunc = function() return BETTERUI.Settings.Modules["CIM"].biggerSkin end,
+            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].biggerSkin = value
                       end,
-            disabled = function() return not BUI.Settings.Modules["CIM"].m_enabled end,
+            disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
             requiresReload = true,
         },
 	}
-	LAM:RegisterAddonPanel("BUI_"..mId, panelData)
-	LAM:RegisterOptionControls("BUI_"..mId, optionsTable)
+	LAM:RegisterAddonPanel("BETTERUI_"..mId, panelData)
+	LAM:RegisterOptionControls("BETTERUI_"..mId, optionsTable)
 end
 
-function BUI.Tooltips.InitModule(m_options)
+function BETTERUI.Tooltips.InitModule(m_options)
     m_options["chatHistory"] = 200
     m_options["showStyleTrait"] = true
 	m_options["removeDeleteDialog"] = false
@@ -122,19 +122,19 @@ function BUI.Tooltips.InitModule(m_options)
     return m_options
 end
 
-function BUI.Tooltips.Setup()
+function BETTERUI.Tooltips.Setup()
 
 	Init("General", "General Interface")
 
-	if BUI.Settings.Modules["Tooltips"].removeDeleteDialog then
-		BUI.PostHook(ZO_MailInbox_Gamepad, 'InitializeKeybindDescriptors', function(self)
+	if BETTERUI.Settings.Modules["Tooltips"].removeDeleteDialog then
+		BETTERUI.PostHook(ZO_MailInbox_Gamepad, 'InitializeKeybindDescriptors', function(self)
 			self.mainKeybindDescriptor[3]["callback"] = function() self:Delete() end
 		end)
 	end
 
-	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_LEFT_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
-	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_RIGHT_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
-	BUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_MOVABLE_TOOLTIP), "LayoutItem", BUI.ReturnItemLink)
+	BETTERUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_LEFT_TOOLTIP), "LayoutItem", BETTERUI.ReturnItemLink)
+	BETTERUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_RIGHT_TOOLTIP), "LayoutItem", BETTERUI.ReturnItemLink)
+	BETTERUI.InventoryHook(GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_MOVABLE_TOOLTIP), "LayoutItem", BETTERUI.ReturnItemLink)
 
-	if(ZO_ChatWindowTemplate1Buffer ~= nil) then ZO_ChatWindowTemplate1Buffer:SetMaxHistoryLines(BUI.Settings.Modules["Tooltips"].chatHistory) end
+	if(ZO_ChatWindowTemplate1Buffer ~= nil) then ZO_ChatWindowTemplate1Buffer:SetMaxHistoryLines(BETTERUI.Settings.Modules["Tooltips"].chatHistory) end
 end

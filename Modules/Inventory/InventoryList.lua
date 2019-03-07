@@ -119,20 +119,20 @@ local function GetCategoryFromItemType(itemType)
 end
 
 
-function BUI_Inventory_DefaultItemSortComparator(left, right)
+function BETTERUI_Inventory_DefaultItemSortComparator(left, right)
     return ZO_TableOrderingFunction(left, right, "bestGamepadItemCategoryName", DEFAULT_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
 end
 
 local function GetMarketPrice(itemLink, stackCount)
     if(stackCount == nil) then stackCount = 1 end
 
-    if (BUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
+    if (BETTERUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
         local mmData = MasterMerchant:itemStats(itemLink, false)
         if(mmData.avgPrice ~= nil) then
             return mmData.avgPrice*stackCount
         end
     end
-    if BUI.Settings.Modules["Tooltips"].ttcIntegration and TamrielTradeCentre ~= nil then
+    if BETTERUI.Settings.Modules["Tooltips"].ttcIntegration and TamrielTradeCentre ~= nil then
         local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
 		if priceInfo then
 			if priceInfo.SuggestedPrice then
@@ -146,11 +146,11 @@ local function GetMarketPrice(itemLink, stackCount)
 end
 
 
-function BUI_SharedGamepadEntryLabelSetup(label, data, selected)
+function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
 
     if label then
     	local font = "ZoFontGamepad27"
-		if BUI.Settings.Modules["CIM"].biggerSkin then
+		if BETTERUI.Settings.Modules["CIM"].biggerSkin then
 			font = "ZoFontGamepad42"
 		end
 		label:SetFont(font)
@@ -176,7 +176,7 @@ function BUI_SharedGamepadEntryLabelSetup(label, data, selected)
            labelTxt = labelTxt..zo_strformat(" |cFFFFFF(<<1>>)|r",data.stackCount)
         end
 
-        if(BUI.Settings.Modules["CIM"].attributeIcons) then
+        if(BETTERUI.Settings.Modules["CIM"].attributeIcons) then
             local itemData = GetItemLink(bagId, slotIndex)
 
             local setItem, _, _, _, _ = GetItemLinkSetInfo(itemData, false)
@@ -191,11 +191,11 @@ function BUI_SharedGamepadEntryLabelSetup(label, data, selected)
 			local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
 
             if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_stolen.dds|t" end
-			if isUnbound and BUI.Settings.Modules["Inventory"].showIconUnboundItem then labelTxt = labelTxt.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
-            if hasEnchantment and BUI.Settings.Modules["Inventory"].showIconEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
-            if setItem and BUI.Settings.Modules["Inventory"].showIconSetGear then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
-			if BUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon then labelTxt = labelTxt .. BUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
-			if BUI.Settings.Modules["Inventory"].showIconIakoniGearChanger then labelTxt = labelTxt .. BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex)  end
+			if isUnbound and BETTERUI.Settings.Modules["Inventory"].showIconUnboundItem then labelTxt = labelTxt.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
+            if hasEnchantment and BETTERUI.Settings.Modules["Inventory"].showIconEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
+            if setItem and BETTERUI.Settings.Modules["Inventory"].showIconSetGear then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
+			if BETTERUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon then labelTxt = labelTxt .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
+			if BETTERUI.Settings.Modules["Inventory"].showIconIakoniGearChanger then labelTxt = labelTxt .. BETTERUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex)  end
             --if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_stolen.dds|t" end
             --if hasEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_enchanted.dds|t" end
             --if setItem then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_setitem.dds|t" end
@@ -216,7 +216,7 @@ function BUI_SharedGamepadEntryLabelSetup(label, data, selected)
     end
 end
 
-function BUI_IconSetup(statusIndicator, equippedIcon, data)
+function BETTERUI_IconSetup(statusIndicator, equippedIcon, data)
 
     statusIndicator:ClearIcons()
 
@@ -250,12 +250,12 @@ function BUI_IconSetup(statusIndicator, equippedIcon, data)
         equippedIcon:SetHidden(true)
     end
 	
-	-- if BUI.Settings.Modules["CIM"].biggerSkin then
+	-- if BETTERUI.Settings.Modules["CIM"].biggerSkin then
 	-- 	equippedIcon:SetDimensions(44, 42)
 	-- end
 end
 
-function BUI_SharedGamepadEntryIconSetup(icon, stackCountLabel, data, selected)
+function BETTERUI_SharedGamepadEntryIconSetup(icon, stackCountLabel, data, selected)
     if icon then
         if data.iconUpdateFn then
             data.iconUpdateFn()
@@ -296,7 +296,7 @@ function BUI_SharedGamepadEntryIconSetup(icon, stackCountLabel, data, selected)
     end
 end
 
-function BUI_Cooldown(control, remaining, duration, cooldownType, timeType, useLeadingEdge, alpha, desaturation, preservePreviousCooldown)
+function BETTERUI_Cooldown(control, remaining, duration, cooldownType, timeType, useLeadingEdge, alpha, desaturation, preservePreviousCooldown)
     local inCooldownNow = remaining > 0 and duration > 0
     if inCooldownNow then
         local timeLeftOnPreviousCooldown = control.cooldown:GetTimeLeft()
@@ -311,7 +311,7 @@ function BUI_Cooldown(control, remaining, duration, cooldownType, timeType, useL
     control.cooldown:SetHidden(not inCooldownNow)
 end
 
-function BUI_CooldownSetup(control, data)
+function BETTERUI_CooldownSetup(control, data)
     local GAMEPAD_DEFAULT_COOLDOWN_TEXTURE = "EsoUI/Art/Mounts/timer_icon.dds"
     if control.cooldown then
         local currentTime = GetFrameTimeMilliseconds()
@@ -324,17 +324,17 @@ function BUI_CooldownSetup(control, data)
         if data.cooldownIcon then
             control.cooldown:SetFillColor(ZO_SELECTED_TEXT:UnpackRGBA())
             control.cooldown:SetVerticalCooldownLeadingEdgeHeight(4)
-            BUI_Cooldown(control, remaining, duration, CD_TYPE_VERTICAL_REVEAL, CD_TIME_TYPE_TIME_UNTIL, USE_LEADING_EDGE, 1, 1, PRESERVE_PREVIOUS_COOLDOWN)
+            BETTERUI_Cooldown(control, remaining, duration, CD_TYPE_VERTICAL_REVEAL, CD_TIME_TYPE_TIME_UNTIL, USE_LEADING_EDGE, 1, 1, PRESERVE_PREVIOUS_COOLDOWN)
         else
-            BUI_Cooldown(control, remaining, duration, CD_TYPE_RADIAL, CD_TIME_TYPE_TIME_UNTIL, DONT_USE_LEADING_EDGE, 0.85, 0, OVERWRITE_PREVIOUS_COOLDOWN)
+            BETTERUI_Cooldown(control, remaining, duration, CD_TYPE_RADIAL, CD_TIME_TYPE_TIME_UNTIL, DONT_USE_LEADING_EDGE, 0.85, 0, OVERWRITE_PREVIOUS_COOLDOWN)
         end
     end
 end
 
-function BUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectingDuringRebuild, enabled, active)
-    BUI_SharedGamepadEntryLabelSetup(control.label, data, selected)
+function BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectingDuringRebuild, enabled, active)
+    BETTERUI_SharedGamepadEntryLabelSetup(control.label, data, selected)
 
-	if BUI.Settings.Modules["CIM"].biggerSkin then
+	if BETTERUI.Settings.Modules["CIM"].biggerSkin then
 		control:GetNamedChild("ItemType"):SetFont("ZoFontGamepad36")
         control:GetNamedChild("Trait"):SetFont("ZoFontGamepad36")
 		control:GetNamedChild("Stat"):SetFont("ZoFontGamepad36")
@@ -346,15 +346,15 @@ function BUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectingDuri
     local itemLink = GetItemLink(data.bagId, data.slotIndex)
     local itemType = GetItemLinkItemType(itemLink) --GetItemType(bagId, slotIndex) 
     if itemType == ITEMTYPE_RECIPE then
-        control:GetNamedChild("Stat"):SetText(IsItemLinkRecipeKnown(itemLink) and GetString(SI_BUI_INV_RECIPE_KNOWN) or GetString(SI_BUI_INV_RECIPE_UNKNOWN))
+        control:GetNamedChild("Stat"):SetText(IsItemLinkRecipeKnown(itemLink) and GetString(SI_BETTERUI_INV_RECIPE_KNOWN) or GetString(SI_BETTERUI_INV_RECIPE_UNKNOWN))
     elseif IsItemLinkBook(itemLink) then
-        control:GetNamedChild("Stat"):SetText(IsItemLinkBookKnown(itemLink) and GetString(SI_BUI_INV_RECIPE_KNOWN) or GetString(SI_BUI_INV_RECIPE_UNKNOWN))
+        control:GetNamedChild("Stat"):SetText(IsItemLinkBookKnown(itemLink) and GetString(SI_BETTERUI_INV_RECIPE_KNOWN) or GetString(SI_BETTERUI_INV_RECIPE_UNKNOWN))
     else
         control:GetNamedChild("Stat"):SetText((data.dataSource.statValue == 0) and "-" or data.dataSource.statValue)
     end
 
     -- Replace the "Value" with the market price of the item (in yellow)
-    if(BUI.Settings.Modules["Inventory"].showMarketPrice) then
+    if(BETTERUI.Settings.Modules["Inventory"].showMarketPrice) then
         local marketPrice, isAverage = GetMarketPrice(GetItemLink(data.bagId,data.slotIndex), data.stackCount)
         if(marketPrice ~= 0) then
 			if isAverage then
@@ -372,17 +372,17 @@ function BUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectingDuri
         control:GetNamedChild("Value"):SetText(ZO_CurrencyControl_FormatCurrency(data.stackSellPrice, USE_SHORT_CURRENCY_FORMAT))
     end
 
-    BUI_SharedGamepadEntryIconSetup(control.icon, control.stackCountLabel, data, selected)
+    BETTERUI_SharedGamepadEntryIconSetup(control.icon, control.stackCountLabel, data, selected)
     if control.highlight then
         if selected and data.highlight then
             control.highlight:SetTexture(data.highlight)
         end
         control.highlight:SetHidden(not selected or not data.highlight)
     end
-    BUI_CooldownSetup(control, data)
-    BUI_IconSetup(control:GetNamedChild("StatusIndicator"), control:GetNamedChild("EquippedMain"), data)
+    BETTERUI_CooldownSetup(control, data)
+    BETTERUI_IconSetup(control:GetNamedChild("StatusIndicator"), control:GetNamedChild("EquippedMain"), data)
 
-	if BUI.Settings.Modules["CIM"].biggerSkin then
+	if BETTERUI.Settings.Modules["CIM"].biggerSkin then
         local iconControl = control:GetNamedChild("Icon")
 		iconControl:SetDimensions(48, 48)
         iconControl:ClearAnchors()
@@ -443,19 +443,19 @@ function GetBestItemCategoryDescription(itemData)
 	return fullDesc
 end
 
-BUI.Inventory.List = ZO_GamepadInventoryList:Subclass()
+BETTERUI.Inventory.List = ZO_GamepadInventoryList:Subclass()
 
-function BUI.Inventory.List:New(...)
+function BETTERUI.Inventory.List:New(...)
     local object = ZO_GamepadInventoryList.New(self, ...)
     return object
 end
 
-function BUI.Inventory.List:Initialize(control, inventoryType, slotType, selectedDataCallback, entrySetupCallback, categorizationFunction, sortFunction, useTriggers, template, templateSetupFunction)
+function BETTERUI.Inventory.List:Initialize(control, inventoryType, slotType, selectedDataCallback, entrySetupCallback, categorizationFunction, sortFunction, useTriggers, template, templateSetupFunction)
     self.control = control
     self.selectedDataCallback = selectedDataCallback
     self.entrySetupCallback = entrySetupCallback
     self.categorizationFunction = categorizationFunction
-    self.sortFunction = BUI_Inventory_DefaultItemSortComparator
+    self.sortFunction = BETTERUI_Inventory_DefaultItemSortComparator
     self.dataBySlotIndex = {}
     self.isDirty = true
     self.useTriggers = (useTriggers ~= false) -- nil => true
@@ -467,16 +467,16 @@ function BUI.Inventory.List:Initialize(control, inventoryType, slotType, selecte
         self.inventoryTypes = { inventoryType }
     end
 
-	if (BUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
-		USE_SHORT_CURRENCY_FORMAT = BUI.Settings.Modules["Inventory"].useShortFormat
+	if (BETTERUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
+		USE_SHORT_CURRENCY_FORMAT = BETTERUI.Settings.Modules["Inventory"].useShortFormat
 	end
 	
 	local function VendorEntryTemplateSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
         ZO_Inventory_BindSlot(data, slotType, data.slotIndex, data.bagId)
-        BUI_SharedGamepadEntry_OnSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
+        BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
     end
 
-    self.list = BUI_VerticalParametricScrollList:New(self.control)
+    self.list = BETTERUI_VerticalParametricScrollList:New(self.control)
     self.list:AddDataTemplate(self.template, templateSetupFunction or VendorEntryTemplateSetup, ZO_GamepadMenuEntryTemplateParametricListFunction)	
 	self.list:AddDataTemplateWithHeader("ZO_GamepadItemSubEntryTemplate", ZO_SharedGamepadEntry_OnSetup, ZO_GamepadMenuEntryTemplateParametricListFunction, MenuEntryTemplateEquality, "ZO_GamepadMenuEntryHeaderTemplate")
 
@@ -545,7 +545,7 @@ function BUI.Inventory.List:Initialize(control, inventoryType, slotType, selecte
     SHARED_INVENTORY:RegisterCallback("SingleSlotInventoryUpdate", OnSingleSlotInventoryUpdate)
 end
 
-function BUI.Inventory.List:AddSlotDataToTable(slotsTable, inventoryType, slotIndex)
+function BETTERUI.Inventory.List:AddSlotDataToTable(slotsTable, inventoryType, slotIndex)
     local itemFilterFunction = self.itemFilterFunction
     local categorizationFunction = self.categorizationFunction or ZO_InventoryUtils_Gamepad_GetBestItemCategoryDescription
     local slotData = SHARED_INVENTORY:GenerateSingleSlotData(inventoryType, slotIndex)
@@ -561,8 +561,8 @@ function BUI.Inventory.List:AddSlotDataToTable(slotsTable, inventoryType, slotIn
 end
 
 -- this function is a VERY basic generic refresh, with no form of sorting or specific interface information
--- if you want to use BUI.Inventory.List, it will be very useful if you OVERWRITE THIS METHOD!
-function BUI.Inventory.List:RefreshList()
+-- if you want to use BETTERUI.Inventory.List, it will be very useful if you OVERWRITE THIS METHOD!
+function BETTERUI.Inventory.List:RefreshList()
     if self.control:IsHidden() then
         self.isDirty = true
         return

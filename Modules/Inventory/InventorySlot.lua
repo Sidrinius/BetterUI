@@ -12,10 +12,10 @@ local PRIMARY_ACTION_KEY = 1
 -- Main class definition is here
 -- Note: these classes WILL be removed in the near future!
 
-BUI.Inventory.SlotActions = ZO_ItemSlotActionsController:Subclass()
+BETTERUI.Inventory.SlotActions = ZO_ItemSlotActionsController:Subclass()
 
 -- This is a way to overwrite the ItemSlotAction's primary command. This is done so that "TryUseItem" and other functions use "CallSecureProtected" when activated
-local function BUI_AddSlotPrimary(self, actionStringId, actionCallback, actionType, visibilityFunction, options)
+local function BETTERUI_AddSlotPrimary(self, actionStringId, actionCallback, actionType, visibilityFunction, options)
     local actionName = actionStringId
 
     visibilityFunction = function()
@@ -91,11 +91,11 @@ local function TryBankItem(inventorySlot)
     end
 end
 
-function BUI.Inventory.SlotActions:Initialize(alignmentOverride, additionalMouseOverbinds, useKeybindStrip)
+function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additionalMouseOverbinds, useKeybindStrip)
     self.alignment = KEYBIND_STRIP_ALIGN_RIGHT
 
     local slotActions = ZO_InventorySlotActions:New(INVENTORY_SLOT_ACTIONS_PREVENT_CONTEXT_MENU)
-	slotActions.AddSlotPrimaryAction = BUI_AddSlotPrimary -- Add a new function which allows us to neatly add our own slots *with context* of the original!!
+	slotActions.AddSlotPrimaryAction = BETTERUI_AddSlotPrimary -- Add a new function which allows us to neatly add our own slots *with context* of the original!!
 
     self.slotActions = slotActions
     self.useKeybindStrip = useKeybindStrip == nil and true or useKeybindStrip
@@ -202,7 +202,7 @@ function BUI.Inventory.SlotActions:Initialize(alignmentOverride, additionalMouse
     end
 end
 
-function BUI.Inventory.SlotActions:SetInventorySlot(inventorySlot)
+function BETTERUI.Inventory.SlotActions:SetInventorySlot(inventorySlot)
     self.inventorySlot = inventorySlot
 
     for i, command in ipairs(self) do

@@ -1,6 +1,6 @@
 local _
 
-local BANKING_ROW_TEMPLATE = "BUI_GenericEntry_Template"
+local BANKING_ROW_TEMPLATE = "BETTERUI_GenericEntry_Template"
 
 local LIST_WITHDRAW = 1
 local LIST_DEPOSIT  = 2
@@ -62,7 +62,7 @@ end
 local function GetMarketPrice(itemLink, stackCount)
 	if(stackCount == nil) then stackCount = 1 end
 	
-	if (BUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
+	if (BETTERUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
 		local mmData = MasterMerchant:itemStats(itemLink, false)
 		if (mmData.avgPrice ~= nil) then
 			return mmData.avgPrice*stackCount
@@ -77,7 +77,7 @@ local function SetupListing(control, data)
 
     local itemLink = GetItemLink(dS.bagId, dS.slotIndex)
     local currentItemType = GetItemLinkItemType(itemLink) --GetItemType(bagId, slotIndex) 
-    if(BUI.Settings.Modules["CIM"].attributeIcons) then
+    if(BETTERUI.Settings.Modules["CIM"].attributeIcons) then
         local dS = data
         local bagId = dS.bagId
         local slotIndex = dS.slotIndex
@@ -95,21 +95,21 @@ local function SetupListing(control, data)
 	
 		local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
 	
-		if isUnbound and BUI.Settings.Modules["Banking"].showIconUnboundItem then fullItemName = fullItemName.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
-        if(hasEnchantment and BUI.Settings.Modules["Banking"].showIconEnchantment) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_enchanted.dds|t" end
-        if(setItem and BUI.Settings.Modules["Banking"].showIconSetGear) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_setitem.dds|t" end
+		if isUnbound and BETTERUI.Settings.Modules["Banking"].showIconUnboundItem then fullItemName = fullItemName.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
+        if(hasEnchantment and BETTERUI.Settings.Modules["Banking"].showIconEnchantment) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_enchanted.dds|t" end
+        if(setItem and BETTERUI.Settings.Modules["Banking"].showIconSetGear) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_setitem.dds|t" end
 		   
 		if currentItemType == ITEMTYPE_RECIPE and not IsItemLinkRecipeKnown(itemLink) then fullItemName = fullItemName.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
-		if BUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon then fullItemName = fullItemName .. BUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
-		if BUI.Settings.Modules["Banking"].showIconIakoniGearChanger then fullItemName = fullItemName .. BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, "Banking")  end
-		if BUI.Settings.Modules["Banking"].showIconAlphaGear then fullItemName = fullItemName .. BUI.Helper.AlphaGear.GetGearSet(bagId, slotIndex, "Banking")  end
+		if BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon then fullItemName = fullItemName .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
+		if BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger then fullItemName = fullItemName .. BETTERUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, "Banking")  end
+		if BETTERUI.Settings.Modules["Banking"].showIconAlphaGear then fullItemName = fullItemName .. BETTERUI.Helper.AlphaGear.GetGearSet(bagId, slotIndex, "Banking")  end
          
     end
     control:GetNamedChild("ItemType"):SetText(string.upper(data.itemCategoryName))
     if currentItemType == ITEMTYPE_RECIPE then
-        control:GetNamedChild("Stat"):SetText(IsItemLinkRecipeKnown(itemLink) and GetString(SI_BUI_INV_RECIPE_KNOWN) or GetString(SI_BUI_INV_RECIPE_UNKNOWN))
+        control:GetNamedChild("Stat"):SetText(IsItemLinkRecipeKnown(itemLink) and GetString(SI_BETTERUI_INV_RECIPE_KNOWN) or GetString(SI_BETTERUI_INV_RECIPE_UNKNOWN))
     elseif IsItemLinkBook(itemLink) then
-        control:GetNamedChild("Stat"):SetText(IsItemLinkBookKnown(itemLink) and GetString(SI_BUI_INV_RECIPE_KNOWN) or GetString(SI_BUI_INV_RECIPE_UNKNOWN))
+        control:GetNamedChild("Stat"):SetText(IsItemLinkBookKnown(itemLink) and GetString(SI_BETTERUI_INV_RECIPE_KNOWN) or GetString(SI_BETTERUI_INV_RECIPE_UNKNOWN))
     else
         control:GetNamedChild("Stat"):SetText((data.statValue == 0) and "-" or data.statValue)
     end
@@ -119,7 +119,7 @@ local function SetupListing(control, data)
     control:GetNamedChild("Icon"):SetHidden(false)
     if not data.meetsUsageRequirement then control:GetNamedChild("Icon"):SetColor(1,0,0,1) else control:GetNamedChild("Icon"):SetColor(1,1,1,1) end
 	
-	if(BUI.Settings.Modules["Inventory"].showMarketPrice) then
+	if(BETTERUI.Settings.Modules["Inventory"].showMarketPrice) then
 		local marketPrice = GetMarketPrice(GetItemLink(data.bagId,data.slotIndex), data.stackCount)
 		if(marketPrice ~= 0) then
 			control:GetNamedChild("Value"):SetColor(1,0.75,0,1)
@@ -136,18 +136,18 @@ end
 
 local function SetupLabelListing(control, data)
     control:GetNamedChild("Label"):SetText(data.label)
-    if BUI.Settings.Modules["CIM"].biggerSkin then
+    if BETTERUI.Settings.Modules["CIM"].biggerSkin then
         control:GetNamedChild("Label"):SetFont("ZoFontGamepad36")
     end
 end
 
-BUI.Banking.Class = BUI.Interface.Window:Subclass()
+BETTERUI.Banking.Class = BETTERUI.Interface.Window:Subclass()
 
-function BUI.Banking.Class:New(...)
-	return BUI.Interface.Window.New(self, ...)
+function BETTERUI.Banking.Class:New(...)
+	return BETTERUI.Interface.Window.New(self, ...)
 end
 
-function BUI.Banking.Class:CurrentUsedBank()
+function BETTERUI.Banking.Class:CurrentUsedBank()
     if(IsHouseBankBag(GetBankingBag()) == false) then
         currentUsedBank = BAG_BANK
     elseif (IsHouseBankBag(GetBankingBag()) == true) then
@@ -157,7 +157,7 @@ function BUI.Banking.Class:CurrentUsedBank()
     end
 end
 
-function BUI.Banking.Class:LastUsedBank()
+function BETTERUI.Banking.Class:LastUsedBank()
    if(IsHouseBankBag(GetBankingBag()) == false) then
         lastUsedBank = BAG_BANK
     elseif (IsHouseBankBag(GetBankingBag()) == true) then
@@ -167,7 +167,7 @@ function BUI.Banking.Class:LastUsedBank()
     end
 end
 
-function BUI.Banking.Class:RefreshFooter()
+function BETTERUI.Banking.Class:RefreshFooter()
 
     if(currentUsedBank == BAG_BANK) then
             --d(IsHouseBankBag())
@@ -180,15 +180,15 @@ function BUI.Banking.Class:RefreshFooter()
     end
 
     if((self.currentMode == LIST_WITHDRAW) and (currentUsedBank == BAG_BANK)) then
-        self.footerFragment.control:GetNamedChild("Data1Value"):SetText(BUI.DisplayNumber(GetBankedCurrencyAmount(CURT_MONEY)))
-        self.footerFragment.control:GetNamedChild("Data2Value"):SetText(BUI.DisplayNumber(GetBankedCurrencyAmount(CURT_TELVAR_STONES)))
+        self.footerFragment.control:GetNamedChild("Data1Value"):SetText(BETTERUI.DisplayNumber(GetBankedCurrencyAmount(CURT_MONEY)))
+        self.footerFragment.control:GetNamedChild("Data2Value"):SetText(BETTERUI.DisplayNumber(GetBankedCurrencyAmount(CURT_TELVAR_STONES)))
     else
-        self.footerFragment.control:GetNamedChild("Data1Value"):SetText(BUI.DisplayNumber(GetCarriedCurrencyAmount(CURT_MONEY)))
-        self.footerFragment.control:GetNamedChild("Data2Value"):SetText(BUI.DisplayNumber(GetCarriedCurrencyAmount(CURT_TELVAR_STONES)))
+        self.footerFragment.control:GetNamedChild("Data1Value"):SetText(BETTERUI.DisplayNumber(GetCarriedCurrencyAmount(CURT_MONEY)))
+        self.footerFragment.control:GetNamedChild("Data2Value"):SetText(BETTERUI.DisplayNumber(GetCarriedCurrencyAmount(CURT_TELVAR_STONES)))
     end
 end
 
-function BUI.Banking.Class:RefreshList()
+function BETTERUI.Banking.Class:RefreshList()
     lastActionName = nil
     --d("tt refresh bank list")
     self.list:OnUpdate()
@@ -196,25 +196,25 @@ function BUI.Banking.Class:RefreshList()
     self:CurrentUsedBank()
 
     -- We have to add 2 rows to the list, one for Withdraw/Deposit GOLD and one for Withdraw/Deposit TEL-VAR
-    local wdString = self.currentMode == LIST_WITHDRAW and GetString(SI_BUI_BANKING_WITHDRAW) or GetString(SI_BUI_BANKING_DEPOSIT)
+    local wdString = self.currentMode == LIST_WITHDRAW and GetString(SI_BETTERUI_BANKING_WITHDRAW) or GetString(SI_BETTERUI_BANKING_DEPOSIT)
     wdString = zo_strformat("<<Z:1>>", wdString)
     if(currentUsedBank == BAG_BANK) then
-        self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_GOLD) ..  "|r", currencyType = CURT_MONEY})
-        self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_TEL_VAR) ..  "|r", currencyType = CURT_TELVAR_STONES})
-        self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_ALLIANCE_POINT) ..  "|r", currencyType = CURT_ALLIANCE_POINTS})
-        self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BUI_CURRENCY_WRIT_VOUCHER) ..  "|r", currencyType = CURT_WRIT_VOUCHERS})
+        self.list:AddEntry("BETTERUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BETTERUI_CURRENCY_GOLD) ..  "|r", currencyType = CURT_MONEY})
+        self.list:AddEntry("BETTERUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BETTERUI_CURRENCY_TEL_VAR) ..  "|r", currencyType = CURT_TELVAR_STONES})
+        self.list:AddEntry("BETTERUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BETTERUI_CURRENCY_ALLIANCE_POINT) ..  "|r", currencyType = CURT_ALLIANCE_POINTS})
+        self.list:AddEntry("BETTERUI_HeaderRow_Template", {label="|cFFFFFF"..wdString.." " .. GetString(SI_BETTERUI_CURRENCY_WRIT_VOUCHER) ..  "|r", currencyType = CURT_WRIT_VOUCHERS})
     else
         if(self.currentMode == LIST_WITHDRAW) then
             if(GetNumBagUsedSlots(currentUsedBank) == 0) then
-                self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK IS EMPTY!|r"})
+                self.list:AddEntry("BETTERUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK IS EMPTY!|r"})
             else
-                self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK|r"})
+                self.list:AddEntry("BETTERUI_HeaderRow_Template", {label="|cFFFFFFHOUSE BANK|r"})
             end
         else
             if(GetNumBagUsedSlots(BAG_BACKPACK) == 0) then
-                self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG IS EMPTY!|r"})
+                self.list:AddEntry("BETTERUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG IS EMPTY!|r"})
             else
-                self.list:AddEntry("BUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG|r"})
+                self.list:AddEntry("BETTERUI_HeaderRow_Template", {label="|cFFFFFFPLAYER BAG|r"})
             end
         end        
     end
@@ -247,7 +247,7 @@ function BUI.Banking.Class:RefreshList()
     for i = 1, #filteredDataTable  do
         local itemData = filteredDataTable[i]
         --use custom categories
-        local customCategory, matched, catName, catPriority = BUI.Helper.AutoCategory:GetCustomCategory(itemData)
+        local customCategory, matched, catName, catPriority = BETTERUI.Helper.AutoCategory:GetCustomCategory(itemData)
         if customCategory and not matched then
             itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
             itemData.bestItemCategoryName = AC_UNGROUPED_NAME
@@ -271,7 +271,7 @@ function BUI.Banking.Class:RefreshList()
     end
     filteredDataTable = tempDataTable
     
-    table.sort(filteredDataTable, BUI_GamepadInventory_DefaultItemSortComparator)
+    table.sort(filteredDataTable, BETTERUI_GamepadInventory_DefaultItemSortComparator)
 
     local currentBestCategoryName = nil
 
@@ -279,7 +279,7 @@ function BUI.Banking.Class:RefreshList()
         local nextItemData = filteredDataTable[i + 1]
 
         local data = ZO_GamepadEntryData:New(itemData.name, itemData.iconFile)
-        data.InitializeInventoryVisualData = BUI.Inventory.Class.InitializeInventoryVisualData
+        data.InitializeInventoryVisualData = BETTERUI.Inventory.Class.InitializeInventoryVisualData
         data:InitializeInventoryVisualData(itemData)
 
         local remaining, duration
@@ -296,18 +296,18 @@ function BUI.Banking.Class:RefreshList()
         data.isEquippedInAnotherCategory = itemData.isEquippedInAnotherCategory
         data.isJunk = itemData.isJunk
 
-        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) or not BUI.Settings.Modules["Inventory"].enableJunk then
+        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) or not BETTERUI.Settings.Modules["Inventory"].enableJunk then
          
             if data.bestGamepadItemCategoryName ~= currentBestCategoryName then
                 currentBestCategoryName = data.bestGamepadItemCategoryName
                 data:SetHeader(currentBestCategoryName)
                 if((AutoCategory) and ((GetNumBagUsedSlots(currentUsedBank) ~= 0) or (GetNumBagUsedSlots(BAG_BACKPACK) ~= 0))) then
-                    self.list:AddEntryWithHeader("BUI_GamepadItemSubEntryTemplate", data)
+                    self.list:AddEntryWithHeader("BETTERUI_GamepadItemSubEntryTemplate", data)
                 else
-                    self.list:AddEntry("BUI_GamepadItemSubEntryTemplate", data)
+                    self.list:AddEntry("BETTERUI_GamepadItemSubEntryTemplate", data)
                 end
             else
-                self.list:AddEntry("BUI_GamepadItemSubEntryTemplate", data)
+                self.list:AddEntry("BETTERUI_GamepadItemSubEntryTemplate", data)
             end
         end
     end
@@ -318,7 +318,7 @@ function BUI.Banking.Class:RefreshList()
     self:RefreshFooter()
 end
 
-function BUI.Banking.Class:RefreshCurrencyTooltip()
+function BETTERUI.Banking.Class:RefreshCurrencyTooltip()
 	if SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() and self:GetList().selectedData.label ~= nil then 
         GAMEPAD_TOOLTIPS:LayoutBankCurrencies(GAMEPAD_LEFT_TOOLTIP, ZO_BANKABLE_CURRENCIES)
 	end
@@ -359,16 +359,16 @@ end
 
 
 local function SetupItemList(list)
-    list:AddDataTemplate("BUI_GamepadItemSubEntryTemplate", BUI_SharedGamepadEntry_OnSetup, ZO_GamepadMenuEntryTemplateParametricListFunction, MenuEntryTemplateEquality)
-    list:AddDataTemplateWithHeader("BUI_GamepadItemSubEntryTemplate", BUI_SharedGamepadEntry_OnSetup, ZO_GamepadMenuEntryTemplateParametricListFunction, MenuEntryTemplateEquality, "ZO_GamepadMenuEntryHeaderTemplate")
+    list:AddDataTemplate("BETTERUI_GamepadItemSubEntryTemplate", BETTERUI_SharedGamepadEntry_OnSetup, ZO_GamepadMenuEntryTemplateParametricListFunction, MenuEntryTemplateEquality)
+    list:AddDataTemplateWithHeader("BETTERUI_GamepadItemSubEntryTemplate", BETTERUI_SharedGamepadEntry_OnSetup, ZO_GamepadMenuEntryTemplateParametricListFunction, MenuEntryTemplateEquality, "ZO_GamepadMenuEntryHeaderTemplate")
 end
 
-function BUI.Banking.Class:Initialize(tlw_name, scene_name)
-	BUI.Interface.Window.Initialize(self, tlw_name, scene_name)
+function BETTERUI.Banking.Class:Initialize(tlw_name, scene_name)
+	BETTERUI.Interface.Window.Initialize(self, tlw_name, scene_name)
 
 	self:InitializeKeybind()
     self:InitializeList()
-    self.itemActions = BUI.Inventory.SlotActions:New(KEYBIND_STRIP_ALIGN_LEFT)
+    self.itemActions = BETTERUI.Inventory.SlotActions:New(KEYBIND_STRIP_ALIGN_LEFT)
 	self.itemActions:SetUseKeybindStrip(false) 
     self:InitializeActionsDialog()
 	
@@ -381,7 +381,7 @@ function BUI.Banking.Class:Initialize(tlw_name, scene_name)
 			self:ReturnToSaved()
 		end
 	end
-	CALLBACK_MANAGER:RegisterCallback("BUI_EVENT_SPLIT_STACK_DIALOG_FINISHED", CallbackSplitStackFinished)
+	CALLBACK_MANAGER:RegisterCallback("BETTERUI_EVENT_SPLIT_STACK_DIALOG_FINISHED", CallbackSplitStackFinished)
 	
     self.list.maxOffset = 30
     self.list:SetHeaderPadding(GAMEPAD_HEADER_DEFAULT_PADDING * 0.75, GAMEPAD_HEADER_SELECTED_PADDING * 0.75)
@@ -390,7 +390,7 @@ function BUI.Banking.Class:Initialize(tlw_name, scene_name)
     -- Setup data templates of the lists
     --self:SetupList(BANKING_ROW_TEMPLATE, SetupListing)
 	SetupItemList(self.list)
-    self:AddTemplate("BUI_HeaderRow_Template",SetupLabelListing)
+    self:AddTemplate("BETTERUI_HeaderRow_Template",SetupLabelListing)
 
     self.currentMode = LIST_WITHDRAW
     self.lastPositions = { [LIST_WITHDRAW] = 1, [LIST_DEPOSIT] = 1 }
@@ -476,14 +476,14 @@ end
 
 -- Calling this function will add keybinds to the strip, likely using the primary key
 -- The primary key will conflict with the category keybind descriptor if added
-function BUI.Banking.Class:RefreshItemActions()
+function BETTERUI.Banking.Class:RefreshItemActions()
     local targetData = self:GetList().selectedData
     --self:SetSelectedInventoryData(targetData) instead:
     self.itemActions:SetInventorySlot(targetData)
 end
 
 
-function BUI.Banking.Class:ActionsDialogSetup(dialog)
+function BETTERUI.Banking.Class:ActionsDialogSetup(dialog)
 	dialog.entryList:SetOnSelectedDataChangedCallback(  function(list, selectedData)
 		self.itemActions:SetSelectedAction(selectedData and selectedData.action)
 	end)
@@ -520,7 +520,7 @@ function BUI.Banking.Class:ActionsDialogSetup(dialog)
     dialog:setupFunc()
 end
 
-function BUI.Banking.Class:InitializeActionsDialog()
+function BETTERUI.Banking.Class:InitializeActionsDialog()
 	local function ActionDialogSetup(dialog)
 		if SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() then
 	
@@ -605,9 +605,9 @@ function BUI.Banking.Class:InitializeActionsDialog()
             lastActionName = nil
 		end
 	end
-	CALLBACK_MANAGER:RegisterCallback("BUI_EVENT_ACTION_DIALOG_SETUP", ActionDialogSetup)
-	CALLBACK_MANAGER:RegisterCallback("BUI_EVENT_ACTION_DIALOG_FINISH", ActionDialogFinish)
-	CALLBACK_MANAGER:RegisterCallback("BUI_EVENT_ACTION_DIALOG_BUTTON_CONFIRM", ActionDialogButtonConfirm)
+	CALLBACK_MANAGER:RegisterCallback("BETTERUI_EVENT_ACTION_DIALOG_SETUP", ActionDialogSetup)
+	CALLBACK_MANAGER:RegisterCallback("BETTERUI_EVENT_ACTION_DIALOG_FINISH", ActionDialogFinish)
+	CALLBACK_MANAGER:RegisterCallback("BETTERUI_EVENT_ACTION_DIALOG_BUTTON_CONFIRM", ActionDialogButtonConfirm)
 end
 
 
@@ -653,7 +653,7 @@ local function FindEmptySlotInBank()
     end
 end
 
-function BUI.Banking.Class:ActivateSpinner()
+function BETTERUI.Banking.Class:ActivateSpinner()
     self.spinner:SetHidden(false)
     self.spinner:Activate()
     if(self:GetList() ~= nil) then
@@ -664,7 +664,7 @@ function BUI.Banking.Class:ActivateSpinner()
     end
 end
 
-function BUI.Banking.Class:DeactivateSpinner()
+function BETTERUI.Banking.Class:DeactivateSpinner()
     self.spinner:SetValue(1)
     self.spinner:SetHidden(true)
     self.spinner:Deactivate()
@@ -676,7 +676,7 @@ function BUI.Banking.Class:DeactivateSpinner()
     end
 end
 
-function BUI.Banking.Class:MoveItem(list, quantity)
+function BETTERUI.Banking.Class:MoveItem(list, quantity)
 	local fromBag, fromBagIndex = ZO_Inventory_GetBagAndIndex(list:GetSelectedData())
     local stackCount = GetSlotStackSize(fromBag, fromBagIndex)
     local fromBagItemLink = GetItemLink(fromBag, fromBagIndex)
@@ -793,7 +793,7 @@ function BUI.Banking.Class:MoveItem(list, quantity)
     end
 end
 
-function BUI.Banking.Class:CancelWithdrawDeposit(list)
+function BETTERUI.Banking.Class:CancelWithdrawDeposit(list)
     if self.confirmationMode then
         self:UpdateSpinnerConfirmation(DEACTIVATE_SPINNER, list)
     else
@@ -801,7 +801,7 @@ function BUI.Banking.Class:CancelWithdrawDeposit(list)
     end
 end
 
-function BUI.Banking.Class:DisplaySelector(currencyType)
+function BETTERUI.Banking.Class:DisplaySelector(currencyType)
     local currency_max
 
     if(self.currentMode == LIST_DEPOSIT) then
@@ -838,7 +838,7 @@ function BUI.Banking.Class:DisplaySelector(currencyType)
     end
 end
 
-function BUI.Banking.Class:HideSelector()
+function BETTERUI.Banking.Class:HideSelector()
     self.selector.control:GetParent():SetHidden(true)
     self.selector:Deactivate()
     self.list:Activate()
@@ -848,14 +848,14 @@ function BUI.Banking.Class:HideSelector()
     KEYBIND_STRIP:AddKeybindButtonGroup(self.coreKeybinds)
 end
 
-function BUI.Banking.Class:CreateListTriggerKeybindDescriptors(list)
+function BETTERUI.Banking.Class:CreateListTriggerKeybindDescriptors(list)
     local leftTrigger = {
         keybind = "UI_SHORTCUT_LEFT_TRIGGER",
         ethereal = true,
         callback = function()
             local list = self.list
             if not list:IsEmpty() then
-                list:SetSelectedIndex(list.selectedIndex-tonumber(BUI.Settings.Modules["CIM"].triggerSpeed))
+                list:SetSelectedIndex(list.selectedIndex-tonumber(BETTERUI.Settings.Modules["CIM"].triggerSpeed))
             end
         end
     }
@@ -865,14 +865,14 @@ function BUI.Banking.Class:CreateListTriggerKeybindDescriptors(list)
         callback = function()
 			local list = self.list
             if not list:IsEmpty() then
-                list:SetSelectedIndex(list.selectedIndex+tonumber(BUI.Settings.Modules["CIM"].triggerSpeed))
+                list:SetSelectedIndex(list.selectedIndex+tonumber(BETTERUI.Settings.Modules["CIM"].triggerSpeed))
             end
         end,
     }
     return leftTrigger, rightTrigger
 end
 
-function BUI.Banking.Class:UpdateActions()
+function BETTERUI.Banking.Class:UpdateActions()
     local targetData = self:GetList().selectedData
     -- since SetInventorySlot also adds/removes keybinds, the order which we call these 2 functions is important
     -- based on whether we are looking at an item or a faux-item
@@ -885,19 +885,19 @@ function BUI.Banking.Class:UpdateActions()
     end
 end
 
-function BUI.Banking.Class:AddKeybinds()
+function BETTERUI.Banking.Class:AddKeybinds()
 	KEYBIND_STRIP:RemoveAllKeyButtonGroups()
 	KEYBIND_STRIP:AddKeybindButtonGroup(self.withdrawDepositKeybinds)
 	KEYBIND_STRIP:AddKeybindButtonGroup(self.coreKeybinds)
 	self:UpdateActions()
 end
 
-function BUI.Banking.Class:RemoveKeybinds()
+function BETTERUI.Banking.Class:RemoveKeybinds()
     KEYBIND_STRIP:RemoveKeybindButtonGroup(self.withdrawDepositKeybinds)
     KEYBIND_STRIP:RemoveKeybindButton(self.coreKeybinds)
 end
 
-function BUI.Banking.Class:ShowActions()
+function BETTERUI.Banking.Class:ShowActions()
     self:RemoveKeybinds()
 
     local function OnActionsFinishedCallback()
@@ -914,15 +914,15 @@ function BUI.Banking.Class:ShowActions()
     ZO_Dialogs_ShowPlatformDialog(ZO_GAMEPAD_INVENTORY_ACTION_DIALOG, dialogData)
 end
 
-function BUI.Banking.Class:InitializeKeybind()
-	if not BUI.Settings.Modules["Banking"].m_enabled then
+function BETTERUI.Banking.Class:InitializeKeybind()
+	if not BETTERUI.Settings.Modules["Banking"].m_enabled then
 		return
 	end
 	
 	self.coreKeybinds = {
                 alignment = KEYBIND_STRIP_ALIGN_LEFT,
 		        {
-		            name = GetString(SI_BUI_BANKING_TOGGLE_LIST),
+		            name = GetString(SI_BETTERUI_BANKING_TOGGLE_LIST),
 		            keybind = "UI_SHORTCUT_SECONDARY",
 		            callback = function()
 		                self:ToggleList(self.currentMode == LIST_DEPOSIT)
@@ -992,7 +992,7 @@ function BUI.Banking.Class:InitializeKeybind()
     self.withdrawDepositKeybinds = {
             alignment = KEYBIND_STRIP_ALIGN_LEFT,
                 {
-                    name = function() return (self.currentMode == LIST_WITHDRAW) and GetString(SI_BUI_BANKING_WITHDRAW) or GetString(SI_BUI_BANKING_DEPOSIT) end,
+                    name = function() return (self.currentMode == LIST_WITHDRAW) and GetString(SI_BETTERUI_BANKING_WITHDRAW) or GetString(SI_BETTERUI_BANKING_DEPOSIT) end,
                     keybind = "UI_SHORTCUT_PRIMARY",
                     callback = function()
                         self:SaveListPosition()
@@ -1009,7 +1009,7 @@ function BUI.Banking.Class:InitializeKeybind()
     {
         alignment = KEYBIND_STRIP_ALIGN_LEFT,
         {
-            name = GetString(SI_BUI_CONFIRM_AMOUNT),
+            name = GetString(SI_BETTERUI_CONFIRM_AMOUNT),
             keybind = "UI_SHORTCUT_PRIMARY",
             visible = function()
                 return true
@@ -1059,7 +1059,7 @@ function BUI.Banking.Class:InitializeKeybind()
 	self.spinnerKeybindStripDescriptor = {
         alignment = KEYBIND_STRIP_ALIGN_LEFT,
         {
-            name = GetString(SI_BUI_CONFIRM),
+            name = GetString(SI_BETTERUI_CONFIRM),
             keybind = "UI_SHORTCUT_PRIMARY",
             callback = function()
             	self:SaveListPosition()
@@ -1080,12 +1080,12 @@ function BUI.Banking.Class:InitializeKeybind()
                                                     end)
 end
 
-function BUI.Banking.Class:SaveListPosition()
+function BETTERUI.Banking.Class:SaveListPosition()
     -- Able to return to the current position again!
     self.lastPositions[self.currentMode] = self.list.selectedIndex
 end
 
-function BUI.Banking.Class:ReturnToSaved()
+function BETTERUI.Banking.Class:ReturnToSaved()
     self:CurrentUsedBank()
     local lastPosition = self.lastPositions[self.currentMode]
     if(self.currentMode == LIST_WITHDRAW) then
@@ -1115,7 +1115,7 @@ function BUI.Banking.Class:ReturnToSaved()
 end
 
 -- Go through and get the item which has been passed to us through the event
-function BUI.Banking.Class:UpdateSingleItem(bagId, slotIndex)
+function BETTERUI.Banking.Class:UpdateSingleItem(bagId, slotIndex)
     if GetSlotStackSize(bagId, slotIndex) > 0 then
         self:RefreshList()
         return
@@ -1132,7 +1132,7 @@ function BUI.Banking.Class:UpdateSingleItem(bagId, slotIndex)
 end
 
 -- This is the final function for the Event "EVENT_INVENTORY_SINGLE_SLOT_UPDATE".
-function BUI.Banking.Class:RemoveItemStack(itemIndex)
+function BETTERUI.Banking.Class:RemoveItemStack(itemIndex)
 
     if(itemIndex >= #self.list.dataList) then
       self.list:MovePrevious()
@@ -1148,7 +1148,7 @@ function BUI.Banking.Class:RemoveItemStack(itemIndex)
     self:RefreshList()
 end
 
-function BUI.Banking.Class:ToggleList(toWithdraw)
+function BETTERUI.Banking.Class:ToggleList(toWithdraw)
 	self:SaveListPosition()
 
 	self.currentMode = toWithdraw and LIST_WITHDRAW or LIST_DEPOSIT
@@ -1169,26 +1169,26 @@ function BUI.Banking.Class:ToggleList(toWithdraw)
 	self:RefreshList()
 end
 
-function BUI.Banking.Init()
-    BUI.Banking.Window = BUI.Banking.Class:New("BUI_TestWindow", BUI_TEST_SCENE)
-    BUI.Banking.Window:SetTitle("|c0066FFBanking Enhanced|r")
+function BETTERUI.Banking.Init()
+    BETTERUI.Banking.Window = BETTERUI.Banking.Class:New("BETTERUI_TestWindow", BETTERUI_TEST_SCENE)
+    BETTERUI.Banking.Window:SetTitle("|c0066FFBanking Enhanced|r")
 
 
     -- Set the column headings up, maybe put them into a table?
-    BUI.Banking.Window:AddColumn(GetString(SI_BUI_BANKING_COLUMN_NAME),87)
-    BUI.Banking.Window:AddColumn(GetString(SI_BUI_BANKING_COLUMN_TYPE),637)
-    BUI.Banking.Window:AddColumn(GetString(SI_BUI_BANKING_COLUMN_TRAIT),897)
-    BUI.Banking.Window:AddColumn(GetString(SI_BUI_BANKING_COLUMN_STAT),1067)
-    BUI.Banking.Window:AddColumn(GetString(SI_BUI_BANKING_COLUMN_VALUE),1187)
+    BETTERUI.Banking.Window:AddColumn(GetString(SI_BETTERUI_BANKING_COLUMN_NAME),87)
+    BETTERUI.Banking.Window:AddColumn(GetString(SI_BETTERUI_BANKING_COLUMN_TYPE),637)
+    BETTERUI.Banking.Window:AddColumn(GetString(SI_BETTERUI_BANKING_COLUMN_TRAIT),897)
+    BETTERUI.Banking.Window:AddColumn(GetString(SI_BETTERUI_BANKING_COLUMN_STAT),1067)
+    BETTERUI.Banking.Window:AddColumn(GetString(SI_BETTERUI_BANKING_COLUMN_VALUE),1187)
 
-    BUI.Banking.Window:RefreshList()
+    BETTERUI.Banking.Window:RefreshList()
 
-    SCENE_MANAGER.scenes['gamepad_banking'] = SCENE_MANAGER.scenes['BUI_BANKING']
+    SCENE_MANAGER.scenes['gamepad_banking'] = SCENE_MANAGER.scenes['BETTERUI_BANKING']
 	
-	if ((not USE_SHORT_CURRENCY_FORMAT ~= nil) and BUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
-		USE_SHORT_CURRENCY_FORMAT = BUI.Settings.Modules["Inventory"].useShortFormat
+	if ((not USE_SHORT_CURRENCY_FORMAT ~= nil) and BETTERUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
+		USE_SHORT_CURRENCY_FORMAT = BETTERUI.Settings.Modules["Inventory"].useShortFormat
 	end
 
     esoSubscriber = IsESOPlusSubscriber()
-    --tw = BUI.Banking.Window --dev mode
+    --tw = BETTERUI.Banking.Window --dev mode
 end

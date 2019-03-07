@@ -1,6 +1,6 @@
 <GuiXml>
 	<Controls>
-        <Control name="BUI_WritsPanel" inherits="ZO_GamepadGrid_NavQuadrant_1_Anchors"  virtual="true">
+        <Control name="BETTERUI_WritsPanel" inherits="ZO_GamepadGrid_NavQuadrant_1_Anchors"  virtual="true">
             <Controls>
                 <Control name="$(parent)SlotContainer">
                     <Dimensions x="325" y="200" />

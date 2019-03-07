@@ -1,7 +1,7 @@
 <GuiXml>
 	<Controls>
 
-        <Control name="BUI_Generic_ScrollListTemplate" mouseEnabled="true" virtual="true">
+        <Control name="BETTERUI_Generic_ScrollListTemplate" mouseEnabled="true" virtual="true">
             <OnMouseWheel>
                 if self.scrollList.active then
                     if delta > 0 then
@@ -39,41 +39,41 @@
         </Control>
 
         <!-- The below 2 controls are redefinitions of ZOS's original NavQuadrant_1 anchors to facilitate smooth transitions and compatibility -->
-        <Control name="BUI_NavQuadrant_1_Anchors" virtual="true">
-            <Dimensions x="BUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
-            <Anchor point="TOPLEFT" relativeTo="GuiRoot" offsetX="BUI_GAMEPAD_QUADRANT_1_LEFT" />
-            <Anchor point="BOTTOMLEFT" relativeTo="GuiRoot" offsetX="BUI_GAMEPAD_QUADRANT_1_LEFT" />
+        <Control name="BETTERUI_NavQuadrant_1_Anchors" virtual="true">
+            <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
+            <Anchor point="TOPLEFT" relativeTo="GuiRoot" offsetX="BETTERUI_GAMEPAD_QUADRANT_1_LEFT" />
+            <Anchor point="BOTTOMLEFT" relativeTo="GuiRoot" offsetX="BETTERUI_GAMEPAD_QUADRANT_1_LEFT" />
         </Control>
-        <Control name="BUI_NavQuadrant_1_ContainerAnchors" virtual="true">
-            <Dimensions x="BUI_GAMEPAD_DEFAULT_PANEL_CONTAINER_WIDTH" />
-            <Anchor point="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
-            <Anchor point="BOTTOMLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
+        <Control name="BETTERUI_NavQuadrant_1_ContainerAnchors" virtual="true">
+            <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_PANEL_CONTAINER_WIDTH" />
+            <Anchor point="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
+            <Anchor point="BOTTOMLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
         </Control>
 
-        <Control name="BUI_HeaderTitleAnchors" virtual="true">
-            <Anchor point="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" offsetY="20" />
+        <Control name="BETTERUI_HeaderTitleAnchors" virtual="true">
+            <Anchor point="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" offsetY="20" />
             <Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT" offsetX="0" />
         </Control>
 
-        <Label name="BUI_GenericColumn_TextTemplate" font="ZoFontGamepad27" horizontalAlignment="LEFT" wrapMode="ELLIPSIS" virtual="true" modifyTextType="UPPERCASE"/>
+        <Label name="BETTERUI_GenericColumn_TextTemplate" font="ZoFontGamepad27" horizontalAlignment="LEFT" wrapMode="ELLIPSIS" virtual="true" modifyTextType="UPPERCASE"/>
 
-        <Label name="BUI_MenuEntryLabelTemplate" font="ZoFontGamepad34" verticalAlignment="CENTER" wrapMode="ELLIPSIS" virtual="true">
-            <Anchor point="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING"/>
-            <Dimensions x="BUI_GAMEPAD_DEFAULT_LIST_ENTRY_WIDTH"/>
+        <Label name="BETTERUI_MenuEntryLabelTemplate" font="ZoFontGamepad34" verticalAlignment="CENTER" wrapMode="ELLIPSIS" virtual="true">
+            <Anchor point="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING"/>
+            <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_LIST_ENTRY_WIDTH"/>
         </Label>
 
-        <Label name="BUI_FooterTemplate" font="ZoFontGamepad45" wrapMode="ELLIPSIS" virtual="true" modifyTextType="UPPERCASE" />
-        <Label name="BUI_FooterSmallTemplate" font="ZoFontGamepad27" wrapMode="ELLIPSIS" virtual="true" modifyTextType="UPPERCASE" />
+        <Label name="BETTERUI_FooterTemplate" font="ZoFontGamepad45" wrapMode="ELLIPSIS" virtual="true" modifyTextType="UPPERCASE" />
+        <Label name="BETTERUI_FooterSmallTemplate" font="ZoFontGamepad27" wrapMode="ELLIPSIS" virtual="true" modifyTextType="UPPERCASE" />
 
 
-        <Texture name="BUI_MenuEntryIconTemplate" tier="MEDIUM" inherits="ZO_MultiIcon" excludeFromResizeToFitExtents="true" level="1" pixelRoundingEnabled="true" virtual="true">
+        <Texture name="BETTERUI_MenuEntryIconTemplate" tier="MEDIUM" inherits="ZO_MultiIcon" excludeFromResizeToFitExtents="true" level="1" pixelRoundingEnabled="true" virtual="true">
             <Dimensions x="32" y="32" />
             <Anchor point="CENTER" relativeTo="$(parent)Label" relativePoint="LEFT" offsetX="-24" />
         </Texture>
 
         <!-- SPINNER -->
 
-        <Control name="BUI_SpinnerButtons" virtual="true">
+        <Control name="BETTERUI_SpinnerButtons" virtual="true">
             <Controls>
                 <Button name="$(parent)Decrease">
                     <Dimensions x="20" y="32" />
@@ -82,7 +82,7 @@
                               pressed="EsoUI/Art/Miscellaneous/Gamepad/spinner_arrow_left_down.dds"
                               disabled="EsoUI/Art/Miscellaneous/Gamepad/spinner_arrow_left_disabled.dds"/>
                     <OnClicked>
-                        BUI.Banking.Window.spinner.spinner:ModifyValue(-1)
+                        BETTERUI.Banking.Window.spinner.spinner:ModifyValue(-1)
                     </OnClicked>
                 </Button>
 
@@ -93,13 +93,13 @@
                               pressed="EsoUI/Art/Miscellaneous/Gamepad/spinner_arrow_right_down.dds"
                               disabled="EsoUI/Art/Miscellaneous/Gamepad/spinner_arrow_right_disabled.dds"/>
                     <OnClicked>
-                        BUI.Banking.Window.spinner.spinner:ModifyValue(1)
+                        BETTERUI.Banking.Window.spinner.spinner:ModifyValue(1)
                     </OnClicked>
                 </Button>
             </Controls>
         </Control>
 
-        <Control name="BUI_GamepadSpinner" inherits="BUI_SpinnerButtons ZO_GamepadSpinnerStyle" virtual="true">
+        <Control name="BETTERUI_GamepadSpinner" inherits="BETTERUI_SpinnerButtons ZO_GamepadSpinnerStyle" virtual="true">
             <Controls>
                 <Label name="$(parent)Display" font="ZoFontGamepadCondensed34" horizontalAlignment="CENTER" verticalAlignment="CENTER" >
                     <Anchor point="TOPLEFT" offsetX="18" offsetY="-2"/>
@@ -108,7 +108,7 @@
             </Controls>
         </Control>
 
-        <Control name="BUI_SpinnerContainerTemplate" virtual="true">
+        <Control name="BETTERUI_SpinnerContainerTemplate" virtual="true">
             <OnInitialized>
                 ZO_GamepadLabeledQuantitySpinnerContainerTemplate_Initialize(self)
             </OnInitialized>
@@ -123,7 +123,7 @@
                     <Anchor point="LEFT" />
                 </Label>
 
-                <Control name="$(parent)Spinner" inherits="BUI_GamepadSpinner">
+                <Control name="$(parent)Spinner" inherits="BETTERUI_GamepadSpinner">
                     <Anchor point="CENTER" />
                     <Dimensions x="97" y="42" />
                     <Controls>
@@ -137,7 +137,7 @@
             </Controls>
         </Control>
 
-        <Control name="BUI_GoldSpinnerContainerTemplate" virtual="true">
+        <Control name="BETTERUI_GoldSpinnerContainerTemplate" virtual="true">
             <Controls>
 
 
@@ -154,54 +154,54 @@
         </Control>
 
 
-        <Control name="BUI_HeaderRow_Template" inherits="BUI_GamepadMenuEntryLabelSizedTemplate" virtual="true">
+        <Control name="BETTERUI_HeaderRow_Template" inherits="BETTERUI_GamepadMenuEntryLabelSizedTemplate" virtual="true">
                <!--  <Dimensions y="32" /> -->
-                <Anchor point="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING"/>
-                <Dimensions x="BUI_GAMEPAD_DEFAULT_LIST_ENTRY_WIDTH"/>
+                <Anchor point="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING"/>
+                <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_LIST_ENTRY_WIDTH"/>
 
                 <Controls>
-                    <Label name="$(parent)Label" inherits="BUI_MenuEntryLabelTemplate" font="ZoFontGamepad27">
+                    <Label name="$(parent)Label" inherits="BETTERUI_MenuEntryLabelTemplate" font="ZoFontGamepad27">
                             <Anchor point="TOPLEFT" offsetX="15"/>
                     </Label>
                 </Controls>
         </Control>
 
 
-        <Control name="BUI_GenericEntry_Template" inherits="BUI_GamepadMenuEntryLabelSizedTemplate" virtual="true">
+        <Control name="BETTERUI_GenericEntry_Template" inherits="BETTERUI_GamepadMenuEntryLabelSizedTemplate" virtual="true">
            <!--  <Dimensions y="32" /> -->
             <Anchor point="TOPLEFT" offsetX="55"/>
-            <Dimensions x="BUI_GAMEPAD_DEFAULT_LIST_ENTRY_WIDTH"/>
+            <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_LIST_ENTRY_WIDTH"/>
 
             <Controls>
-                <Label name="$(parent)Label" inherits="BUI_MenuEntryLabelTemplate" font="ZoFontGamepad27">
+                <Label name="$(parent)Label" inherits="BETTERUI_MenuEntryLabelTemplate" font="ZoFontGamepad27">
                         <Anchor point="TOPLEFT" offsetX="28"/>
                 </Label>
-                <Texture name="$(parent)Icon" inherits="BUI_MenuEntryIconTemplate" edgeColor="00000000">
+                <Texture name="$(parent)Icon" inherits="BETTERUI_MenuEntryIconTemplate" edgeColor="00000000">
                 </Texture>
-                <Label name="$(parent)ItemType" inherits="BUI_GamepadSubMenuEntryLabelTemplate" text="NONE" font="ZoFontGamepad27" override="true" verticalAlignment="CENTER" horizontalAlignment="LEFT" excludeFromResizeToFitExtents="true">
+                <Label name="$(parent)ItemType" inherits="BETTERUI_GamepadSubMenuEntryLabelTemplate" text="NONE" font="ZoFontGamepad27" override="true" verticalAlignment="CENTER" horizontalAlignment="LEFT" excludeFromResizeToFitExtents="true">
                     <Anchor point="TOPLEFT" relativeTo="$(parent)Label" offsetX="485"/>
                 </Label>
-                <Label name="$(parent)Stat" inherits="BUI_GamepadSubMenuEntryLabelTemplate" text="-" font="ZoFontGamepad27" override="true" verticalAlignment="CENTER" horizontalAlignment="LEFT" excludeFromResizeToFitExtents="true">
+                <Label name="$(parent)Stat" inherits="BETTERUI_GamepadSubMenuEntryLabelTemplate" text="-" font="ZoFontGamepad27" override="true" verticalAlignment="CENTER" horizontalAlignment="LEFT" excludeFromResizeToFitExtents="true">
                     <Anchor point="TOPLEFT" relativeTo="$(parent)Label" offsetX="679"/>
                 </Label>
-                <Label name="$(parent)Value" inherits="BUI_GamepadSubMenuEntryLabelTemplate" text="0" font="ZoFontGamepad27" override="true" verticalAlignment="CENTER" horizontalAlignment="LEFT" excludeFromResizeToFitExtents="true">
+                <Label name="$(parent)Value" inherits="BETTERUI_GamepadSubMenuEntryLabelTemplate" text="0" font="ZoFontGamepad27" override="true" verticalAlignment="CENTER" horizontalAlignment="LEFT" excludeFromResizeToFitExtents="true">
                     <Anchor point="TOPLEFT" relativeTo="$(parent)Label" offsetX="744"/>
                 </Label>
             </Controls>
         </Control>
 
-		<Label name="BUI_GenericColumn_Label" inherits="BUI_GenericColumn_TextTemplate BUI_HeaderTitleAnchors" text="..." virtual="true">
+		<Label name="BETTERUI_GenericColumn_Label" inherits="BETTERUI_GenericColumn_TextTemplate BETTERUI_HeaderTitleAnchors" text="..." virtual="true">
                 <Anchor point="LEFT" relativeTo="$(parent)TabBar" relativePoint="BOTTOMLEFT" offsetX="28" />
                 <Anchor point="RIGHT" relativeTo="$(parent)TabBar" relativePoint="BOTTOMRIGHT" offsetX="2" offsetY="95" />
          </Label>
 
-        <Control name="BUI_GenericInterfaceHeader" resizeToFitDescendents="true" virtual="true">
+        <Control name="BETTERUI_GenericInterfaceHeader" resizeToFitDescendents="true" virtual="true">
             <Anchor point="TOPLEFT" />
             <Anchor point="TOPRIGHT" />
 
             <Controls>
-                <Control name="$(parent)TabBar" inherits="BUI_GamepadTabBarScrollListTemplate" hidden="false">
-                    <Anchor point="TOPLEFT" offsetY="110" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING"/>
+                <Control name="$(parent)TabBar" inherits="BETTERUI_GamepadTabBarScrollListTemplate" hidden="false">
+                    <Anchor point="TOPLEFT" offsetY="110" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING"/>
                     <Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT" />
                     <Controls>
                          <Button name="$(parent)LeftIcon" hidden="true">
@@ -221,26 +221,26 @@
                             </OnClicked>
                         </Button>
 
-                        <Control name="$(parent)DividerBottomF" inherits="BUI_GamepadHeaderHorizontalDivider">
+                        <Control name="$(parent)DividerBottomF" inherits="BETTERUI_GamepadHeaderHorizontalDivider">
                             <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" />
                             <Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="0" offsetY="77" />
                         </Control>
-                        <Control name="$(parent)DividerBottomS" inherits="BUI_GamepadHeaderHorizontalDivider">
+                        <Control name="$(parent)DividerBottomS" inherits="BETTERUI_GamepadHeaderHorizontalDivider">
                             <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" />
                             <Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="0" offsetY="81" />
                         </Control>
                     </Controls>
                 </Control>
 
-                <Control name="$(parent)TitleContainer" inherits="BUI_HeaderTitleAnchors">
+                <Control name="$(parent)TitleContainer" inherits="BETTERUI_HeaderTitleAnchors">
                     <Controls>
-                         <Label name="$(parent)Title" inherits="BUI_GamepadScreenHeaderTitleTextTemplate" text="|cFF6600 |r" hidden="false">
+                         <Label name="$(parent)Title" inherits="BETTERUI_GamepadScreenHeaderTitleTextTemplate" text="|cFF6600 |r" hidden="false">
                             <Anchor point="TOPLEFT" />
                         </Label>
                     </Controls>
                 </Control>
 
-                <Control name="$(parent)DividerBottom" inherits="BUI_GamepadHeaderHorizontalDivider">
+                <Control name="$(parent)DividerBottom" inherits="BETTERUI_GamepadHeaderHorizontalDivider">
                     <Anchor point="LEFT" relativeTo="$(parent)TabBar" relativePoint="BOTTOMLEFT" offsetX="0" />
                     <Anchor point="RIGHT" relativeTo="$(parent)TabBar" relativePoint="BOTTOMRIGHT" offsetX="0" offsetY="110" />
                 </Control>
@@ -249,7 +249,7 @@
 
 
 
-        <Control name="BUI_VerticalDivider" resizeToFitDescendents="true" virtual="true">
+        <Control name="BETTERUI_VerticalDivider" resizeToFitDescendents="true" virtual="true">
             <Controls>
                 <Texture name="$(parent)Backdrop" textureFile="BetterUI/Modules/Banking/Images/nav_vert.dds">
                     <Anchor point="CENTER" offsetX="4"/>
@@ -259,32 +259,32 @@
         </Control>
 
 
-        <Control name="BUI_GenericInterfaceFooter" resizeToFitDescendents="false" virtual="true">
+        <Control name="BETTERUI_GenericInterfaceFooter" resizeToFitDescendents="false" virtual="true">
            <Anchor point="TOPLEFT" />
             <Anchor point="TOPRIGHT" />
 
             <Controls>
 
                 <Texture name="$(parent)SelectBg" textureFile="BetterUI/Modules/Banking/Images/selectbg.dds">
-                    <Dimensions x="BUI_GAMEPAD_DEFAULT_PANEL_WIDTH" y="90" />
+                    <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_PANEL_WIDTH" y="90" />
                     <Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER" offsetX="5" offsetY="210" />
                     <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT"/>
                 </Texture>
-                <Control name="$(parent)DividerCentre" inherits="BUI_VerticalDivider">
+                <Control name="$(parent)DividerCentre" inherits="BETTERUI_VerticalDivider">
                     <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0"/>
                     <Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER" offsetY="6" />
                 </Control>
 
-                <Control name="$(parent)DividerBottomT" inherits="BUI_GamepadFooterHorizontalDivider">
-                    <Dimensions x="BUI_GAMEPAD_DEFAULT_LIST_ENTRY_HWIDTH" y="5" />
+                <Control name="$(parent)DividerBottomT" inherits="BETTERUI_GamepadFooterHorizontalDivider">
+                    <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_LIST_ENTRY_HWIDTH" y="5" />
                     <Anchor point="CENTER" relativeTo="$(parent)SelectBg" relativePoint="CENTER" offsetX="0" />
-                    <Anchor point="TOPLEFT" relativeTo="$(parent)SelectBg" relativePoint="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" offsetY="0" />
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)SelectBg" relativePoint="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" offsetY="0" />
                 </Control>
 
-                <Control name="$(parent)DividerBottomB" inherits="BUI_GamepadFooterHorizontalDivider">
-                    <Dimensions x="BUI_GAMEPAD_DEFAULT_LIST_ENTRY_HWIDTH" y="5" />
+                <Control name="$(parent)DividerBottomB" inherits="BETTERUI_GamepadFooterHorizontalDivider">
+                    <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_LIST_ENTRY_HWIDTH" y="5" />
                     <Anchor point="CENTER" relativeTo="$(parent)SelectBg" relativePoint="CENTER" offsetX="0" />
-                    <Anchor point="TOPLEFT" relativeTo="$(parent)SelectBg" relativePoint="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" offsetY="6" />
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)SelectBg" relativePoint="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" offsetY="6" />
                 </Control>
 
                 <Control name="$(parent)Withdraw">
@@ -294,13 +294,13 @@
                             <Dimensions x="250" y="30" />
                             <Anchor point="LEFT" offsetX="155"/>
                             <OnClicked>
-                                BUI.Banking.Window:ToggleList(true)
+                                BETTERUI.Banking.Window:ToggleList(true)
                             </OnClicked>
                             <Controls>
-                                <Label name="$(parent)Label" text="SI_BUI_BANKING_WITHDRAW" horizontalAlignment="LEFT" inherits="BUI_FooterTemplate">
+                                <Label name="$(parent)Label" text="SI_BETTERUI_BANKING_WITHDRAW" horizontalAlignment="LEFT" inherits="BETTERUI_FooterTemplate">
                                     <Anchor point="LEFT" offsetX="70" offsetY="-10"/>
                                 </Label>
-                                <Label name="$(parent)SpaceLabel" text="|t24:24:/esoui/art/icons/mapkey/mapkey_bank.dds|t 10/180" horizontalAlignment="RIGHT" inherits="BUI_FooterSmallTemplate">
+                                <Label name="$(parent)SpaceLabel" text="|t24:24:/esoui/art/icons/mapkey/mapkey_bank.dds|t 10/180" horizontalAlignment="RIGHT" inherits="BETTERUI_FooterSmallTemplate">
                                     <Anchor point="LEFT" offsetX="70" offsetY="25"/>
                                 </Label>
                             </Controls>
@@ -321,13 +321,13 @@
                             <Dimensions x="250" y="30" />
                             <Anchor point="RIGHT" offsetX="-205"/>
                             <OnClicked>
-                                BUI.Banking.Window:ToggleList(false)
+                                BETTERUI.Banking.Window:ToggleList(false)
                             </OnClicked>
                             <Controls>
-                                <Label name="$(parent)Label" text="SI_BUI_BANKING_DEPOSIT" horizontalAlignment="RIGHT" inherits="BUI_FooterTemplate" color="444444">
+                                <Label name="$(parent)Label" text="SI_BETTERUI_BANKING_DEPOSIT" horizontalAlignment="RIGHT" inherits="BETTERUI_FooterTemplate" color="444444">
                                     <Anchor point="RIGHT" offsetX="-100" offsetY="-10"/>
                                 </Label>
-                                <Label name="$(parent)SpaceLabel" text="|t24:24:/esoui/art/inventory/gamepad/gp_inventory_icon_all.dds|t 70/112" horizontalAlignment="RIGHT" inherits="BUI_FooterSmallTemplate">
+                                <Label name="$(parent)SpaceLabel" text="|t24:24:/esoui/art/inventory/gamepad/gp_inventory_icon_all.dds|t 70/112" horizontalAlignment="RIGHT" inherits="BETTERUI_FooterSmallTemplate">
                                     <Anchor point="RIGHT" offsetX="-100" offsetY="25"/>
                                 </Label>
                             </Controls>
@@ -343,7 +343,7 @@
             </Controls>
         </Control>
 
-        <TopLevelControl name="BUI_BankingFooterBar" level="120" tier="2" layer="1" hidden="true">
+        <TopLevelControl name="BETTERUI_BankingFooterBar" level="120" tier="2" layer="1" hidden="true">
             <Controls>
 	            <Label name="$(parent)Data1Value" level="0" tier="2" layer="2" text="100,000" font="ZoFontGamepad36" wrapMode="ELLIPSIS" modifyTextType="UPPERCASE" color="FFBF00">
 		            <Dimensions y="36" />
@@ -364,21 +364,21 @@
             </Controls>
         </TopLevelControl>
 
-		<TopLevelControl name="BUI_GenericInterface" hidden="true" virtual="true">
+		<TopLevelControl name="BETTERUI_GenericInterface" hidden="true" virtual="true">
             <Controls>
                 <Control name="$(parent)Loading" hidden="true" inherits="ZO_GamepadCenteredLoadingIconAndLabelTemplate" text="Loading list..." />
 
-                <Control name="$(parent)Container" inherits="BUI_NavQuadrant_1_ContainerAnchors">
+                <Control name="$(parent)Container" inherits="BETTERUI_NavQuadrant_1_ContainerAnchors">
                     <Controls>
 
-                        <Control name="$(parent)Footer" inherits="BUI_NavQuadrant_1_Anchors">
+                        <Control name="$(parent)Footer" inherits="BETTERUI_NavQuadrant_1_Anchors">
                             <Anchor point="TOPLEFT" />
                             <Anchor point="BOTTOMRIGHT" offsetY="-60" relativeTo="GuiRoot"/>
                             <Dimensions y="90" />
                             <Controls>
-                                <Control name="$(parent)Footer" inherits="BUI_GenericInterfaceFooter" override="true">
+                                <Control name="$(parent)Footer" inherits="BETTERUI_GenericInterfaceFooter" override="true">
                                     <Anchor point="BOTTOMLEFT" offsetY="-60"/>
-                                    <Dimensions y="90" x="BUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
+                                    <Dimensions y="90" x="BETTERUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
 
                                     <OnInitialized>
                                         self:GetParent().footer = self
@@ -387,23 +387,23 @@
                             </Controls>
                         </Control>
 
-                        <Control name="$(parent)Header" inherits="BUI_NavQuadrant_1_Anchors">
+                        <Control name="$(parent)Header" inherits="BETTERUI_NavQuadrant_1_Anchors">
                             <Anchor point="TOPLEFT"/>
-                            <Dimensions y="115" x="BUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
+                            <Dimensions y="115" x="BETTERUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
 
 		                    <Controls>
-                                <Control name="$(parent)Header" inherits="BUI_GenericInterfaceHeader">
-                                    <Dimensions y="115" x="BUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
+                                <Control name="$(parent)Header" inherits="BETTERUI_GenericInterfaceHeader">
+                                    <Dimensions y="115" x="BETTERUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
                                     <OnInitialized>
                                         self:GetParent().header = self
                                     </OnInitialized>
                                 </Control>
-		                        <Control name="$(parent)HeaderColumnBar" inherits="BUI_HeaderTitleAnchors" />
+		                        <Control name="$(parent)HeaderColumnBar" inherits="BETTERUI_HeaderTitleAnchors" />
 		                   </Controls>
 		                </Control>
 
 
-                        <Control name="$(parent)List" inherits="BUI_NavQuadrant_1_Anchors BUI_Generic_ScrollListTemplate">
+                        <Control name="$(parent)List" inherits="BETTERUI_NavQuadrant_1_Anchors BETTERUI_Generic_ScrollListTemplate">
 							<Anchor point="TOPLEFT" relativeTo="$(parent)HeaderHeader" relativePoint="BOTTOMLEFT" offsetX="0"/> 
                             <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)FooterFooter" relativePoint="TOPRIGHT" /> 
 							
@@ -413,18 +413,18 @@
 
                             <Controls>
                                 <Label name="$(parent)NoItemsLabel"  font="ZoFontGamepadCondensed36" horizontalAlignment="CENTER" text="Nothing in list">
-                                    <Anchor point="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
-                                    <Anchor point="BOTTOMRIGHT" offsetX="-BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
+                                    <Anchor point="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
+                                    <Anchor point="BOTTOMRIGHT" offsetX="-BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
                                 </Label>
-                                <Control name="$(parent)SpinnerContainer" inherits="BUI_SpinnerContainerTemplate" hidden="true">
-                                    <Dimensions y="45" x="BUI_GAMEPAD_DEFAULT_LIST_ENTRY_WIDTH"/>
+                                <Control name="$(parent)SpinnerContainer" inherits="BETTERUI_SpinnerContainerTemplate" hidden="true">
+                                    <Dimensions y="45" x="BETTERUI_GAMEPAD_DEFAULT_LIST_ENTRY_WIDTH"/>
                                     <Anchor point="CENTER" relativeTo="$(parent)ListScreenCenterIsAlongTopListScreenCenter" offsetX="20" />
 
                                 </Control>
                             </Controls>
                         </Control>
 
-                        <Control name="$(parent)InputContainer" inherits="BUI_GoldSpinnerContainerTemplate" hidden="true">
+                        <Control name="$(parent)InputContainer" inherits="BETTERUI_GoldSpinnerContainerTemplate" hidden="true">
                                     <Dimensions y="30"/>
                                     <Anchor point="LEFT" relativeTo="$(parent)ListListScreenCenterIsAlongTopListScreenCenter" offsetX="200" />
                                     <Anchor point="RIGHT" relativeTo="$(parent)ListListScreenCenterIsAlongTopListScreenCenter" offsetX="200" />

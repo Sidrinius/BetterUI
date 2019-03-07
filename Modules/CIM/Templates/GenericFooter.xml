@@ -5,14 +5,14 @@
 		<!-- Currently, GenericFooter isn't actually generic but specifically used within GAMEPAD_INVENTORY to display the bottom status bar. Aiming to sort this in a future update where I need to use GenericFooter again -->
 
 
-       <Label name="BUI_GamepadScreenFooterTemplate" font="ZoFontGamepad27" horizontalAlignment="LEFT" wrapMode="ELLIPSIS" virtual="true" modifyTextType="UPPERCASE" />
+       <Label name="BETTERUI_GamepadScreenFooterTemplate" font="ZoFontGamepad27" horizontalAlignment="LEFT" wrapMode="ELLIPSIS" virtual="true" modifyTextType="UPPERCASE" />
 
-        <Control name="BUI_GamepadFooterAnchors" virtual="true">
+        <Control name="BETTERUI_GamepadFooterAnchors" virtual="true">
             <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" />
             <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
         </Control>
 
-        <Control name="BUI_GamepadFooterHorizontalDivider" resizeToFitDescendents="true" virtual="true">
+        <Control name="BETTERUI_GamepadFooterHorizontalDivider" resizeToFitDescendents="true" virtual="true">
             <Controls>
                 <Texture name="$(parent)Left" textureFile="EsoUI/Art/Windows/Gamepad/gp_nav1_horDivider.dds">
                     <Anchor point="LEFT" />
@@ -35,41 +35,41 @@
         </Control>
 
 
-        <Control name="BUI_GamepadGenericScreenFooter" inherits="BUI_GamepadFooterAnchors" resizeToFitDescendents="true" virtual="true">
+        <Control name="BETTERUI_GamepadGenericScreenFooter" inherits="BETTERUI_GamepadFooterAnchors" resizeToFitDescendents="true" virtual="true">
             <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" offsetY="-140" />
             <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)" offsetY="-140" />
 
             <Controls>
-                <Control name="$(parent)DividerBottom" inherits="BUI_GamepadFooterHorizontalDivider">
+                <Control name="$(parent)DividerBottom" inherits="BETTERUI_GamepadFooterHorizontalDivider">
                     <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" />
-                    <Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-BUI_GAMEPAD_DEFAULT_HORIZ_PADDING_OTHER" offsetY="-15" />
+                    <Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING_OTHER" offsetY="-15" />
                 </Control>
                 
-                 <Label name="$(parent)CWLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Carry">
+                 <Label name="$(parent)CWLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Carry">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="3"  />
                  </Label>
-                 <Label name="$(parent)GoldLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Gold">
+                 <Label name="$(parent)GoldLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Gold">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="150" offsetY="3" />
                  </Label>
-                 <Label name="$(parent)APLabel" inherits="BUI_GamepadScreenFooterTemplate" text="AP">
+                 <Label name="$(parent)APLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="AP">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="400" offsetY="3"  />
                  </Label>
-                 <Label name="$(parent)TVLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Tel Var">
+                 <Label name="$(parent)TVLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Tel Var">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="625" offsetY="3"  />
                  </Label>
-                 <Label name="$(parent)TCLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Transmute Crystals">
+                 <Label name="$(parent)TCLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Transmute Crystals">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="850" offsetY="3"  />
                  </Label>
-<!--                  <Label name="$(parent)CrownsLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Crowns">
+<!--                  <Label name="$(parent)CrownsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Crowns">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="865" offsetY="3"  />
                  </Label>  
-                 <Label name="$(parent)GemsLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Crown Gems">
+                 <Label name="$(parent)GemsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Crown Gems">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1050" offsetY="3"  />
                  </Label>   --> 
-                 <Label name="$(parent)WritsLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Writs">
+                 <Label name="$(parent)WritsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Writs">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1050" offsetY="3"  />
                  </Label> 
-                 <Label name="$(parent)TicketsLabel" inherits="BUI_GamepadScreenFooterTemplate" text="Tickets">
+                 <Label name="$(parent)TicketsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Tickets">
                         <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1200" offsetY="3"  />
                  </Label>         
 
@@ -78,10 +78,10 @@
         
         
 
-        <Control name="BUI_GamepadScreenFooterContainer" virtual="true">
+        <Control name="BETTERUI_GamepadScreenFooterContainer" virtual="true">
             <Dimensions y="40"/>
             <Controls>
-                <Control name="$(parent)Footer" inherits="BUI_GamepadGenericScreenFooter">
+                <Control name="$(parent)Footer" inherits="BETTERUI_GamepadGenericScreenFooter">
                     
                     <OnInitialized>
                         self:GetParent().footer = self

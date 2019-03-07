@@ -1,52 +1,52 @@
-BUI = {
+BETTERUI = {
 	ResearchTraits = {}
 }
 
-BUI.name = "BetterUI"
-BUI.version = "2.63"
+BETTERUI.name = "BetterUI"
+BETTERUI.version = "2.64"
 
--- Program Global (scope of BUI, though) variable initialization
-BUI.WindowManager = GetWindowManager()
-BUI.EventManager = GetEventManager()
+-- Program Global (scope of BETTERUI, though) variable initialization
+BETTERUI.WindowManager = GetWindowManager()
+BETTERUI.EventManager = GetEventManager()
 
 -- pseudo-Class definitions
-BUI.CONST = {}
---BUI.Lib = {}
-BUI.CIM = {}
+BETTERUI.CONST = {}
+--BETTERUI.Lib = {}
+BETTERUI.CIM = {}
 
-BUI.GenericHeader = {}
-BUI.GenericFooter = {}
-BUI.Interface = {}
-BUI.Interface.Window = {}
+BETTERUI.GenericHeader = {}
+BETTERUI.GenericFooter = {}
+BETTERUI.Interface = {}
+BETTERUI.Interface.Window = {}
 
-BUI.Inventory = {
+BETTERUI.Inventory = {
 	List = {},
 	Class = {},
 }
 
-BUI.Writs = {
+BETTERUI.Writs = {
 	List = {}
 }
 
 
-BUI.Banking = {
+BETTERUI.Banking = {
 	Class = {}
 }
 
-BUI.Tooltips = {
+BETTERUI.Tooltips = {
 
 }
 
-BUI.Settings = {}
+BETTERUI.Settings = {}
 
-BUI.Helper = {
+BETTERUI.Helper = {
 	GamePadBuddy = {},
 	IokaniGearChanger = {},
 	AutoCategory = {},
 	AlphaGear = {},
 }
 
-BUI.DefaultSettings = {
+BETTERUI.DefaultSettings = {
 	firstInstall = true,
 	Modules = {
 		["*"] = { -- Module setting template
@@ -58,11 +58,11 @@ BUI.DefaultSettings = {
 
 
 function ddebug(str)
-	return d("|c0066ff[BUI]|r "..str)
+	return d("|c0066ff[BETTERUI]|r "..str)
 end
 
 -- Thanks to Bart Kiers for this function :)
-function BUI.DisplayNumber(number)
+function BETTERUI.DisplayNumber(number)
 	  local i, j, minus, int, fraction = tostring(number):find('([-]?)(%d+)([.]?%d*)')
 	  -- reverse the int-string and append a comma to all blocks of 3 digits
 	  int = int:reverse():gsub("(%d%d%d)", "%1,")
@@ -74,11 +74,11 @@ end
 function Init_ModulePanel(moduleName, moduleDesc)
 	return {
 		type = "panel",
-		name = "|t24:24:/esoui/art/buttons/gamepad/xbox/nav_xbone_b.dds|t "..BUI.name.." ("..moduleName..")",
+		name = "|t24:24:/esoui/art/buttons/gamepad/xbox/nav_xbone_b.dds|t "..BETTERUI.name.." ("..moduleName..")",
 		displayName = "|c0066ffBETTERUI|r :: "..moduleDesc,
 		author = "prasoc, RockingDice, Goobsnake",
-		version = BUI.version,
-		slashCommand = "/bui",
+		version = BETTERUI.version,
+		slashCommand = "/betterui",
 		registerForRefresh = true,
 		registerForDefaults = true
 	}
@@ -87,5 +87,5 @@ end
 ZO_Store_OnInitialize_Gamepad = function(...) end
 
 -- Imagery, you dont need to localise these strings
-ZO_CreateStringId("SI_BUI_INV_EQUIP_TEXT_HIGHLIGHT","|cFF6600<<1>>|r")
-ZO_CreateStringId("SI_BUI_INV_EQUIP_TEXT_NORMAL","|cCCCCCC<<1>>|r")
+ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_TEXT_HIGHLIGHT","|cFF6600<<1>>|r")
+ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_TEXT_NORMAL","|cCCCCCC<<1>>|r")
