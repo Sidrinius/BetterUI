@@ -99,7 +99,7 @@ local function Init(mId, moduleName)
         },
         {
             type = "checkbox",
-            name = "Use bigger font size in the inventory and banking item lists",
+            name = "Use bigger font size in the UI item lists",
             tooltip = "Changed the font size of item lists bigger.",
             getFunc = function() return BETTERUI.Settings.Modules["CIM"].biggerSkin end,
             setFunc = function(value) BETTERUI.Settings.Modules["CIM"].biggerSkin = value
