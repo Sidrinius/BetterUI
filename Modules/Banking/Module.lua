@@ -10,8 +10,8 @@ local function Init(mId, moduleName)
 			type = "checkbox",
 			name = "Item Icon - Unbound Items",
 			tooltip = "Show an icon after unbound items.",
-			getFunc = function () return BUI.Settings.Modules["Banking"].showIconUnboundItem end,
-			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconUnboundItem = value
+			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconUnboundItem end,
+			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconUnboundItem = value
 				changed = true end,
 			width = "full",
 			requiresReload = true,
@@ -20,8 +20,8 @@ local function Init(mId, moduleName)
 			type = "checkbox",
 			name = "Item Icon - Enchantment",
 			tooltip = "Show an icon after enchanted item.",
-			getFunc = function () return BUI.Settings.Modules["Banking"].showIconEnchantment end,
-			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconEnchantment = value
+			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconEnchantment end,
+			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconEnchantment = value
 				changed = true end,
 			width = "full",
 			requiresReload = true,
@@ -30,8 +30,8 @@ local function Init(mId, moduleName)
 			type = "checkbox",
 			name = "Item Icon - Set Gear",
 			tooltip = "Show an icon after set gears.",
-			getFunc = function () return BUI.Settings.Modules["Banking"].showIconSetGear end,
-			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconSetGear = value
+			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconSetGear end,
+			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconSetGear = value
 				changed = true end,
 			width = "full",
 			requiresReload = true,
@@ -40,51 +40,56 @@ local function Init(mId, moduleName)
 			type = "checkbox",
 			name = "Item Icon - Iakoni's Gear Changer",
 			tooltip = "Show the first set number in Iakoni's settings.",
-			getFunc = function () return BUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,
-			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconIakoniGearChanger = value
+			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,
+			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger = value
 				changed = true end,
 			width = "full",
-			disabled = function() return BUI.Settings.Modules["Banking"].showIconAlphaGear end,
+			disabled = function() return BETTERUI.Settings.Modules["Banking"].showIconAlphaGear end,
 			requiresReload = true,
 		},
 		{
 			type = "checkbox",
 			name = "Item Icon - Alpha Gear",
 			tooltip = "Show the first set number in Alpha Gear.",
-			getFunc = function () return BUI.Settings.Modules["Banking"].showIconAlphaGear end,
-			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconAlphaGear = value
+			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconAlphaGear end,
+			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconAlphaGear = value
 				changed = true end,
 			width = "full",
-			disabled = function() return BUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,
+			disabled = function() return BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,
 			requiresReload = true,
 		},
 		{
 			type = "checkbox",
 			name = "Show all sets instead",
 			tooltip = "Show all sets if in multiple settings.",
-			getFunc = function () return BUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets end,
-			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets = value
+			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets end,
+			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets = value
 				changed = true end,
 			width = "full",
 			requiresReload = true,
-			disabled = function() return not BUI.Settings.Modules["Banking"].showIconIakoniGearChanger and not BUI.Settings.Modules["Banking"].showIconAlphaGear end,  
+			disabled = function() return not BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger and not BETTERUI.Settings.Modules["Banking"].showIconAlphaGear end,  
 		},		
 		{
 			type = "checkbox",
 			name = "Item Icon - GamePadBuddy's Status Indicator",
 			tooltip = "Show an icon to indicate gear's researchable/known/duplicated/researching/ornate/intricate status.",
-			getFunc = function () return BUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon end,
-			setFunc = function (value) BUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon = value
+			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon end,
+			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon = value
 				changed = true end,
 			width = "full",
 			requiresReload = true,
+		},
+		{
+			type = "button",	
+			name = "Reload UI",
+			func = function() ReloadUI() end,
 		},	         
 	}
-	LAM:RegisterAddonPanel("BUI_"..mId, panelData)
-	LAM:RegisterOptionControls("BUI_"..mId, optionsTable)
+	LAM:RegisterAddonPanel("BETTERUI_"..mId, panelData)
+	LAM:RegisterOptionControls("BETTERUI_"..mId, optionsTable)
 end
 
-function BUI.Banking.InitModule(m_options)
+function BETTERUI.Banking.InitModule(m_options)
 	m_options["showIconEnchantment"] = true
 	m_options["showIconSetGear"] = true
 	m_options["showIconUnboundItem"] = true
@@ -95,10 +100,10 @@ function BUI.Banking.InitModule(m_options)
 	return m_options
 end
 
-function BUI.Banking.Setup()
+function BETTERUI.Banking.Setup()
 
 	Init("Bank", "Banking")
 
-	BUI.Banking.Init()
+	BETTERUI.Banking.Init()
 
 end

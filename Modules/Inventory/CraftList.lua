@@ -1,4 +1,4 @@
-BUI.Inventory.CraftList = BUI.Inventory.List:Subclass()
+BETTERUI.Inventory.CraftList = BETTERUI.Inventory.List:Subclass()
 function GetFilterComparator(filterType)
 	return function(itemData)
 		if filterType then
@@ -36,11 +36,11 @@ local DEFAULT_GAMEPAD_ITEM_SORT =
     uniqueId = { isId64 = true },
 }
 
-local function BUI_CraftList_DefaultItemSortComparator(left, right)
+local function BETTERUI_CraftList_DefaultItemSortComparator(left, right)
     return ZO_TableOrderingFunction(left, right, "bestGamepadItemCategoryName", DEFAULT_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
 end
 
-function BUI.Inventory.CraftList:AddSlotDataToTable(slotsTable, inventoryType, slotIndex)
+function BETTERUI.Inventory.CraftList:AddSlotDataToTable(slotsTable, inventoryType, slotIndex)
     local itemFilterFunction = self.itemFilterFunction
     local categorizationFunction = self.categorizationFunction or ZO_InventoryUtils_Gamepad_GetBestItemCategoryDescription
     local slotData = SHARED_INVENTORY:GenerateSingleSlotData(inventoryType, slotIndex)
@@ -58,14 +58,14 @@ function BUI.Inventory.CraftList:AddSlotDataToTable(slotsTable, inventoryType, s
     end
 end
 
-function BUI.Inventory.CraftList:RefreshList(filterType) 
+function BETTERUI.Inventory.CraftList:RefreshList(filterType) 
 	self.list:Clear()
 
 	self.itemFilterFunction = GetFilterComparator(filterType)
 
 	filteredDataTable = self:GenerateSlotTable()
 	
-	table.sort(filteredDataTable, BUI_CraftList_DefaultItemSortComparator)
+	table.sort(filteredDataTable, BETTERUI_CraftList_DefaultItemSortComparator)
 
     local lastBestItemCategoryName
     for i, itemData in ipairs(filteredDataTable) do
@@ -83,7 +83,7 @@ function BUI.Inventory.CraftList:RefreshList(filterType)
             data:SetHeader(itemData.bestItemCategoryName)
         end
 
-        self.list:AddEntry("BUI_GamepadItemSubEntryTemplate", data)
+        self.list:AddEntry("BETTERUI_GamepadItemSubEntryTemplate", data)
 		
         lastBestItemCategoryName = itemData.bestItemCategoryName
     end

@@ -2,9 +2,9 @@ local _
 
 local ACTIVATE_SPINNER = true
 local DEACTIVATE_SPINNER = false
-local DEFAULT_ROW_TEMPLATE = "BUI_GenericEntry_Template"
+local DEFAULT_ROW_TEMPLATE = "BETTERUI_GenericEntry_Template"
 
-BUI_TEST_SCENE_NAME = "BUI_BANKING"
+BETTERUI_TEST_SCENE_NAME = "BETTERUI_BANKING"
 
 local BANKING_INTERACTION =
 {
@@ -16,24 +16,24 @@ local function WrapInt(value, min, max)
     return (zo_floor(value) - min) % (max - min + 1) + min
 end
 
-function BUI.CIM.SetTooltipWidth(width)
+function BETTERUI.CIM.SetTooltipWidth(width)
     -- Setup the larger and offset LEFT_TOOLTIP and background fragment so that the new inventory fits!
     GAMEPAD_NAV_QUADRANT_1_BACKGROUND_FRAGMENT.control:SetWidth(width)
    -- GAMEPAD_LEFT_TOOLTIP_BACKGROUND_FRAGMENT.control:SetDimensions(50, 50)
     GAMEPAD_TOOLTIPS.tooltips.GAMEPAD_LEFT_TOOLTIP.control:SetAnchor(3,GuiRoot,3, width+66, 52)
 end
 
-BUI.Interface.Window = ZO_Object:Subclass()
+BETTERUI.Interface.Window = ZO_Object:Subclass()
 
-function BUI.Interface.Window:New(...)
+function BETTERUI.Interface.Window:New(...)
 	local object = ZO_Object.New(self)
     object:Initialize(...)
 	return object
 end
 
-function BUI.Interface.Window:Initialize(tlw_name, scene_name)
+function BETTERUI.Interface.Window:Initialize(tlw_name, scene_name)
     self.windowName = tlw_name
-    self.control = BUI.WindowManager:CreateControlFromVirtual(tlw_name, GuiRoot, "BUI_GenericInterface")
+    self.control = BETTERUI.WindowManager:CreateControlFromVirtual(tlw_name, GuiRoot, "BETTERUI_GenericInterface")
     self.header = self.control:GetNamedChild("ContainerHeader")
     self.footer = self.control:GetNamedChild("ContainerFooter")
 
@@ -53,35 +53,35 @@ function BUI.Interface.Window:Initialize(tlw_name, scene_name)
 
 	self.header.columns = {}
 
-    BUI_TEST_SCENE = ZO_InteractScene:New(BUI_TEST_SCENE_NAME, SCENE_MANAGER, BANKING_INTERACTION)
+    BETTERUI_TEST_SCENE = ZO_InteractScene:New(BETTERUI_TEST_SCENE_NAME, SCENE_MANAGER, BANKING_INTERACTION)
 
-    self:InitializeFragment("BUI_TEST_FRAGMENT")
-    self:InitializeScene(BUI_TEST_SCENE)
+    self:InitializeFragment("BETTERUI_TEST_FRAGMENT")
+    self:InitializeScene(BETTERUI_TEST_SCENE)
 
     self:InitializeList()
 end
 
-function BUI.Interface.Window:SetSpinnerValue(max, value)
+function BETTERUI.Interface.Window:SetSpinnerValue(max, value)
     self.spinner:SetMinMax(1, max)
     self.spinner:SetValue(value)
 end
 
 
 
-function BUI.Interface.Window:ActivateSpinner()
+function BETTERUI.Interface.Window:ActivateSpinner()
     self.spinner:SetHidden(false)
     self.spinner:Activate()
     if(self:GetList() ~= nil) then self:GetList():Deactivate() end
 end
 
-function BUI.Interface.Window:DeactivateSpinner()
+function BETTERUI.Interface.Window:DeactivateSpinner()
     self.spinner:SetValue(1)
     self.spinner:SetHidden(true)
     self.spinner:Deactivate()
     if(self:GetList() ~= nil) then self:GetList():Activate() end
 end
 
-function BUI.Interface.Window:UpdateSpinnerConfirmation(activateSpinner, list)
+function BETTERUI.Interface.Window:UpdateSpinnerConfirmation(activateSpinner, list)
     self.confirmationMode = activateSpinner
     if activateSpinner then
         self:ActivateSpinner()
@@ -99,7 +99,7 @@ function BUI.Interface.Window:UpdateSpinnerConfirmation(activateSpinner, list)
     list:SetDirectionalInputEnabled(not activateSpinner)
 end
 
-function BUI.Interface.Window:ApplySpinnerMinMax(toggleValue)
+function BETTERUI.Interface.Window:ApplySpinnerMinMax(toggleValue)
     if(toggleValue) then
         KEYBIND_STRIP:RemoveKeybindButtonGroup(self.triggerSpinnerBinds)
     else
@@ -108,12 +108,12 @@ function BUI.Interface.Window:ApplySpinnerMinMax(toggleValue)
 end
 
 -- GetList() can be extended to allow for multiple lists in one Window object
-function BUI.Interface.Window:GetList()
+function BETTERUI.Interface.Window:GetList()
     return self.list
 end
 
 
-function BUI.Interface.Window:InitializeKeybind()
+function BETTERUI.Interface.Window:InitializeKeybind()
     self.coreKeybinds = {
     }
 
@@ -123,8 +123,8 @@ function BUI.Interface.Window:InitializeKeybind()
 end
 
 
-function BUI.Interface.Window:InitializeList(listName)
-    self.list = BUI_VerticalItemParametricScrollList:New(self.control:GetNamedChild("Container"):GetNamedChild("List")) -- replace the itemList with my own generic one (with better gradient size, etc.)
+function BETTERUI.Interface.Window:InitializeList(listName)
+    self.list = BETTERUI_VerticalItemParametricScrollList:New(self.control:GetNamedChild("Container"):GetNamedChild("List")) -- replace the itemList with my own generic one (with better gradient size, etc.)
 
     self:GetList():SetAlignToScreenCenter(true, 30)
 
@@ -135,39 +135,39 @@ function BUI.Interface.Window:InitializeList(listName)
 end
 
 -- Overridden
-function BUI.Interface.Window:RefreshList()
+function BETTERUI.Interface.Window:RefreshList()
 end
 
 -- Overridden
-function BUI.Interface.Window:OnItemSelectedChange()
+function BETTERUI.Interface.Window:OnItemSelectedChange()
 end
 
-function BUI.Interface.Window:SetupList(rowTemplate, SetupFunct)
+function BETTERUI.Interface.Window:SetupList(rowTemplate, SetupFunct)
     self.itemListTemplate = rowTemplate
     self:GetList():AddDataTemplate(rowTemplate, SetupFunct, ZO_GamepadMenuEntryTemplateParametricListFunction)
 end
 
-function BUI.Interface.Window:AddTemplate(rowTemplate, SetupFunct)
+function BETTERUI.Interface.Window:AddTemplate(rowTemplate, SetupFunct)
     self:GetList():AddDataTemplate(rowTemplate,SetupFunct, ZO_GamepadMenuEntryTemplateParametricListFunction)
 end
 
-function BUI.Interface.Window:AddEntryToList(data)
+function BETTERUI.Interface.Window:AddEntryToList(data)
     self:GetList():AddEntry(self.itemListTemplate, data)
     self:GetList():Commit()
 end
 
-function BUI.Interface.Window:AddColumn(columnName, xOffset)
+function BETTERUI.Interface.Window:AddColumn(columnName, xOffset)
     local colNumber = #self.header.columns + 1
-    self.header.columns[colNumber] = CreateControlFromVirtual("Column"..colNumber,self.header:GetNamedChild("HeaderColumnBar"),"BUI_GenericColumn_Label")
+    self.header.columns[colNumber] = CreateControlFromVirtual("Column"..colNumber,self.header:GetNamedChild("HeaderColumnBar"),"BETTERUI_GenericColumn_Label")
     self.header.columns[colNumber]:SetAnchor(LEFT, self.header:GetNamedChild("HeaderColumnBar"), BOTTOMLEFT, xOffset, 95)
     self.header.columns[colNumber]:SetText(columnName)
 end
 
-function BUI.Interface.Window:SetTitle(headerText)
+function BETTERUI.Interface.Window:SetTitle(headerText)
     self.header:GetNamedChild("Header"):GetNamedChild("TitleContainer"):GetNamedChild("Title"):SetText(headerText)
 end
 
-function BUI.Interface.Window:RefreshVisible()
+function BETTERUI.Interface.Window:RefreshVisible()
     self:RefreshList()
     -- self.list.selectedDataCallback = function(list, selectedData)
     --     ddebug("SetOnSelectedDataChangedCallback called")
@@ -177,19 +177,19 @@ function BUI.Interface.Window:RefreshVisible()
     self:GetList():RefreshVisible()
 end
 
-function BUI.Interface.Window:SetOnSelectedDataChangedCallback(selectedDataCallback)
+function BETTERUI.Interface.Window:SetOnSelectedDataChangedCallback(selectedDataCallback)
     self.selectedDataCallback = selectedDataCallback
 end
 
-function BUI.Interface.Window:InitializeFragment()
+function BETTERUI.Interface.Window:InitializeFragment()
 	self.fragment = ZO_SimpleSceneFragment:New(self.control)
     self.fragment:SetHideOnSceneHidden(true)
 
-    self.footerFragment = ZO_SimpleSceneFragment:New(BUI_BankingFooterBar)
+    self.footerFragment = ZO_SimpleSceneFragment:New(BETTERUI_BankingFooterBar)
     self.footerFragment:SetHideOnSceneHidden(true)
 end
 
-function BUI.Interface.Window:InitializeScene(SCENE_NAME)
+function BETTERUI.Interface.Window:InitializeScene(SCENE_NAME)
     self.sceneName = SCENE_NAME
     SCENE_NAME:AddFragmentGroup(FRAGMENT_GROUP.GAMEPAD_DRIVEN_UI_WINDOW)
     SCENE_NAME:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_GAMEPAD)
@@ -205,10 +205,10 @@ function BUI.Interface.Window:InitializeScene(SCENE_NAME)
     local function SceneStateChange(oldState, newState)
         if(newState == SCENE_SHOWING) then
             KEYBIND_STRIP:AddKeybindButtonGroup(self.coreKeybinds)
-        	BUI.CIM.SetTooltipWidth(BUI_GAMEPAD_DEFAULT_PANEL_WIDTH)
+        	BETTERUI.CIM.SetTooltipWidth(BETTERUI_GAMEPAD_DEFAULT_PANEL_WIDTH)
         elseif(newState == SCENE_HIDING) then
             KEYBIND_STRIP:RemoveKeybindButtonGroup(self.coreKeybinds)
-           BUI.CIM.SetTooltipWidth(BUI_ZO_GAMEPAD_DEFAULT_PANEL_WIDTH)
+           BETTERUI.CIM.SetTooltipWidth(BETTERUI_ZO_GAMEPAD_DEFAULT_PANEL_WIDTH)
         elseif(newState == SCENE_HIDDEN) then
 
         end
@@ -217,15 +217,15 @@ function BUI.Interface.Window:InitializeScene(SCENE_NAME)
 
 end
 
-function BUI.Interface.Window:ToggleScene()
+function BETTERUI.Interface.Window:ToggleScene()
 	--SCENE_MANAGER:Show
-	SCENE_MANAGER:Toggle(BUI_TEST_SCENE_NAME)
+	SCENE_MANAGER:Toggle(BETTERUI_TEST_SCENE_NAME)
 end
 
-function BUI.Interface.Window:OnTabNext()
+function BETTERUI.Interface.Window:OnTabNext()
     ddebug("OnTabNext")
 end
 
-function BUI.Interface.Window:OnTabPrev()
+function BETTERUI.Interface.Window:OnTabPrev()
     ddebug("OnTabPrev")
 end

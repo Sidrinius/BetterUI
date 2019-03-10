@@ -1,7 +1,7 @@
 ﻿local _
 
 -- A modified header class for the inventory system.
--- Has the added functionality of a tabbar (of type BUI_TabBarScrollList)
+-- Has the added functionality of a tabbar (of type BETTERUI_TabBarScrollList)
 
 -----------------------------------------------------------------------------
 
@@ -24,8 +24,8 @@ local ROW_OFFSET_Y = GENERIC_HEADER_INFO_LABEL_HEIGHT + 10
 local DATA_OFFSET_X = 5
 local HEADER_OFFSET_X = 29
 
-BUI_GAMEPAD_CONTENT_HEADER_DIVIDER_INFO_BOTTOM_PADDING_Y = GENERIC_HEADER_INFO_LABEL_HEIGHT
-BUI_GAMEPAD_CONTENT_DIVIDER_INFO_PADDING_Y = 50
+BETTERUI_GAMEPAD_CONTENT_HEADER_DIVIDER_INFO_BOTTOM_PADDING_Y = GENERIC_HEADER_INFO_LABEL_HEIGHT
+BETTERUI_GAMEPAD_CONTENT_DIVIDER_INFO_PADDING_Y = 50
 
 local Anchor = ZO_Object:Subclass()
 function Anchor:New(pointOnMe, targetId, pointOnTarget, offsetX, offsetY)
@@ -60,7 +60,7 @@ local function TabBar_Setup(control, data, selected, selectedDuringRebuild, enab
 
 end
 
-function BUI.GenericHeader.Initialize(control, createTabBar, layout)
+function BETTERUI.GenericHeader.Initialize(control, createTabBar, layout)
     control.controls =
         {
             [TABBAR]            = control:GetNamedChild("TabBar"),
@@ -81,39 +81,39 @@ end
 
 local TEXT_ALIGN_RIGHT = 2
 
-function BUI.GenericHeader.AddToList(control, data)
+function BETTERUI.GenericHeader.AddToList(control, data)
     local tabBarControl = control.controls[TABBAR]
-    control.tabBar:AddEntry("BUI_GamepadTabBarTemplate", data)
+    control.tabBar:AddEntry("BETTERUI_GamepadTabBarTemplate", data)
 end
 
-function BUI.GenericHeader.SetEquipText(control, isEquipMain)
+function BETTERUI.GenericHeader.SetEquipText(control, isEquipMain)
     local equipControl = control:GetNamedChild("TitleContainer"):GetNamedChild("EquipText")
     if isEquipMain then
-        equipControl:SetText(zo_strformat(GetString(SI_BUI_INV_EQUIP_TEXT_HIGHLIGHT), GetString(SI_BUI_INV_EQUIPSLOT_MAIN)))
+        equipControl:SetText(zo_strformat(GetString(SI_BETTERUI_INV_EQUIP_TEXT_HIGHLIGHT), GetString(SI_BETTERUI_INV_EQUIPSLOT_MAIN)))
     else
-        equipControl:SetText(zo_strformat(GetString(SI_BUI_INV_EQUIP_TEXT_NORMAL), GetString(SI_BUI_INV_EQUIPSLOT_MAIN)))
+        equipControl:SetText(zo_strformat(GetString(SI_BETTERUI_INV_EQUIP_TEXT_NORMAL), GetString(SI_BETTERUI_INV_EQUIPSLOT_MAIN)))
     end
     equipControl:SetHorizontalAlignment(TEXT_ALIGN_RIGHT)
 end
 
-function BUI.GenericHeader.SetBackupEquipText(control, isEquipMain)
+function BETTERUI.GenericHeader.SetBackupEquipText(control, isEquipMain)
     local equipControl = control:GetNamedChild("TitleContainer"):GetNamedChild("BackupEquipText")
     if isEquipMain then
-        equipControl:SetText(zo_strformat(GetString(SI_BUI_INV_EQUIP_TEXT_NORMAL), GetString(SI_BUI_INV_EQUIPSLOT_BACKUP)))
+        equipControl:SetText(zo_strformat(GetString(SI_BETTERUI_INV_EQUIP_TEXT_NORMAL), GetString(SI_BETTERUI_INV_EQUIPSLOT_BACKUP)))
     else
-        equipControl:SetText(zo_strformat(GetString(SI_BUI_INV_EQUIP_TEXT_HIGHLIGHT), GetString(SI_BUI_INV_EQUIPSLOT_BACKUP)))
+        equipControl:SetText(zo_strformat(GetString(SI_BETTERUI_INV_EQUIP_TEXT_HIGHLIGHT), GetString(SI_BETTERUI_INV_EQUIPSLOT_BACKUP)))
     end
 
     equipControl:SetHorizontalAlignment(TEXT_ALIGN_RIGHT)
 end
 
-function BUI.GenericHeader.SetTitleText(control, titleText)
+function BETTERUI.GenericHeader.SetTitleText(control, titleText)
     local titleTextControl = control:GetNamedChild("TitleContainer"):GetNamedChild("Title")
     titleTextControl:SetText(titleText)
 end
 
 
-function BUI.GenericHeader.SetEquippedIcons(control, equipMain, equipOff, equipPoison)
+function BETTERUI.GenericHeader.SetEquippedIcons(control, equipMain, equipOff, equipPoison)
 	local equipMainControl = control:GetNamedChild("TitleContainer"):GetNamedChild("MainHandIcon")
 	local equipOffControl = control:GetNamedChild("TitleContainer"):GetNamedChild("OffHandIcon")
 	local equipPoisonControl = control:GetNamedChild("TitleContainer"):GetNamedChild("PoisonIcon")
@@ -125,7 +125,7 @@ function BUI.GenericHeader.SetEquippedIcons(control, equipMain, equipOff, equipP
 	if(equipPoison ~= "") then equipPoisonControl:SetTexture(equipPoison) else equipPoisonControl:SetTexture(DEFAULT_INVSLOT_ICON)  end
 end
 
-function BUI.GenericHeader.SetBackupEquippedIcons(control, equipMain, equipOff, equipPoison)
+function BETTERUI.GenericHeader.SetBackupEquippedIcons(control, equipMain, equipOff, equipPoison)
     local equipMainControl = control:GetNamedChild("TitleContainer"):GetNamedChild("BackupMainHandIcon")
     local equipOffControl = control:GetNamedChild("TitleContainer"):GetNamedChild("BackupOffHandIcon")
     local equipPoisonControl = control:GetNamedChild("TitleContainer"):GetNamedChild("BackupPoisonIcon")
@@ -137,11 +137,11 @@ function BUI.GenericHeader.SetBackupEquippedIcons(control, equipMain, equipOff, 
     if(equipPoison ~= "") then equipPoisonControl:SetTexture(equipPoison) else equipPoisonControl:SetTexture(DEFAULT_INVSLOT_ICON)  end
 end
 
-function BUI.GenericHeader.RefreshData()
+function BETTERUI.GenericHeader.RefreshData()
     -- blank, ready for overriding
 end
 
-function BUI.GenericHeader.Refresh(control, data, blockTabBarCallbacks)
+function BETTERUI.GenericHeader.Refresh(control, data, blockTabBarCallbacks)
 	--ddebug("LOL")
 	--d(data)
 	
@@ -152,11 +152,11 @@ function BUI.GenericHeader.Refresh(control, data, blockTabBarCallbacks)
 
     if not control.tabBar then
         local tabBarData = { attachedTo=control, parent=data.tabBarData.parent, onNext=data.tabBarData.onNext, onPrev = data.tabBarData.onPrev }
-        control.tabBar = BUI_TabBarScrollList:New(tabBarControl, tabBarControl:GetNamedChild("LeftIcon"), tabBarControl:GetNamedChild("RightIcon"), tabBarData)
+        control.tabBar = BETTERUI_TabBarScrollList:New(tabBarControl, tabBarControl:GetNamedChild("LeftIcon"), tabBarControl:GetNamedChild("RightIcon"), tabBarData)
         control.tabBar:Activate()
         control.tabBar.hideUnselectedControls = false
 
-        control.tabBar:AddDataTemplate("BUI_GamepadTabBarTemplate", TabBar_Setup, ZO_GamepadMenuEntryTemplateParametricListFunction, MenuEntryTemplateEquality)
+        control.tabBar:AddDataTemplate("BETTERUI_GamepadTabBarTemplate", TabBar_Setup, ZO_GamepadMenuEntryTemplateParametricListFunction, MenuEntryTemplateEquality)
     end
 
     if control.tabBar then

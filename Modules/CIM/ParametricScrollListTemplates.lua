@@ -23,8 +23,8 @@ end
 
 PARAMETRIC_SCROLL_LIST_VERTICAL = true
 PARAMETRIC_SCROLL_LIST_HORIZONTAL = false
-BUI_VERTICAL_PARAMETRIC_LIST_DEFAULT_FADE_GRADIENT_SIZE = 32
-BUI_HORIZONTAL_PARAMETRIC_LIST_DEFAULT_FADE_GRADIENT_SIZE = 32
+BETTERUI_VERTICAL_PARAMETRIC_LIST_DEFAULT_FADE_GRADIENT_SIZE = 32
+BETTERUI_HORIZONTAL_PARAMETRIC_LIST_DEFAULT_FADE_GRADIENT_SIZE = 32
 
 local DEFAULT_EXPECTED_ENTRY_HEIGHT = 30
 local DEFAULT_EXPECTED_HEADER_HEIGHT = 24
@@ -47,8 +47,8 @@ local function GetEndOfControl(mode, control)
 end
 
 
-BUI_VerticalParametricScrollList = ZO_ParametricScrollList:Subclass()
-function BUI_VerticalParametricScrollList:New(...)
+BETTERUI_VerticalParametricScrollList = ZO_ParametricScrollList:Subclass()
+function BETTERUI_VerticalParametricScrollList:New(...)
     local list = ZO_ParametricScrollList.New(self, ...)
 
     list.EnsureValidGradient = function(self)
@@ -80,8 +80,8 @@ function BUI_VerticalParametricScrollList:New(...)
                 local MINIMUM_ALLOWED_FADE_GRADIENT = 32
                 local gradientMaxStart = zo_max(listMid - listStart - selectedControlBufferStart, MINIMUM_ALLOWED_FADE_GRADIENT)
                 local gradientMaxEnd = zo_max(listEnd - listMid - selectedControlBufferEnd, MINIMUM_ALLOWED_FADE_GRADIENT)
-                local gradientStartSize = zo_min(gradientMaxStart, BUI_VERTICAL_PARAMETRIC_LIST_DEFAULT_FADE_GRADIENT_SIZE)
-                local gradientEndSize = zo_min(gradientMaxEnd, BUI_VERTICAL_PARAMETRIC_LIST_DEFAULT_FADE_GRADIENT_SIZE)
+                local gradientStartSize = zo_min(gradientMaxStart, BETTERUI_VERTICAL_PARAMETRIC_LIST_DEFAULT_FADE_GRADIENT_SIZE)
+                local gradientEndSize = zo_min(gradientMaxEnd, BETTERUI_VERTICAL_PARAMETRIC_LIST_DEFAULT_FADE_GRADIENT_SIZE)
                 local FIRST_FADE_GRADIENT = 1
                 local SECOND_FADE_GRADIENT = 2
                 local GRADIENT_TEX_CORD_0 = 0
@@ -96,7 +96,7 @@ function BUI_VerticalParametricScrollList:New(...)
     return list
 end
 
-function BUI_VerticalParametricScrollList:Initialize(control)
+function BETTERUI_VerticalParametricScrollList:Initialize(control)
     ZO_ParametricScrollList.Initialize(self, control, PARAMETRIC_SCROLL_LIST_VERTICAL, ZO_GamepadOnDefaultScrollListActivatedChanged)
     self:SetHeaderPadding(GAMEPAD_HEADER_DEFAULT_PADDING, GAMEPAD_HEADER_SELECTED_PADDING)
     self:SetUniversalPostPadding(GAMEPAD_DEFAULT_POST_PADDING)
@@ -105,26 +105,26 @@ function BUI_VerticalParametricScrollList:Initialize(control)
     self.alignToScreenCenterExpectedEntryHalfHeight = 30
 end
 
-BUI_VerticalItemParametricScrollList = BUI_VerticalParametricScrollList:Subclass()
-function BUI_VerticalItemParametricScrollList:New(control)
-    local list = BUI_VerticalParametricScrollList.New(self, control)
+BETTERUI_VerticalItemParametricScrollList = BETTERUI_VerticalParametricScrollList:Subclass()
+function BETTERUI_VerticalItemParametricScrollList:New(control)
+    local list = BETTERUI_VerticalParametricScrollList.New(self, control)
     list:SetUniversalPostPadding(GAMEPAD_DEFAULT_POST_PADDING)
     return list
 end
 
-BUI_HorizontalScrollList_Gamepad = ZO_HorizontalScrollList:Subclass()
+BETTERUI_HorizontalScrollList_Gamepad = ZO_HorizontalScrollList:Subclass()
 
-function BUI_HorizontalScrollList_Gamepad:New(...)
+function BETTERUI_HorizontalScrollList_Gamepad:New(...)
     return ZO_HorizontalScrollList.New(self, ...)
 end
 
-function BUI_HorizontalScrollList_Gamepad:Initialize(control, templateName, numVisibleEntries, setupFunction, equalityFunction, onCommitWithItemsFunction, onClearedFunction)
+function BETTERUI_HorizontalScrollList_Gamepad:Initialize(control, templateName, numVisibleEntries, setupFunction, equalityFunction, onCommitWithItemsFunction, onClearedFunction)
     ZO_HorizontalScrollList.Initialize(self, control, templateName, numVisibleEntries, setupFunction, equalityFunction, onCommitWithItemsFunction, onClearedFunction)
     self:SetActive(true)
     self.movementController = ZO_MovementController:New(MOVEMENT_CONTROLLER_DIRECTION_HORIZONTAL)
 end
 
-function BUI_HorizontalScrollList_Gamepad:UpdateAnchors(primaryControlOffsetX, initialUpdate, reselectingDuringRebuild)
+function BETTERUI_HorizontalScrollList_Gamepad:UpdateAnchors(primaryControlOffsetX, initialUpdate, reselectingDuringRebuild)
     if self.isUpdatingAnchors then return end
     self.isUpdatingAnchors = true
 
@@ -180,12 +180,12 @@ function BUI_HorizontalScrollList_Gamepad:UpdateAnchors(primaryControlOffsetX, i
     end
 end
 
-function BUI_HorizontalScrollList_Gamepad:SetOnActivatedChangedFunction(onActivatedChangedFunction)
+function BETTERUI_HorizontalScrollList_Gamepad:SetOnActivatedChangedFunction(onActivatedChangedFunction)
     self.onActivatedChangedFunction = onActivatedChangedFunction
     self.dirty = true
 end
 
-function BUI_HorizontalScrollList_Gamepad:Commit()
+function BETTERUI_HorizontalScrollList_Gamepad:Commit()
     ZO_HorizontalScrollList.Commit(self)
 
     local hideArrows = not self.active
@@ -193,7 +193,7 @@ function BUI_HorizontalScrollList_Gamepad:Commit()
     self.rightArrow:SetHidden(hideArrows)
 end
 
-function BUI_HorizontalScrollList_Gamepad:SetActive(active)
+function BETTERUI_HorizontalScrollList_Gamepad:SetActive(active)
     if (self.active ~= active) or self.dirty then
         self.active = active
         self.dirty = false
@@ -214,15 +214,15 @@ function BUI_HorizontalScrollList_Gamepad:SetActive(active)
     end
 end
 
-function BUI_HorizontalScrollList_Gamepad:Activate()
+function BETTERUI_HorizontalScrollList_Gamepad:Activate()
     self:SetActive(true)
 end
 
-function BUI_HorizontalScrollList_Gamepad:Deactivate()
+function BETTERUI_HorizontalScrollList_Gamepad:Deactivate()
     self:SetActive(false)
 end
 
-function BUI_HorizontalScrollList_Gamepad:UpdateDirectionalInput()
+function BETTERUI_HorizontalScrollList_Gamepad:UpdateDirectionalInput()
     local result = self.movementController:CheckMovement()
     if result == MOVEMENT_CONTROLLER_MOVE_NEXT then
         self:MoveLeft()
@@ -231,8 +231,8 @@ function BUI_HorizontalScrollList_Gamepad:UpdateDirectionalInput()
     end
 end
 
-BUI_HorizontalParametricScrollList = ZO_ParametricScrollList:Subclass()
-function BUI_HorizontalParametricScrollList:New(control, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
+BETTERUI_HorizontalParametricScrollList = ZO_ParametricScrollList:Subclass()
+function BETTERUI_HorizontalParametricScrollList:New(control, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
     onActivatedChangedFunction = onActivatedChangedFunction or ZO_GamepadOnDefaultScrollListActivatedChanged
     local list = ZO_ParametricScrollList.New(self, control, PARAMETRIC_SCROLL_LIST_HORIZONTAL, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
     list:SetHeaderPadding(GAMEPAD_HEADER_DEFAULT_PADDING, GAMEPAD_HEADER_SELECTED_PADDING)
@@ -240,26 +240,26 @@ function BUI_HorizontalParametricScrollList:New(control, onActivatedChangedFunct
     return list
 end
 
-function BUI_HorizontalListEntrySetup(control, data, selected, reselectingDuringRebuild, enabled, selectedFromParent)
+function BETTERUI_HorizontalListEntrySetup(control, data, selected, reselectingDuringRebuild, enabled, selectedFromParent)
       control:SetText(data.text)
 
     local color = selectedFromParent and ZO_SELECTED_TEXT or ZO_DISABLED_TEXT
     control:SetColor(color:UnpackRGBA())
 end
 
-function BUI_HorizontalListRow_Initialize(self, setupFunction, equalityFunction)
+function BETTERUI_HorizontalListRow_Initialize(self, setupFunction, equalityFunction)
     self.GetHeight = function(control)
                          return 50
                      end
     self.label = self:GetNamedChild("Name")
     self.horizontalListControl = self:GetNamedChild("HorizontalList")
-    self.horizontalListObject = BUI_HorizontalScrollList_Gamepad:New(self.horizontalListControl, "ZO_GamepadHorizontalListEntry", 1, setupFunction, equalityFunction)
+    self.horizontalListObject = BETTERUI_HorizontalScrollList_Gamepad:New(self.horizontalListControl, "ZO_GamepadHorizontalListEntry", 1, setupFunction, equalityFunction)
     self.horizontalListObject:SetAllowWrapping(true)
 end
 
-BUI_TabBarScrollList = BUI_HorizontalParametricScrollList:Subclass()
-function BUI_TabBarScrollList:New(control, leftIcon, rightIcon, data, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
-    local list = BUI_HorizontalParametricScrollList.New(self, control, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
+BETTERUI_TabBarScrollList = BETTERUI_HorizontalParametricScrollList:Subclass()
+function BETTERUI_TabBarScrollList:New(control, leftIcon, rightIcon, data, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
+    local list = BETTERUI_HorizontalParametricScrollList.New(self, control, onActivatedChangedFunction, onCommitWithItemsFunction, onClearedFunction)
     list:EnableAnimation(true)
     list:SetDirectionalInputEnabled(false)
     list:SetHideUnselectedControls(false)
@@ -284,15 +284,15 @@ function BUI_TabBarScrollList:New(control, leftIcon, rightIcon, data, onActivate
     list:SetPlaySoundFunction(GamepadParametricScrollListPlaySound)
     return list
 end
-function BUI_TabBarScrollList:Activate()
+function BETTERUI_TabBarScrollList:Activate()
     KEYBIND_STRIP:AddKeybindButtonGroup(self.keybindStripDescriptor)
-    BUI_HorizontalParametricScrollList.Activate(self)
+    BETTERUI_HorizontalParametricScrollList.Activate(self)
 end
-function BUI_TabBarScrollList:Deactivate()
+function BETTERUI_TabBarScrollList:Deactivate()
     KEYBIND_STRIP:RemoveKeybindButtonGroup(self.keybindStripDescriptor)
-    BUI_HorizontalParametricScrollList.Deactivate(self)
+    BETTERUI_HorizontalParametricScrollList.Deactivate(self)
 end
-function BUI_TabBarScrollList:InitializeKeybindStripDescriptors()
+function BETTERUI_TabBarScrollList:InitializeKeybindStripDescriptors()
     self.keybindStripDescriptor =
     {
         {
@@ -300,7 +300,7 @@ function BUI_TabBarScrollList:InitializeKeybindStripDescriptors()
             ethereal = true,
             callback = function()
                 if self.active then
-                    self:MovePrevious(BUI.Settings.Modules["Inventory"].enableWrapping)
+                    self:MovePrevious(BETTERUI.Settings.Modules["Inventory"].enableWrapping)
                 end
             end,
         },
@@ -309,13 +309,13 @@ function BUI_TabBarScrollList:InitializeKeybindStripDescriptors()
             ethereal = true,
             callback = function()
                 if self.active then
-                    self:MoveNext(BUI.Settings.Modules["Inventory"].enableWrapping)
+                    self:MoveNext(BETTERUI.Settings.Modules["Inventory"].enableWrapping)
                 end
             end,
         },
     }
 end
-function BUI_TabBarScrollList:Commit(dontReselect)
+function BETTERUI_TabBarScrollList:Commit(dontReselect)
     if #self.dataList > 1 then
         self.leftIcon:SetHidden(false)
         self.rightIcon:SetHidden(false)
@@ -323,10 +323,10 @@ function BUI_TabBarScrollList:Commit(dontReselect)
         self.leftIcon:SetHidden(true)
         self.rightIcon:SetHidden(true)
     end
-    BUI_HorizontalParametricScrollList.Commit(self, dontReselect)
+    BETTERUI_HorizontalParametricScrollList.Commit(self, dontReselect)
     self:RefreshPips()
 end
-function BUI_TabBarScrollList:SetPipsEnabled(enabled, divider)
+function BETTERUI_TabBarScrollList:SetPipsEnabled(enabled, divider)
     self.pipsEnabled = enabled
     if not divider then
         -- There is a default divider in the tabbar control
@@ -337,7 +337,7 @@ function BUI_TabBarScrollList:SetPipsEnabled(enabled, divider)
     end
     self:RefreshPips()
 end
-function BUI_TabBarScrollList:RefreshPips()
+function BETTERUI_TabBarScrollList:RefreshPips()
     if not self.pipsEnabled then
         if self.pips then
             self.pips:RefreshPips()
@@ -358,17 +358,17 @@ function BUI_TabBarScrollList:RefreshPips()
     end
     self.pips:RefreshPips(numPips, selectedPipIndex)
 end
-function BUI_TabBarScrollList:UpdateHeaderText()
+function BETTERUI_TabBarScrollList:UpdateHeaderText()
     if self.attachedTo ~= nil then
         local selectedIndex = self.targetSelectedIndex or self.selectedIndex
         --self.attachedTo:GetNamedChild("TitleContainer"):GetNamedChild("Title"):SetText(self.dataList[selectedIndex].text)
     end
 end
-function BUI_TabBarScrollList:SetSelectedIndex(selectedIndex, allowEvenIfDisabled, forceAnimation)
-    BUI_HorizontalParametricScrollList.SetSelectedIndex(self, selectedIndex, allowEvenIfDisabled, forceAnimation)
+function BETTERUI_TabBarScrollList:SetSelectedIndex(selectedIndex, allowEvenIfDisabled, forceAnimation)
+    BETTERUI_HorizontalParametricScrollList.SetSelectedIndex(self, selectedIndex, allowEvenIfDisabled, forceAnimation)
     self:RefreshPips()
 end
-function BUI_TabBarScrollList:MovePrevious(allowWrapping, suppressFailSound)
+function BETTERUI_TabBarScrollList:MovePrevious(allowWrapping, suppressFailSound)
     ZO_ConveyorSceneFragment_SetMovingBackward()
     local succeeded = ZO_ParametricScrollList.MovePrevious(self)
     if not succeeded and allowWrapping then
@@ -386,7 +386,7 @@ function BUI_TabBarScrollList:MovePrevious(allowWrapping, suppressFailSound)
         return succeeded
 end
 
-function BUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
+function BETTERUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
     ZO_ConveyorSceneFragment_SetMovingForward()
     local succeeded = ZO_ParametricScrollList.MoveNext(self)
     if not succeeded and allowWrapping then
@@ -405,13 +405,13 @@ function BUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
 end
 
 local SUB_LIST_CENTER_OFFSET = -50
-BUI_VerticalParametricScrollListSubList = BUI_VerticalParametricScrollList:Subclass()
-function BUI_VerticalParametricScrollListSubList:New(control, parentList, parentKeybinds, onDataChosen)
-    local manager = BUI_VerticalParametricScrollList.New(self, control, parentList, parentKeybinds, onDataChosen)
+BETTERUI_VerticalParametricScrollListSubList = BETTERUI_VerticalParametricScrollList:Subclass()
+function BETTERUI_VerticalParametricScrollListSubList:New(control, parentList, parentKeybinds, onDataChosen)
+    local manager = BETTERUI_VerticalParametricScrollList.New(self, control, parentList, parentKeybinds, onDataChosen)
     return manager
 end
-function BUI_VerticalParametricScrollListSubList:Initialize(control, parentList, parentKeybinds, onDataChosen)
-    BUI_VerticalParametricScrollList.Initialize(self, control)
+function BETTERUI_VerticalParametricScrollListSubList:Initialize(control, parentList, parentKeybinds, onDataChosen)
+    BETTERUI_VerticalParametricScrollList.Initialize(self, control)
     self.parentList = parentList
     self.parentKeybinds = parentKeybinds
     self.onDataChosen = onDataChosen
@@ -419,18 +419,18 @@ function BUI_VerticalParametricScrollListSubList:Initialize(control, parentList,
     self.control:SetHidden(true)
     self:SetFixedCenterOffset(SUB_LIST_CENTER_OFFSET)
 end
-function BUI_VerticalParametricScrollListSubList:Commit(dontReselect)
+function BETTERUI_VerticalParametricScrollListSubList:Commit(dontReselect)
     ZO_ParametricScrollList.Commit(self, dontReselect)
     self:UpdateAnchors(self.targetSelectedIndex)
     self.onDataChosen(self:GetTargetData())
 end
-function BUI_VerticalParametricScrollListSubList:CancelSelection()
+function BETTERUI_VerticalParametricScrollListSubList:CancelSelection()
     local indexToReturnTo = zo_clamp(self.indexOnOpen, 1, #self.dataList)
     self.targetSelectedIndex = indexToReturnTo
     self:UpdateAnchors(indexToReturnTo)
     self.onDataChosen(self:GetDataForDataIndex(indexToReturnTo))
 end
-function BUI_VerticalParametricScrollListSubList:InitializeKeybindStrip()
+function BETTERUI_VerticalParametricScrollListSubList:InitializeKeybindStrip()
     local function OnEntered()
         self.onDataChosen(self:GetTargetData())
         self.didSelectEntry = true
@@ -444,38 +444,38 @@ function BUI_VerticalParametricScrollListSubList:InitializeKeybindStrip()
     ZO_Gamepad_AddBackNavigationKeybindDescriptors(self.keybindStripDescriptor, GAME_NAVIGATION_TYPE_BUTTON, OnBack)
     ZO_Gamepad_AddListTriggerKeybindDescriptors(self.keybindStripDescriptor, self)
 end
-function BUI_VerticalParametricScrollListSubList:Activate()
+function BETTERUI_VerticalParametricScrollListSubList:Activate()
     self.parentList:Deactivate()
     KEYBIND_STRIP:RemoveKeybindButtonGroup(self.parentKeybinds)
-    BUI_VerticalParametricScrollList.Activate(self)
+    BETTERUI_VerticalParametricScrollList.Activate(self)
     KEYBIND_STRIP:AddKeybindButtonGroup(self.keybindStripDescriptor)
     self.control:SetHidden(false)
     self.indexOnOpen = self.selectedIndex
     self.didSelectEntry = false
 end
-function BUI_VerticalParametricScrollListSubList:Deactivate()
+function BETTERUI_VerticalParametricScrollListSubList:Deactivate()
     if not self.active then
         return
     end
     if self.active and not self.didSelectEntry then
         self:CancelSelection()
     end
-    BUI_VerticalParametricScrollList.Deactivate(self)
+    BETTERUI_VerticalParametricScrollList.Deactivate(self)
     KEYBIND_STRIP:RemoveKeybindButtonGroup(self.keybindStripDescriptor)
     self.parentList:Activate()
     KEYBIND_STRIP:AddKeybindButtonGroup(self.parentKeybinds)
     self.control:SetHidden(true)
 end
 
-BUI_Gamepad_ParametricList_Screen = ZO_Gamepad_ParametricList_Screen:Subclass()
+BETTERUI_Gamepad_ParametricList_Screen = ZO_Gamepad_ParametricList_Screen:Subclass()
 
-function BUI_Gamepad_ParametricList_Screen:New(...)
+function BETTERUI_Gamepad_ParametricList_Screen:New(...)
     local object = ZO_Gamepad_ParametricList_Screen.New(self)
     object:Initialize(...)
     return object
 end
 
-function BUI_Gamepad_ParametricList_Screen:Initialize(control, createTabBar, activateOnShow, scene)
+function BETTERUI_Gamepad_ParametricList_Screen:Initialize(control, createTabBar, activateOnShow, scene)
     control.owner = self
     self.control = control
 
@@ -508,7 +508,7 @@ function BUI_Gamepad_ParametricList_Screen:Initialize(control, createTabBar, act
     self.dirty = true
 end
 
-function BUI_Gamepad_ParametricList_Screen:SetListsUseTriggerKeybinds(addListTriggerKeybinds, optionalHeaderComparator)
+function BETTERUI_Gamepad_ParametricList_Screen:SetListsUseTriggerKeybinds(addListTriggerKeybinds, optionalHeaderComparator)
     self.addListTriggerKeybinds = addListTriggerKeybinds
     self.listTriggerHeaderComparator = optionalHeaderComparator
 

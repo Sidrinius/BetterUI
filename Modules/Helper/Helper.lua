@@ -1,7 +1,7 @@
 local _
 local LAM = LibStub:GetLibrary("LibAddonMenu-2.0")
   
-function BUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)
+function BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)
 	if GamePadBuddy then
 		local itemFlagStatus = GamePadBuddy:GetItemFlagStatus(bagId, slotIndex)
 		local iconTextureName
@@ -31,7 +31,7 @@ function BUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)
 	return "";
 end
 
-function BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, moduleName)
+function BETTERUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, moduleName)
 	if GearChangerByIakoni and GearChangerByIakoni.savedVariables then
 		local itemType = GetItemType(bagId, slotIndex)
 		if itemType == ITEMTYPE_ARMOR or itemType == ITEMTYPE_WEAPON then
@@ -45,7 +45,7 @@ function BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, moduleName)
 						if itemID==a[i][u] then
 							--find gear in set i
 							result = result .. "|t24:24:/BetterUI/Modules/Helper/Images/icon_set_" .. i .. ".dds|t"
-							if not BUI.Settings.Modules[moduleName].showIconIakoniGearChangerAllSets then
+							if not BETTERUI.Settings.Modules[moduleName].showIconIakoniGearChangerAllSets then
 								return result							
 							else
 								break
@@ -60,7 +60,7 @@ function BUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, moduleName)
 	return "";
 end
 
-function BUI.Helper.AlphaGear.GetGearSet(bagId, slotIndex, moduleName)
+function BETTERUI.Helper.AlphaGear.GetGearSet(bagId, slotIndex, moduleName)
 	if AG then
 		local itemType = GetItemType(bagId, slotIndex)
 		if itemType == ITEMTYPE_ARMOR or itemType == ITEMTYPE_WEAPON then
@@ -71,7 +71,7 @@ function BUI.Helper.AlphaGear.GetGearSet(bagId, slotIndex, moduleName)
 					for slot = 1,14 do
 						if AG.setdata[AG.setdata[nr].Set.gear].Gear[slot].id == itemID then 
 							result = result .. "|t24:24:/BetterUI/Modules/Helper/Images/icon_set_" .. nr .. ".dds|t"  
-							if not BUI.Settings.Modules[moduleName].showIconIakoniGearChangerAllSets then
+							if not BETTERUI.Settings.Modules[moduleName].showIconIakoniGearChangerAllSets then
 								return result							
 							else
 								break
@@ -98,11 +98,11 @@ local CUSTOM_GAMEPAD_ITEM_SORT =
     uniqueId = { isId64 = true },
 }
 
-function BUI_GamepadInventory_DefaultItemSortComparator(left, right)
+function BETTERUI_GamepadInventory_DefaultItemSortComparator(left, right)
     return ZO_TableOrderingFunction(left, right, "sortPriorityName", CUSTOM_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
 end
 
-function BUI.Helper.AutoCategory:GetCustomCategory(itemData)
+function BETTERUI.Helper.AutoCategory:GetCustomCategory(itemData)
 	local useCustomCategory = false
 	if AutoCategory and AutoCategory.curSavedVars then
 		useCustomCategory = true

@@ -2,18 +2,18 @@
     <Controls>
 
         <!-- The below 2 controls are redefinitions of ZOS's original NavQuadrant_1 anchors to facilitate smooth transitions and compatibility -->
-        <Control name="BUI_GamepadGrid_NavQuadrant_1_Anchors" virtual="true">
-            <Dimensions x="BUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
-            <Anchor point="TOPLEFT" relativeTo="GuiRoot" offsetX="BUI_GAMEPAD_QUADRANT_1_LEFT" />
-            <Anchor point="BOTTOMLEFT" relativeTo="GuiRoot" offsetX="BUI_GAMEPAD_QUADRANT_1_LEFT" />
+        <Control name="BETTERUI_GamepadGrid_NavQuadrant_1_Anchors" virtual="true">
+            <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_PANEL_WIDTH" />
+            <Anchor point="TOPLEFT" relativeTo="GuiRoot" offsetX="BETTERUI_GAMEPAD_QUADRANT_1_LEFT" />
+            <Anchor point="BOTTOMLEFT" relativeTo="GuiRoot" offsetX="BETTERUI_GAMEPAD_QUADRANT_1_LEFT" />
         </Control>
-        <Control name="BUI_GamepadGrid_NavQuadrant_1_ContainerAnchors" virtual="true">
-            <Dimensions x="BUI_GAMEPAD_DEFAULT_PANEL_CONTAINER_WIDTH" />
-            <Anchor point="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
-            <Anchor point="BOTTOMLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
+        <Control name="BETTERUI_GamepadGrid_NavQuadrant_1_ContainerAnchors" virtual="true">
+            <Dimensions x="BETTERUI_GAMEPAD_DEFAULT_PANEL_CONTAINER_WIDTH" />
+            <Anchor point="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
+            <Anchor point="BOTTOMLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
         </Control>
 
-        <Control name="BUI_VerticalParametricScrollListTemplate" mouseEnabled="true" virtual="true">
+        <Control name="BETTERUI_VerticalParametricScrollListTemplate" mouseEnabled="true" virtual="true">
             <OnMouseWheel>
                 if self.scrollList.active then
                     if delta > 0 then
@@ -48,9 +48,9 @@
             </Controls>
         </Control>
 
-        <Control name="BUI_Gamepad_ParametricList_Screen_ListContainer" inherits="BUI_GamepadGrid_NavQuadrant_1_ContainerAnchors" virtual="true">
+        <Control name="BETTERUI_Gamepad_ParametricList_Screen_ListContainer" inherits="BETTERUI_GamepadGrid_NavQuadrant_1_ContainerAnchors" virtual="true">
             <Controls>
-                <Control name="$(parent)List" inherits="BUI_VerticalParametricScrollListTemplate">
+                <Control name="$(parent)List" inherits="BETTERUI_VerticalParametricScrollListTemplate">
                     <AnchorFill />
 
                     <OnInitialized>
@@ -62,15 +62,15 @@
 
                     <Controls>
                         <Label name="$(parent)NoItemsLabel"  font="ZoFontGamepadCondensed36" horizontalAlignment="CENTER" verticalAlignment="CENTER">
-                            <Anchor point="TOPLEFT" offsetX="BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
-                            <Anchor point="BOTTOMRIGHT" offsetX="-BUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
+                            <Anchor point="TOPLEFT" offsetX="BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
+                            <Anchor point="BOTTOMRIGHT" offsetX="-BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING" />
                         </Label>
                     </Controls>
                 </Control>
             </Controls>
         </Control>
 
-        <Control name="BUI_Gamepad_ParametricList_Screen" inherits="BUI_GamepadGrid_NavQuadrant_1_Anchors" hidden="true" virtual="true">
+        <Control name="BETTERUI_Gamepad_ParametricList_Screen" inherits="BETTERUI_GamepadGrid_NavQuadrant_1_Anchors" hidden="true" virtual="true">
             <Controls>
                 <Scroll name="$(parent)Mask">
                     <AnchorFill />
@@ -80,8 +80,8 @@
                             <AnchorFill />
 
                             <Controls>
-                                <Control name="$(parent)HeaderContainer" inherits="BUI_GamepadScreenHeaderContainer BUI_GamepadGrid_NavQuadrant_1_ContainerAnchors" />
-                                <Control name="$(parent)FooterContainer" inherits="BUI_GamepadScreenFooterContainer BUI_GamepadGrid_NavQuadrant_1_ContainerAnchors" />
+                                <Control name="$(parent)HeaderContainer" inherits="BETTERUI_GamepadScreenHeaderContainer BETTERUI_GamepadGrid_NavQuadrant_1_ContainerAnchors" />
+                                <Control name="$(parent)FooterContainer" inherits="BETTERUI_GamepadScreenFooterContainer BETTERUI_GamepadGrid_NavQuadrant_1_ContainerAnchors" />
                             </Controls>
 
                         </Control>

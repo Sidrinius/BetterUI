@@ -1,6 +1,6 @@
 local _
 
-function BUI.Writs.Get(qId)
+function BETTERUI.Writs.Get(qId)
 	writLines = {}
 	writConcate = ''
 	for lineId = 1, GetJournalQuestNumConditions(qId,1) do
@@ -22,8 +22,8 @@ function BUI.Writs.Get(qId)
 	return writConcate
 end
 
-function BUI.Writs.Update()
-	BUI.Writs.List = {}
+function BETTERUI.Writs.Update()
+	BETTERUI.Writs.List = {}
 	for qId=1, MAX_JOURNAL_QUESTS do
 		if IsValidQuestIndex(qId) then
 			if GetJournalQuestType(qId) == QUEST_TYPE_CRAFTING then
@@ -39,23 +39,23 @@ function BUI.Writs.Update()
 				if string.find(string.lower(qName),'jewelry') then currentWrit = CRAFTING_TYPE_JEWELRYCRAFTING end
 
 				if currentWrit ~= -1 then
-					BUI.Writs.List[currentWrit] = { id = qId, writLines = BUI.Writs.Get(qId) }
+					BETTERUI.Writs.List[currentWrit] = { id = qId, writLines = BETTERUI.Writs.Get(qId) }
 				end
 			end
 		end
 	end
 end
 
-function BUI.Writs.Show(writType)
-	BUI.Writs.Update()
-	if BUI.Writs.List[writType] ~= nil then
-		local qName,_,activeText,_,_,completed = GetJournalQuestInfo(BUI.Writs.List[writType].id)
-		BUI_WritsPanelSlotContainerExtractionSlotWritName:SetText(zo_strformat("|c0066ff[BUI]|r <<1>>",qName))
-		BUI_WritsPanelSlotContainerExtractionSlotWritDesc:SetText(zo_strformat("<<1>>",BUI.Writs.List[writType].writLines))
-		BUI_WritsPanel:SetHidden(false)
+function BETTERUI.Writs.Show(writType)
+	BETTERUI.Writs.Update()
+	if BETTERUI.Writs.List[writType] ~= nil then
+		local qName,_,activeText,_,_,completed = GetJournalQuestInfo(BETTERUI.Writs.List[writType].id)
+		BETTERUI_WritsPanelSlotContainerExtractionSlotWritName:SetText(zo_strformat("|c0066ff[BETTERUI]|r <<1>>",qName))
+		BETTERUI_WritsPanelSlotContainerExtractionSlotWritDesc:SetText(zo_strformat("<<1>>",BETTERUI.Writs.List[writType].writLines))
+		BETTERUI_WritsPanel:SetHidden(false)
 	end
 end
 
-function BUI.Writs.Hide()
-	BUI_WritsPanel:SetHidden(true)
+function BETTERUI.Writs.Hide()
+	BETTERUI_WritsPanel:SetHidden(true)
 end
