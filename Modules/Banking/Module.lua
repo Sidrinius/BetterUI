@@ -78,6 +78,11 @@ local function Init(mId, moduleName)
 				changed = true end,
 			width = "full",
 			requiresReload = true,
+		},
+		{
+			type = "button",	
+			name = "Reload UI",
+			func = function() ReloadUI() end,
 		},	         
 	}
 	LAM:RegisterAddonPanel("BETTERUI_"..mId, panelData)

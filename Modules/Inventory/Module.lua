@@ -40,11 +40,6 @@ local function Init(mId, moduleName)
             width = "full",
         },
 		{
-			type = "header",
-			name = "|c0066FF[Enhanced Inventory]|r Display",
-			width = "full",
-		},
-		{
             type = "checkbox",
             name = "Display character attributes when switching tooltip",
             tooltip = "Show the character attributes on the switching tooltip rather than seeing the current equipped item",
@@ -143,9 +138,11 @@ local function Init(mId, moduleName)
 			width = "full",
 			requiresReload = true,
 		},
-		{ 			
-			type = "header", 		
-		},		         	 	
+		{
+			type = "button",	
+			name = "Reload UI",
+			func = function() ReloadUI() end,
+		},	         	 	
 	}
 	LAM:RegisterAddonPanel("BETTERUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BETTERUI_"..mId, optionsTable)
