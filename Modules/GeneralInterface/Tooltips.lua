@@ -28,11 +28,14 @@ function BETTERUI.Tooltips.GetNumberOfMatchingItems(itemLink, BAG)
     return itemMatches;
 end
 
-local function AddInventoryPostInfo(tooltip, bagId, slotIndex)
-    local itemLink = GetItemLink(bagId, slotIndex)
-    d(itemLink)
-	if itemLink then --and itemLink ~= tooltip.lastItemLink then
-        local stackCount = GetSlotStackSize(bagId, slotIndex)
+local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeStackCount)
+    local stackCount
+    if itemLink then
+        if storeStackCount then
+            stackCount = storeStackCount
+        else
+            stackCount = GetSlotStackSize(bagId, slotIndex)
+        end
         if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
             local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
             if(priceInfo == nil) then
@@ -66,8 +69,7 @@ local function AddInventoryPostInfo(tooltip, bagId, slotIndex)
 	end
 end
 
-local function AddInventoryPreInfo(tooltip, bagId, slotIndex)
-    local itemLink = GetItemLink(bagId, slotIndex)
+local function AddInventoryPreInfo(tooltip, itemLink)
     if itemLink and BETTERUI.Settings.Modules["Tooltips"].showStyleTrait then
         local traitString
         if(CanItemLinkBeTraitResearched(itemLink))  then
@@ -100,16 +102,44 @@ local function AddInventoryPreInfo(tooltip, bagId, slotIndex)
     end
 end
 
-function BETTERUI.InventoryHook(tooltipControl, method, linkFunc)
-	local origMethod = tooltipControl[method]
+function BETTERUI.InventoryHook(tooltipControl, method, linkFunc, method2, linkFunc2, method3, linkFunc3)
+    local newMethod = tooltipControl[method]
+    local newMethod2 = tooltipControl[method2]
+    local newMethod3 = tooltipControl[method3]
+    local bagId
+    local itemLink
+    local slotIndex
+    local storeItemLink
+    local storeStackCount
 
-	tooltipControl[method] = function(self, ...)
-		AddInventoryPreInfo(self, linkFunc(...))
-		origMethod(self, ...)
-		AddInventoryPostInfo(self, linkFunc(...))
-	end
+    tooltipControl[method2] = function(self, ...)
+        bagId, slotIndex = linkFunc2(...)
+        newMethod2(self, ...)
+    end
+    tooltipControl[method3] = function(self, ...)
+        storeItemLink, storeStackCount = linkFunc3(...)
+        newMethod3(self, ...)
+    end
+    tooltipControl[method] = function(self, ...)
+        if storeItemLink then
+            itemLink = storeItemLink
+        else
+            itemLink = linkFunc(...)
+        end
+        AddInventoryPreInfo(self, itemLink)
+        newMethod(self, ...)
+        AddInventoryPostInfo(self, itemLink, bagId, slotIndex, storeStackCount)
+    end
+end
+
+function BETTERUI.ReturnItemLink(itemLink)
+    return itemLink
 end
 
 function BETTERUI.ReturnSelectedData(bagId, slotIndex)
     return bagId, slotIndex
+end
+
+function BETTERUI.ReturnStoreSearch(storeItemLink, storeStackCount)
+    return storeItemLink, storeStackCount
 end
