@@ -3,7 +3,7 @@ local _
 function BETTERUI.Tooltips.GetNumberOfMatchingItems(itemLink, BAG)
 
     -- Get bag size
-    local bagSize = GetBagSize(BAG)
+    local bagSize = GetNumBagUsedSlots(BAG)
  
     -- Var to hold item matches
     local itemMatches = 0
@@ -28,10 +28,11 @@ function BETTERUI.Tooltips.GetNumberOfMatchingItems(itemLink, BAG)
     return itemMatches;
 end
 
-local function AddInventoryPostInfo(tooltip, itemLink)
+local function AddInventoryPostInfo(tooltip, bagId, slotIndex)
+    local itemLink = GetItemLink(bagId, slotIndex)
+    d(itemLink)
 	if itemLink then --and itemLink ~= tooltip.lastItemLink then
-		--tooltip.lastItemLink = itemLink
-        local stackCount = GetItemLinkStacks(itemLink)
+        local stackCount = GetSlotStackSize(bagId, slotIndex)
         if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
             local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
             if(priceInfo == nil) then
@@ -65,8 +66,8 @@ local function AddInventoryPostInfo(tooltip, itemLink)
 	end
 end
 
-local function AddInventoryPreInfo(tooltip, itemLink)
-
+local function AddInventoryPreInfo(tooltip, bagId, slotIndex)
+    local itemLink = GetItemLink(bagId, slotIndex)
     if itemLink and BETTERUI.Settings.Modules["Tooltips"].showStyleTrait then
         local traitString
         if(CanItemLinkBeTraitResearched(itemLink))  then
@@ -109,6 +110,6 @@ function BETTERUI.InventoryHook(tooltipControl, method, linkFunc)
 	end
 end
 
-function BETTERUI.ReturnItemLink(itemLink)
-	return itemLink
+function BETTERUI.ReturnSelectedData(bagId, slotIndex)
+    return bagId, slotIndex
 end
