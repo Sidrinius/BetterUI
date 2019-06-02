@@ -34,6 +34,13 @@ local function IsTwoHandedWeaponCategory(categoryType)
 end
 
 local function GetBestItemCategoryDescription(itemData)
+
+    local isItemStolen = IsItemStolen(itemData.bagId, itemData.slotIndex)
+
+    if isItemStolen then
+        return 'Stolen'
+    end
+
     if itemData.equipType == EQUIP_TYPE_INVALID then
         return GetString("SI_ITEMTYPE", itemData.itemType)
     end

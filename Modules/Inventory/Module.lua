@@ -23,6 +23,17 @@ local function Init(mId, moduleName)
 			width = "full",
 			requiresReload = true,
 		},
+		{
+			type = "checkbox",
+			name = "Enable \"Stolen\" inventory category",
+			tooltip = "Displays items marked as \"stolen\" as their own tab category",
+			getFunc = function() return BETTERUI.Settings.Modules["Inventory"].enableStolen end,
+			setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].enableStolen = value
+				changed = true
+				end,
+			width = "full",
+			requiresReload = true,
+		},
         {
             type = "checkbox",
             name = "Enable category wrapping",
@@ -153,6 +164,7 @@ function BETTERUI.Inventory.InitModule(m_options)
     m_options["showMarketPrice"] = false
     m_options["useTriggersForSkip"] = false
     m_options["enableJunk"] = true
+    m_options["enableStolen"] = true
 	m_options["displayCharAttributes"] = true
 	m_options["useShortFormat"] = true
 	m_options["bindOnEquipProtection"] = true

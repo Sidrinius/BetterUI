@@ -89,7 +89,7 @@
                        </Button>
                        <Button name="$(parent)RightIcon">
                            <Dimensions x="50" y="50"/>
-                           <Anchor point="RIGHT" relativeTo="$(parent)" offsetX="-50"/>
+                           <Anchor point="RIGHT" relativeTo="$(parent)" offsetX="-10"/>
                            <Textures normal="EsoUI/Art/Buttons/Gamepad/Xbox/Nav_XBone_RB.dds"/>
                            <OnClicked>
                                self:GetParent().scrollList:MoveNext(true)
