@@ -150,8 +150,10 @@ function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
 
     if label then
     	local font = "ZoFontGamepad27"
-		if BETTERUI.Settings.Modules["CIM"].biggerSkin then
-			font = "ZoFontGamepad42"
+		if BETTERUI.Settings.Modules["CIM"].biggerSkin == "Bigger" then
+            font = "ZoFontGamepad36"
+        elseif BETTERUI.Settings.Modules["CIM"].biggerSkin == "Biggest" then
+            font = "ZoFontGamepad42"
 		end
 		label:SetFont(font)
 		
@@ -334,12 +336,18 @@ end
 function BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectingDuringRebuild, enabled, active)
     BETTERUI_SharedGamepadEntryLabelSetup(control.label, data, selected)
 
-	if BETTERUI.Settings.Modules["CIM"].biggerSkin then
-		control:GetNamedChild("ItemType"):SetFont("ZoFontGamepad36")
+    if BETTERUI.Settings.Modules["CIM"].biggerSkin == "Bigger" then
+        control:GetNamedChild("ItemType"):SetFont("ZoFontGamepadCondensed34")
+        control:GetNamedChild("Trait"):SetFont("ZoFontGamepadCondensed34")
+		control:GetNamedChild("Stat"):SetFont("ZoFontGamepadCondensed34")
+        control:GetNamedChild("Value"):SetFont("ZoFontGamepadCondensed34")
+    elseif BETTERUI.Settings.Modules["CIM"].biggerSkin == "Biggest" then
+        control:GetNamedChild("ItemType"):SetFont("ZoFontGamepad36")
         control:GetNamedChild("Trait"):SetFont("ZoFontGamepad36")
 		control:GetNamedChild("Stat"):SetFont("ZoFontGamepad36")
 		control:GetNamedChild("Value"):SetFont("ZoFontGamepad36")
-	end
+    end
+
     control:GetNamedChild("ItemType"):SetText(string.upper(data.bestItemTypeName))
     local traitType = GetItemTrait(data.bagId, data.slotIndex)
     control:GetNamedChild("Trait"):SetText(traitType == ITEM_TRAIT_TYPE_NONE and "-" or string.upper(GetString("SI_ITEMTRAITTYPE", traitType)))
@@ -382,7 +390,15 @@ function BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectin
     BETTERUI_CooldownSetup(control, data)
     BETTERUI_IconSetup(control:GetNamedChild("StatusIndicator"), control:GetNamedChild("EquippedMain"), data)
 
-	if BETTERUI.Settings.Modules["CIM"].biggerSkin then
+	if BETTERUI.Settings.Modules["CIM"].biggerSkin == "Bigger" then
+        local iconControl = control:GetNamedChild("Icon")
+		iconControl:SetDimensions(42, 42)
+        iconControl:ClearAnchors()
+        iconControl:SetAnchor(CENTER, control:GetNamedChild("Label"), LEFT, -38, 0)         
+
+        local equipIconControl = control:GetNamedChild("EquippedMain")
+        equipIconControl:SetDimensions(34, 28)
+    elseif BETTERUI.Settings.Modules["CIM"].biggerSkin == "Biggest" then
         local iconControl = control:GetNamedChild("Icon")
 		iconControl:SetDimensions(48, 48)
         iconControl:ClearAnchors()

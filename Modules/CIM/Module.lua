@@ -6,7 +6,7 @@ function BETTERUI.CIM.InitModule(m_options)
 	m_options["triggerSpeed"] = 10
 	m_options["condenseLtooltip"] = false
 	m_options["enhanceCompat"] = false
-	m_options["biggerSkin"] = false
+	m_options["biggerSkin"] = "Default"
 	m_options["rhScrollSpeed"] = 50
 	return m_options
 end
