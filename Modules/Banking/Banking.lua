@@ -143,9 +143,9 @@ end
 
 local function SetupLabelListing(control, data)
     control:GetNamedChild("Label"):SetText(data.label)
-    if BETTERUI.Settings.Modules["CIM"].skinSize == "Bigger" then
+    if BETTERUI.Settings.Modules["CIM"].skinSize == "Medium" then
         control:GetNamedChild("Label"):SetFont("ZoFontGamepadCondensed34")
-    elseif BETTERUI.Settings.Modules["CIM"].skinSize == "Biggest" then
+    elseif BETTERUI.Settings.Modules["CIM"].skinSize == "Large" then
         control:GetNamedChild("Label"):SetFont("ZoFontGamepad36")
     end 
 end
