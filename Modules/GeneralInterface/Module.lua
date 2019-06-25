@@ -103,8 +103,8 @@ local function Init(mId, moduleName)
             name = "Change the font size of items in lists",
 			tooltip = "Changes the font size of listed items in the inventory and bank. The size can make you see more or less items at once.",
 			choices = {"Default", "Bigger", "Biggest"},
-            getFunc = function() return BETTERUI.Settings.Modules["CIM"].biggerSkin end,
-            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].biggerSkin = value
+            getFunc = function() return BETTERUI.Settings.Modules["CIM"].skinSize end,
+            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].skinSize = value
                       end,
             disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",

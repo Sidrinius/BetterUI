@@ -150,9 +150,9 @@ function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
 
     if label then
     	local font = "ZoFontGamepad27"
-		if BETTERUI.Settings.Modules["CIM"].biggerSkin == "Bigger" then
+		if BETTERUI.Settings.Modules["CIM"].skinSize == "Bigger" then
             font = "ZoFontGamepad36"
-        elseif BETTERUI.Settings.Modules["CIM"].biggerSkin == "Biggest" then
+        elseif BETTERUI.Settings.Modules["CIM"].skinSize == "Biggest" then
             font = "ZoFontGamepad42"
 		end
 		label:SetFont(font)
@@ -252,7 +252,7 @@ function BETTERUI_IconSetup(statusIndicator, equippedIcon, data)
         equippedIcon:SetHidden(true)
     end
 	
-	-- if BETTERUI.Settings.Modules["CIM"].biggerSkin then
+	-- if BETTERUI.Settings.Modules["CIM"].skinSize then
 	-- 	equippedIcon:SetDimensions(44, 42)
 	-- end
 end
@@ -336,12 +336,12 @@ end
 function BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectingDuringRebuild, enabled, active)
     BETTERUI_SharedGamepadEntryLabelSetup(control.label, data, selected)
 
-    if BETTERUI.Settings.Modules["CIM"].biggerSkin == "Bigger" then
+    if BETTERUI.Settings.Modules["CIM"].skinSize == "Bigger" then
         control:GetNamedChild("ItemType"):SetFont("ZoFontGamepadCondensed34")
         control:GetNamedChild("Trait"):SetFont("ZoFontGamepadCondensed34")
 		control:GetNamedChild("Stat"):SetFont("ZoFontGamepadCondensed34")
         control:GetNamedChild("Value"):SetFont("ZoFontGamepadCondensed34")
-    elseif BETTERUI.Settings.Modules["CIM"].biggerSkin == "Biggest" then
+    elseif BETTERUI.Settings.Modules["CIM"].skinSize == "Biggest" then
         control:GetNamedChild("ItemType"):SetFont("ZoFontGamepad36")
         control:GetNamedChild("Trait"):SetFont("ZoFontGamepad36")
 		control:GetNamedChild("Stat"):SetFont("ZoFontGamepad36")
@@ -390,7 +390,7 @@ function BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectin
     BETTERUI_CooldownSetup(control, data)
     BETTERUI_IconSetup(control:GetNamedChild("StatusIndicator"), control:GetNamedChild("EquippedMain"), data)
 
-	if BETTERUI.Settings.Modules["CIM"].biggerSkin == "Bigger" then
+	if BETTERUI.Settings.Modules["CIM"].skinSize == "Bigger" then
         local iconControl = control:GetNamedChild("Icon")
 		iconControl:SetDimensions(42, 42)
         iconControl:ClearAnchors()
@@ -398,7 +398,7 @@ function BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectin
 
         local equipIconControl = control:GetNamedChild("EquippedMain")
         equipIconControl:SetDimensions(34, 28)
-    elseif BETTERUI.Settings.Modules["CIM"].biggerSkin == "Biggest" then
+    elseif BETTERUI.Settings.Modules["CIM"].skinSize == "Biggest" then
         local iconControl = control:GetNamedChild("Icon")
 		iconControl:SetDimensions(48, 48)
         iconControl:ClearAnchors()
