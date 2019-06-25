@@ -86,12 +86,13 @@ local function Init(mId, moduleName)
 			disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
 			width = "full",
 		},
-        {
-            type = "checkbox",
-            name = "Reduce the font size of the item tooltip",
-            tooltip = "Allows much more item information to be displayed at once on the tooltips",
-            getFunc = function() return BETTERUI.Settings.Modules["CIM"].condenseLTooltip end,
-            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].condenseLTooltip = value
+		{
+            type = "dropdown",
+            name = "Change the font size of item tooltips",
+			tooltip = "Allows more or less item information to be displayed at once on the tooltips",
+			choices = {"Small", "Medium", "Large", "Default"},
+            getFunc = function() return BETTERUI.Settings.Modules["CIM"].tooltipSize end,
+            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].tooltipSize = value
                       end,
             disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
