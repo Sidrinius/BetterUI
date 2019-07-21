@@ -35,43 +35,52 @@
         </Control>
 
 
-        <Control name="BETTERUI_GamepadGenericScreenFooter" inherits="BETTERUI_GamepadFooterAnchors" resizeToFitDescendents="true" virtual="true">
-            <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" offsetY="-140" />
-            <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)" offsetY="-140" />
+        <Control name="BETTERUI_GamepadGenericScreenFooter" inherits="BETTERUI_GamepadFooterAnchors" resizeToFitDescendents="false" virtual="true">
+            <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" offsetY="-195" />
+            <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)" offsetY="-195" />
 
             <Controls>
                 <Control name="$(parent)DividerBottom" inherits="BETTERUI_GamepadFooterHorizontalDivider">
                     <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" />
-                    <Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING_OTHER" offsetY="-15" />
+                    <Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-BETTERUI_GAMEPAD_DEFAULT_HORIZ_PADDING_OTHER" offsetY="15" />
                 </Control>
                 
                  <Label name="$(parent)CWLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Carry">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="3"  />
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="32"  />
                  </Label>
                  <Label name="$(parent)GoldLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Gold">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="150" offsetY="3" />
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="200" offsetY="32" />
                  </Label>
-                 <Label name="$(parent)APLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="AP">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="400" offsetY="3"  />
-                 </Label>
-                 <Label name="$(parent)TVLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Tel Var">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="625" offsetY="3"  />
-                 </Label>
+                 <Label name="$(parent)KeysLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Undaunted Keys">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="450" offsetY="32"  />
+                 </Label> 
                  <Label name="$(parent)TCLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Transmute Crystals">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="850" offsetY="3"  />
-                 </Label>
-<!--                  <Label name="$(parent)CrownsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Crowns">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="865" offsetY="3"  />
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="700" offsetY="32"  />
+                 </Label> 
+                 <Label name="$(parent)CrownsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Crowns">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="950" offsetY="32"  />
                  </Label>  
                  <Label name="$(parent)GemsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Crown Gems">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1050" offsetY="3"  />
-                 </Label>   --> 
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1150" offsetY="32"  />
+                 </Label>
+                 <Label name="$(parent)BankLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Bank">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="58"  />
+                 </Label>
+                 <Label name="$(parent)TVLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Tel Var">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="200" offsetY="58"  />
+                 </Label>
+                 <Label name="$(parent)APLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="AP">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="450" offsetY="58"  />
+                 </Label>
                  <Label name="$(parent)WritsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Writs">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1050" offsetY="3"  />
-                 </Label> 
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="700" offsetY="58"  />
+                 </Label>    
                  <Label name="$(parent)TicketsLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Tickets">
-                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1200" offsetY="3"  />
-                 </Label>         
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="950" offsetY="58"  />
+                 </Label>  
+                 <Label name="$(parent)OutfitLabel" inherits="BETTERUI_GamepadScreenFooterTemplate" text="Outfit Tokens">
+                        <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="1150" offsetY="58"  />
+                 </Label>       
 
             </Controls>
         </Control>
