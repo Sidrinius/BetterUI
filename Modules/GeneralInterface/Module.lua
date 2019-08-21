@@ -126,6 +126,8 @@ function BETTERUI.Tooltips.InitModule(m_options)
 	m_options["removeDeleteDialog"] = false
 	m_options["mmIntegration"] = true
 	m_options["ttcIntegration"] = true
+	m_options["skinSize"] = "Default"
+	m_options["tooltipSize"] = "Default"
     return m_options
 end
 
