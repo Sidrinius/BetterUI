@@ -229,8 +229,12 @@ function BETTERUI.Inventory.Setup()
 
 	inv = GAMEPAD_INVENTORY
 
-    if(BETTERUI.Settings.Modules["CIM"].condenseLTooltip) then
-        ZO_TOOLTIP_STYLES["topSection"] = {
+	--ZO_TOOLTIP_STYLES["topSection"] = {
+		--fontSize = "$(GP_27)",
+		--height = DOES NOT EXIST
+
+	if(BETTERUI.Settings.Modules["CIM"].tooltipSize == "Small") then
+        ZO_TOOLTIP_STYLES["topSection"] = { -- Item Type (e.g. Ring, Neck, Crown Item)
             layoutPrimaryDirection = "up",
             layoutSecondaryDirection = "right",
             widthPercent = 100,
@@ -239,26 +243,93 @@ function BETTERUI.Inventory.Setup()
             height = 64,
             uppercase = true,
             fontColorField = GENERAL_COLOR_OFF_WHITE,
-        }
-
-        ZO_TOOLTIP_STYLES["statValuePairStat"] = {
+		}
+		ZO_TOOLTIP_STYLES["flavorText"] = {
+			fontSize = 22,
+		}
+        ZO_TOOLTIP_STYLES["statValuePairStat"] = { --Level word
             fontSize = 22,
             uppercase = true,
             fontColorField = GENERAL_COLOR_OFF_WHITE,
         }
-        ZO_TOOLTIP_STYLES["statValuePairValue"] =
-        {
+        ZO_TOOLTIP_STYLES["statValuePairValue"] = { --Level Number
             fontSize = 30,
             fontColorField = GENERAL_COLOR_WHITE,
         }
-        ZO_TOOLTIP_STYLES["title"] = {
-            fontSize = 36,
-            customSpacing = 8,
+        ZO_TOOLTIP_STYLES["title"] = {  --Item name
+            fontSize = 32,
+			customSpacing = 8,
+			--widthPercent = 100,
             uppercase = true,
             fontColorField = GENERAL_COLOR_WHITE,
         }
-        ZO_TOOLTIP_STYLES["bodyDescription"] =    {
+        ZO_TOOLTIP_STYLES["bodyDescription"] = { -- Actual item stats including set bonuses
             fontSize = 22,
+        }
+	elseif(BETTERUI.Settings.Modules["CIM"].tooltipSize == "Medium") then
+        ZO_TOOLTIP_STYLES["topSection"] = { -- Item Type (e.g. Ring, Neck, Crown Item)
+            layoutPrimaryDirection = "up",
+            layoutSecondaryDirection = "right",
+            widthPercent = 100,
+            childSpacing = 1,
+            fontSize = 25,
+            uppercase = true,
+            fontColorField = GENERAL_COLOR_OFF_WHITE,
+		}
+		ZO_TOOLTIP_STYLES["flavorText"] = {
+			fontSize = 34,
+		}
+        ZO_TOOLTIP_STYLES["statValuePairStat"] = { --Level word
+            fontSize = 27,
+            uppercase = true,
+            fontColorField = GENERAL_COLOR_OFF_WHITE,
+		}
+        ZO_TOOLTIP_STYLES["statValuePairValue"] = { --Level Number
+            fontSize = 38,
+            fontColorField = GENERAL_COLOR_WHITE,
+		}
+        ZO_TOOLTIP_STYLES["title"] = { --Item name
+            fontSize = 34,
+			customSpacing = 8,
+			widthPercent = 100,
+            uppercase = true,
+			fontColorField = GENERAL_COLOR_WHITE,
+		}
+        ZO_TOOLTIP_STYLES["bodyDescription"] = { -- Actual item stats including set bonuses
+            fontSize = 34,
+        }
+	elseif(BETTERUI.Settings.Modules["CIM"].tooltipSize == "Large") then
+        ZO_TOOLTIP_STYLES["topSection"] = { -- Item Type (e.g. Ring, Neck, Crown Item)
+            layoutPrimaryDirection = "up",
+            layoutSecondaryDirection = "right",
+            widthPercent = 100,
+            childSpacing = 1,
+            fontSize = 27,
+            height = 64,
+            uppercase = true,
+            fontColorField = GENERAL_COLOR_OFF_WHITE,
+        }
+		ZO_TOOLTIP_STYLES["flavorText"] = {
+			fontSize = 38,
+		}
+        ZO_TOOLTIP_STYLES["statValuePairStat"] = { --Level word
+            fontSize = 27,
+            uppercase = true,
+            fontColorField = GENERAL_COLOR_OFF_WHITE,
+        }
+        ZO_TOOLTIP_STYLES["statValuePairValue"] = { --Level Number
+            fontSize = 42,
+            fontColorField = GENERAL_COLOR_WHITE,
+        }
+        ZO_TOOLTIP_STYLES["title"] = { --Item name
+            fontSize = 38,
+			customSpacing = 8,
+			widthPercent = 100,
+            uppercase = true,
+			fontColorField = GENERAL_COLOR_WHITE,
+        }
+        ZO_TOOLTIP_STYLES["bodyDescription"] = { -- Actual item stats including set bonuses
+            fontSize = 38,
         }
     end
 	

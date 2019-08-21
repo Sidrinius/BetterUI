@@ -86,27 +86,31 @@ local function Init(mId, moduleName)
 			disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
 			width = "full",
 		},
-        {
-            type = "checkbox",
-            name = "Reduce the font size of the item tooltip",
-            tooltip = "Allows much more item information to be displayed at once on the tooltips",
-            getFunc = function() return BETTERUI.Settings.Modules["CIM"].condenseLTooltip end,
-            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].condenseLTooltip = value
+		{
+            type = "dropdown",
+            name = "Tooltip font size",
+			tooltip = "Allows more or less item information to be displayed at once in tooltips",
+			choices = {"Small", "Medium", "Large", "Default"},
+            getFunc = function() return BETTERUI.Settings.Modules["CIM"].tooltipSize end,
+            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].tooltipSize = value
                       end,
             disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
             requiresReload = true,
+            default = "Default",
         },
         {
-            type = "checkbox",
-            name = "Use bigger font size in the UI item lists",
-            tooltip = "Changed the font size of item lists bigger.",
-            getFunc = function() return BETTERUI.Settings.Modules["CIM"].biggerSkin end,
-            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].biggerSkin = value
+            type = "dropdown",
+            name = "Interface and item list font size",
+			tooltip = "Changes the font size of listed items in the inventory and bank. Different sizes make you see more or less items at once.",
+			choices = {"Default", "Medium", "Large"},
+            getFunc = function() return BETTERUI.Settings.Modules["CIM"].skinSize end,
+            setFunc = function(value) BETTERUI.Settings.Modules["CIM"].skinSize = value
                       end,
             disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
             requiresReload = true,
+            default = "Default",
         },
         {
 			type = "button",	
