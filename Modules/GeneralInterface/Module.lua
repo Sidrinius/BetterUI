@@ -97,6 +97,7 @@ local function Init(mId, moduleName)
             disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
             requiresReload = true,
+            default = "Default",
         },
         {
             type = "dropdown",
@@ -109,6 +110,7 @@ local function Init(mId, moduleName)
             disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
             width = "full",
             requiresReload = true,
+            default = "Default",
         },
         {
 			type = "button",	
@@ -126,8 +128,6 @@ function BETTERUI.Tooltips.InitModule(m_options)
 	m_options["removeDeleteDialog"] = false
 	m_options["mmIntegration"] = true
 	m_options["ttcIntegration"] = true
-	m_options["skinSize"] = "Default"
-	m_options["tooltipSize"] = "Default"
     return m_options
 end
 
