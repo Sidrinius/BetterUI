@@ -1,3 +1,4 @@
+_G.mmErrorSuppress = 0
 local _
 
 function BETTERUI.Tooltips.GetNumberOfMatchingItems(itemLink, BAG)
@@ -36,39 +37,53 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
         else
             stackCount = GetSlotStackSize(bagId, slotIndex)
         end
-        if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
-            local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
-            if(priceInfo == nil) then
-                tooltip:AddLine(string.format("TTC Price: " .. GetString(TTC_PRICE_NOLISTINGDATA)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
-            else
-                if(priceInfo.SuggestedPrice ~= nil) then
-                    if stackCount > 1 then 
-                        tooltip:AddLine(zo_strformat("TTC price: <<1>> |t18:18:<<2>>|t,   Stack(<<3>>): <<4>> |t18:18:<<2>>|t ", TamrielTradeCentre:FormatNumber(priceInfo.SuggestedPrice, 0), GetCurrencyGamepadIcon(CURT_MONEY), stackCount, TamrielTradeCentre:FormatNumber(priceInfo.SuggestedPrice * stackCount, 0)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
-                    else
-                        tooltip:AddLine(zo_strformat("TTC price: <<1>> |t18:18:<<2>>|t ", TamrielTradeCentre:FormatNumber(priceInfo.SuggestedPrice, 0), GetCurrencyGamepadIcon(CURT_MONEY)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
-                    end
+    end
+
+    if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
+        local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
+        if(priceInfo == nil) then
+            tooltip:AddLine(string.format("TTC Price: " .. GetString(TTC_PRICE_NOLISTINGDATA)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+        else
+            if(priceInfo.SuggestedPrice ~= nil) then
+                if stackCount > 1 then 
+                    tooltip:AddLine(zo_strformat("TTC price: <<1>> |t18:18:<<2>>|t,   Stack(<<3>>): <<4>> |t18:18:<<2>>|t ", TamrielTradeCentre:FormatNumber(priceInfo.SuggestedPrice, 0), GetCurrencyGamepadIcon(CURT_MONEY), stackCount, TamrielTradeCentre:FormatNumber(priceInfo.SuggestedPrice * stackCount, 0)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
                 else
-                    tooltip:AddLine(zo_strformat("TTC price: <<1>> |t18:18:<<2>>|t ", TamrielTradeCentre:FormatNumber(priceInfo.Avg, 0), GetCurrencyGamepadIcon(CURT_MONEY)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+                    tooltip:AddLine(zo_strformat("TTC price: <<1>> |t18:18:<<2>>|t ", TamrielTradeCentre:FormatNumber(priceInfo.SuggestedPrice, 0), GetCurrencyGamepadIcon(CURT_MONEY)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
                 end
-                tooltip:AddLine(string.format(GetString(TTC_PRICE_AGGREGATEPRICESXYZ), TamrielTradeCentre:FormatNumber(priceInfo.Avg), 
-                TamrielTradeCentre:FormatNumber(priceInfo.Min), TamrielTradeCentre:FormatNumber(priceInfo.Max)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+            else
+                tooltip:AddLine(zo_strformat("TTC price: <<1>> |t18:18:<<2>>|t ", TamrielTradeCentre:FormatNumber(priceInfo.Avg, 0), GetCurrencyGamepadIcon(CURT_MONEY)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+            end
+            tooltip:AddLine(string.format(GetString(TTC_PRICE_AGGREGATEPRICESXYZ), TamrielTradeCentre:FormatNumber(priceInfo.Avg), 
+            TamrielTradeCentre:FormatNumber(priceInfo.Min), TamrielTradeCentre:FormatNumber(priceInfo.Max)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+        end
+    end
+
+	if MasterMerchant ~= nil and BETTERUI.Settings.Modules["Tooltips"].mmIntegration then 
+        -- Turning on error suppression for MasterMerchant guildstore browse/sell (Hacky work around for now)
+        if BETTERUI.Settings.Modules["Tooltips"].mmIntegrationErrorSuppress then 
+            if SCENE_MANAGER.scenes['gamepad_trading_house']:IsShowing() and mmErrorSuppress == 0 then
+                ZO_UIErrors_ToggleSupressDialog()
+               -- d("Suppression on")
+                mmErrorSuppress = 1
+            elseif not SCENE_MANAGER.scenes['gamepad_trading_house']:IsShowing() and mmErrorSuppress == 1 then
+                ZO_UIErrors_ToggleSupressDialog()
+               -- d("Suppression off Guild Store not Showing")
+                mmErrorSuppress = 0
             end
         end
 
-		if MasterMerchant ~= nil and BETTERUI.Settings.Modules["Tooltips"].mmIntegration then
-			local tipLine, avgPrice, graphInfo = MasterMerchant:itemPriceTip(itemLink, false, clickable)
-			if(tipLine ~= nil) then
-                tooltip:AddLine(zo_strformat("<<1>> ", tipLine), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
-	            if stackCount > 1 then
-                    tooltip:AddLine(zo_strformat("Stack(<<1>>): <<2>> |t18:18:<<3>>|t ", stackCount, avgPrice * stackCount, GetCurrencyGamepadIcon(CURT_MONEY)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 })
-                end
-            else
-				tooltip:AddLine(string.format("MM price: UNKNOWN"), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
-			end
+        local tipLine, avgPrice = MasterMerchant:itemPriceTip(itemLink, false, clickable)
+		if(tipLine ~= nil) then
+            tooltip:AddLine(zo_strformat("<<1>> ", tipLine), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+            if stackCount > 1 then
+                tooltip:AddLine(zo_strformat("Stack(<<1>>): <<2>> |t18:18:<<3>>|t ", stackCount, avgPrice * stackCount, GetCurrencyGamepadIcon(CURT_MONEY)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 })
+            end
+        else
+			tooltip:AddLine(string.format("MM price: UNKNOWN"), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
 		end
-        -- Whitespace buffer
-        tooltip:AddLine(string.format(""), { fontSize = 12, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
 	end
+    -- Whitespace buffer
+    tooltip:AddLine(string.format(""), { fontSize = 12, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
 end
 
 local function AddInventoryPreInfo(tooltip, itemLink)

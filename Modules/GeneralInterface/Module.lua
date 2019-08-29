@@ -15,8 +15,22 @@ local function Init(mId, moduleName)
 			tooltip = "Hooks Master Merchant into the item tooltips",
 			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].mmIntegration end,
 			setFunc = function(value) BETTERUI.Settings.Modules["Tooltips"].mmIntegration = value
+						if not BETTERUI.Settings.Modules["Tooltips"].mmIntegration then
+		                    BETTERUI.Settings.Modules["Tooltips"].mmIntegrationErrorSuppress = false
+		                end
 					end,
 			disabled = function() return MasterMerchant == nil end,
+			width = "full",
+			requiresReload = true,
+		},
+		{
+			type = "checkbox",
+			name = "Master Merchant Error Suppression",
+			tooltip = "Suppresses guild store error messages from MM",
+			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].mmIntegrationErrorSuppress end,
+			setFunc = function(value) BETTERUI.Settings.Modules["Tooltips"].mmIntegrationErrorSuppress = value
+		            end,
+            disabled = function() return not BETTERUI.Settings.Modules["Tooltips"].mmIntegration end,
 			width = "full",
 			requiresReload = true,
 		},
@@ -127,6 +141,7 @@ function BETTERUI.Tooltips.InitModule(m_options)
     m_options["showStyleTrait"] = true
 	m_options["removeDeleteDialog"] = false
 	m_options["mmIntegration"] = true
+	m_options["mmIntegrationErrorSuppress"] = false
 	m_options["ttcIntegration"] = true
     return m_options
 end
