@@ -62,12 +62,10 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
         -- Turning on error suppression for MasterMerchant guildstore browse/sell (Hacky work around for now)
         if BETTERUI.Settings.Modules["Tooltips"].mmIntegrationErrorSuppress then 
             if SCENE_MANAGER.scenes['gamepad_trading_house']:IsShowing() and mmErrorSuppress == 0 then
-                ZO_UIErrors_ToggleSupressDialog()
-               -- d("Suppression on")
+                EVENT_MANAGER:UnregisterForEvent("ErrorFrame", EVENT_LUA_ERROR)
                 mmErrorSuppress = 1
             elseif not SCENE_MANAGER.scenes['gamepad_trading_house']:IsShowing() and mmErrorSuppress == 1 then
-                ZO_UIErrors_ToggleSupressDialog()
-               -- d("Suppression off Guild Store not Showing")
+                EVENT_MANAGER:RegisterForEvent("ErrorFrame", EVENT_LUA_ERROR)
                 mmErrorSuppress = 0
             end
         end
