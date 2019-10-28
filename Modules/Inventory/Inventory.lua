@@ -1265,7 +1265,7 @@ function BETTERUI.Inventory.HookActionDialog()
             {
                 keybind = "DIALOG_PRIMARY",
                 text = GetString(SI_GAMEPAD_SELECT_OPTION),
-            	callback = function(dialog)    
+            	callback = function(dialog)  
             		--if (ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction) == GetString(SI_ITEM_ACTION_DESTROY)) then
 						-- ZO_InventorySlot_InitiateDestroyItem = function(inventorySlot)
 						-- local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
@@ -1895,8 +1895,17 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
             		local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
             		local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
             		if isQuickslot then
-            			--assign
-            			self:ShowQuickslot()
+                			--assign
+                        --self:ShowQuickslot()
+                        local validSlot = GetFirstFreeValidSlotForItem(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+                        if validSlot then
+                            CallSecureProtected('SelectSlotItem', self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex, validSlot)
+                        else
+                            --Quickslot order [12]=1,[11]=2,[10]=3,[9]=4,[16]=5,[15]=6,[14]=7,[13]=8
+                            CallSecureProtected('ClearSlot', 12)
+                            --CallSecureProtected('SelectSlotItem', self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex, nil)
+            			end
+                        zo_callLater(function() self:RefreshItemList() end, 200)
             		elseif filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
             			--switch compare
             			self:SwitchInfo()
