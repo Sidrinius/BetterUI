@@ -11,7 +11,7 @@
                             <Controls>
 								 <Backdrop name="$(parent)Bg" inherits="ZO_DefaultBackdrop_Gamepad" excludeFromResizeToFitExtents="true">
 									<Anchor point="TOPLEFT" offsetX="-190" offsetY="-22" />
-                                    <Anchor point="BOTTOMRIGHT" offsetX="200" offsetY="147" />
+                                    <Anchor point="BOTTOMRIGHT" offsetX="225" offsetY="147" />
 								</Backdrop>
 
                                 <Label name="$(parent)WritName" font="ZoFontGamepad27" horizontalAlignment="LEFT" inherits="ZO_TooltipIfTruncatedLabel" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED">

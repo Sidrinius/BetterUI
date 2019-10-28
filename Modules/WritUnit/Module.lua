@@ -2,14 +2,13 @@ local _
 local LAM = LibStub:GetLibrary("LibAddonMenu-2.0")
 
 local function Init(mId, moduleName)
-	local panelData = Init_ModulePanel(moduleName, "Guild Store Improvement Settings")
+	local panelData = Init_ModulePanel(moduleName, "Writ Settings")
 
 	LAM:RegisterAddonPanel("BETTERUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BETTERUI_"..mId, optionsTable)
 end
 
 function BETTERUI.Writs.InitModule(m_options)
-
     return m_options
 end
 
