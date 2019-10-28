@@ -1902,10 +1902,14 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
                             CallSecureProtected('SelectSlotItem', self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex, validSlot)
                         else
                             --Quickslot order [12]=1,[11]=2,[10]=3,[9]=4,[16]=5,[15]=6,[14]=7,[13]=8
-                            CallSecureProtected('ClearSlot', 12)
-                            --CallSecureProtected('SelectSlotItem', self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex, nil)
-            			end
-                        zo_callLater(function() self:RefreshItemList() end, 200)
+                            local quickSlotIndex = GetItemCurrentActionBarSlot(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+                            if quickSlotIndex then
+                                CallSecureProtected('ClearSlot', quickSlotIndex)
+                            else
+                                CallSecureProtected('SelectSlotItem', self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex, 12)
+                            end
+                        end
+                        zo_callLater(function() self:RefreshItemList() end, 250)
             		elseif filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
             			--switch compare
             			self:SwitchInfo()

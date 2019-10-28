@@ -87,11 +87,6 @@ function BETTERUI.InitModuleOptions()
             disabled = function() return BETTERUI.Settings.Modules["CIM"].m_enabled or not BETTERUI.Settings.Modules["CIM"].m_enabled end,
 			width = "full",
 		},
-		{
-			type = "button",	
-			name = "Reload UI",
-			func = function() ReloadUI() end,
-		},
 	}
 
 	LAM:RegisterAddonPanel("BETTERUI_".."Modules", panelData)
