@@ -273,26 +273,6 @@ function BETTERUI.Inventory.Class:IsItemListEmpty(filteredEquipSlot, nonEquipabl
     return SHARED_INVENTORY:IsFilteredSlotDataEmpty(comparator, BAG_BACKPACK, BAG_WORN)
 end
 
-
-local function CanUnequipItem(inventorySlot)
-    local bag, slot = ZO_Inventory_GetBagAndIndex(inventorySlot)
-    --d("unequip check : " .. bag .. " " .. slot)
-    if bag == BAG_WORN then
-        local _, stackCount = GetItemInfo(bag, slot)
-        --d("stack count: " .. stackCount)
-        return stackCount > 0
-    end
-    return false
-end
-
-function BETTERUI.Inventory.Class:TryUnequipItem(inventorySlot)
-	--d("unequip: ")
-	if CanUnequipItem(inventorySlot) then
-	    local equipSlot = ZO_Inventory_GetSlotIndex(inventorySlot)
-    	UnequipItem(equipSlot)
-    end
-end
-
 function BETTERUI.Inventory.Class:TryEquipItem(inventorySlot, isCallingFromActionDialog)
     local equipType = inventorySlot.dataSource.equipType
 
@@ -1887,6 +1867,8 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
                     else
                         return false
                     end
+                elseif self.actionMode == CRAFT_BAG_ACTION_MODE then
+                    return true
                 end
             end,
             callback = function()
