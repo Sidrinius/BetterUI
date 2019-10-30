@@ -17,7 +17,7 @@ BETTERUI.Inventory.SlotActions = ZO_ItemSlotActionsController:Subclass()
 -- This is a way to overwrite the ItemSlotAction's primary command. This is done so that "TryUseItem" and other functions use "CallSecureProtected" when activated
 local function BETTERUI_AddSlotPrimary(self, actionStringId, actionCallback, actionType, visibilityFunction, options)
     local actionName = actionStringId
-
+    d(actionName)
     visibilityFunction = function()
 	    return not IsUnitDead("player")
 	end
@@ -61,9 +61,9 @@ end
 local function TryBankItem(inventorySlot)
     if(PLAYER_INVENTORY:IsBanking()) then
         local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
-        if(bag == BAG_BANK or bag == BAG_SUBSCRIBER_BANK) then
+        if bag == BAG_BANK or bag == BAG_SUBSCRIBER_BANK or IsHouseBankBag(bag) then
             --Withdraw
-            if(DoesBagHaveSpaceFor(BAG_BACKPACK, bag, index)) then
+            if DoesBagHaveSpaceFor(BAG_BACKPACK, bag, index) then
                 CallSecureProtected("PickupInventoryItem",bag, index)
                 CallSecureProtected("PlaceInTransfer")
             else
@@ -73,22 +73,56 @@ local function TryBankItem(inventorySlot)
             --Deposit
             if IsItemStolen(bag, index) then
                 ZO_Alert(UI_ALERT_CATEGORY_ERROR, SOUNDS.NEGATIVE_CLICK, SI_STOLEN_ITEM_CANNOT_DEPOSIT_MESSAGE)
-            elseif DoesBagHaveSpaceFor(BAG_BANK, bag, index) or DoesBagHaveSpaceFor(BAG_SUBSCRIBER_BANK, bag, index) then
-                CallSecureProtected("PickupInventoryItem",bag, index)
-                CallSecureProtected("PlaceInTransfer")
             else
-                if not IsESOPlusSubscriber() then
-                    if GetNumBagUsedSlots(BAG_SUBSCRIBER_BANK) > 0 then
-                        TriggerTutorial(TUTORIAL_TRIGGER_BANK_OVERFULL)
-                    else
-                        TriggerTutorial(TUTORIAL_TRIGGER_BANK_FULL_NO_ESO_PLUS)
+                local bankingBag = GetBankingBag()
+                local canAlsoBePlacedInSubscriberBank = bankingBag == BAG_BANK
+                if DoesBagHaveSpaceFor(bankingBag, bag, index) or (canAlsoBePlacedInSubscriberBank and DoesBagHaveSpaceFor(BAG_SUBSCRIBER_BANK, bag, index)) then
+                    CallSecureProtected("PickupInventoryItem",bag, index)
+                    CallSecureProtected("PlaceInTransfer")
+                else
+                    if canAlsoBePlacedInSubscriberBank and not IsESOPlusSubscriber() then
+                        if GetNumBagUsedSlots(BAG_SUBSCRIBER_BANK) > 0 then
+                            TriggerTutorial(TUTORIAL_TRIGGER_BANK_OVERFULL)
+                        else
+                            TriggerTutorial(TUTORIAL_TRIGGER_BANK_FULL_NO_ESO_PLUS)
+                        end
                     end
-                end
-                ZO_Alert(UI_ALERT_CATEGORY_ERROR, SOUNDS.NEGATIVE_CLICK, SI_INVENTORY_ERROR_BANK_FULL)
-            end
+                    ZO_AlertEvent(EVENT_BANK_IS_FULL)
+                end                
+             end
         end
         return true
     end
+end
+
+--Quick and dirty fix for newly secured inventory calls for craft bag withdraw & deposit
+local function TryMoveToInventoryorCraftBag(inventorySlot, targetBag)
+    local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
+
+    if targetBag ~= BAG_VIRTUAL then
+        if DoesBagHaveSpaceFor(targetBag, bag, index) then
+            local stackSize
+            local emptySlotIndex = FindFirstEmptySlotInBag(targetBag)
+            if bag ~= nil then
+                stackSize, maxStackSize = GetSlotStackSize(bag, index)
+                if stackSize >= maxStackSize then
+                    stackSize = maxStackSize
+                end
+            end
+            CallSecureProtected("PickupInventoryItem", bag, index, stackSize)
+            CallSecureProtected("PlaceInInventory", targetBag, emptySlotIndex)
+        else
+            ZO_Alert(UI_ALERT_CATEGORY_ERROR, SOUNDS.NEGATIVE_CLICK, SI_INVENTORY_ERROR_INVENTORY_FULL)
+        end
+        ClearCursor()
+    else
+        CallSecureProtected("PlaceInInventory", targetBag, 0)
+    end
+end
+
+local function CanItemMoveToCraftBag(inventorySlot)
+    local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
+    return HasCraftBagAccess() and CanItemBeVirtual(bag, index) and not IsItemStolen(bag, index)
 end
 
 function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additionalMouseOverbinds, useKeybindStrip)
@@ -114,6 +148,7 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
         order = 500,
         callback = function()
             if self.selectedAction then
+                --CallSecureProtected('function', self.itemActions:DoSelectedAction())
                 self:DoSelectedAction()
             else
                 slotActions:DoPrimaryAction()
@@ -136,6 +171,8 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
         if not inventorySlot then
             self.actionName = nil
         else
+            d('action')
+            d(self.actionName)
             ZO_InventorySlot_DiscoverSlotActionsFromActionList(inventorySlot, slotActions)
 
 			--self.actionName = slotActions:GetPrimaryActionName()
@@ -150,7 +187,9 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
 					self.actionName == GetString(SI_ITEM_ACTION_EQUIP) or 
                     self.actionName == GetString(SI_ITEM_ACTION_UNEQUIP) or 
 					self.actionName == GetString(SI_ITEM_ACTION_BANK_WITHDRAW) or 
-					self.actionName == GetString(SI_ITEM_ACTION_BANK_DEPOSIT) then
+					self.actionName == GetString(SI_ITEM_ACTION_BANK_DEPOSIT) or 
+                    self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) or 
+                    self.actionName == GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG) then
                     table.remove(slotActions.m_slotActions, PRIMARY_ACTION_KEY)
                 end
             else
@@ -171,7 +210,13 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
 			end
 			if self.actionName == GetString(SI_ITEM_ACTION_BANK_DEPOSIT) then
 				slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_BANK_DEPOSIT), function(...) TryBankItem(inventorySlot) end, "primary", nil, {visibleWhenDead = false})
-			end				
+			end
+            if CanItemMoveToCraftBag(inventorySlot) and (self.actionName == nil or self.actionName == SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
+                slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
+            end 
+            if self.actionName == GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG) then
+                slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_BACKPACK) end, "primary", nil, {visibleWhenDead = false})
+            end 			
         end
     end
 
