@@ -191,10 +191,10 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
                     self.actionName == GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG) then
                     table.remove(slotActions.m_slotActions, PRIMARY_ACTION_KEY)
                 end
-            elseif secondaryAction and secondaryAction[INDEX_ACTION_NAME] then
+            elseif CanItemMoveToCraftBag(inventorySlot) and secondaryAction and secondaryAction[INDEX_ACTION_NAME] then
                 self.actionName = secondaryAction[INDEX_ACTION_NAME]
                -- d(self.actionName)
-                if CanItemMoveToCraftBag(inventorySlot) and self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
+                if self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
                     table.remove(slotActions.m_slotActions, SECONDARY_ACTION_KEY)
                 end
             else
@@ -217,7 +217,7 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
 				slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_BANK_DEPOSIT), function(...) TryBankItem(inventorySlot) end, "primary", nil, {visibleWhenDead = false})
 			end
             if CanItemMoveToCraftBag(inventorySlot) and self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
-                slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "secondary", nil, {visibleWhenDead = false})
+                slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
             end 
             if self.actionName == GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG) then
                 slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_BACKPACK) end, "primary", nil, {visibleWhenDead = false})

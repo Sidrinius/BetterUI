@@ -1838,13 +1838,16 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
             	if self.actionMode == ITEM_LIST_ACTION_MODE then
             		--bag mode
             		local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
-            		local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
-            		if isQuickslot then
+                    local isQuestItem = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUEST)            		
+                    local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+                    if isQuickslot then
             			--assign
             			return GetString(SI_BETTERUI_INV_ACTION_QUICKSLOT_ASSIGN)
-            		elseif filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
+            		elseif not isQuestItem and filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
             			--switch compare
             			return GetString(SI_BETTERUI_INV_SWITCH_INFO)
+                    else 
+                        return GetString(SI_ITEM_ACTION_LINK_TO_CHAT)
             		end 
             	elseif self.actionMode == CRAFT_BAG_ACTION_MODE then
             		--craftbag mode
@@ -1855,15 +1858,14 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
             end,
             keybind = "UI_SHORTCUT_SECONDARY",
             visible = function()
-            	if self.actionMode == ITEM_LIST_ACTION_MODE then
+                if self.actionMode == ITEM_LIST_ACTION_MODE then
                     if self.itemList.selectedData then
-                        local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
-                        local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
-                    
-                        if not isQuickslot and filterType ~= ITEMFILTERTYPE_WEAPONS and filterType ~= ITEMFILTERTYPE_ARMOR and filterType ~= ITEMFILTERTYPE_JEWELRY then
+                        local isQuestItem = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUEST)                                        
+                        if not isQuestItem then
+                            return true
+                        else
                             return false
                         end
-                        return true
                     else
                         return false
                     end
@@ -1875,7 +1877,8 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
             	if self.actionMode == ITEM_LIST_ACTION_MODE then
             		--bag mode
             		local isQuickslot = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUICKSLOT)
-            		local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+            		local isQuestItem = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUEST)                    
+                    local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
             		if isQuickslot then
                 			--assign
                         --self:ShowQuickslot()
@@ -1892,9 +1895,14 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
                             end
                         end
                         zo_callLater(function() self:RefreshItemList() end, 250)
-            		elseif filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
+            		elseif not isQuestItem and filterType ~= ITEMFILTERTYPE_QUEST and filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
             			--switch compare
             			self:SwitchInfo()
+                    else 
+                        local itemLink = GetItemLink(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+                        if itemLink then
+                            ZO_LinkHandler_InsertLink(zo_strformat("[<<2>>]", SI_TOOLTIP_ITEM_NAME, itemLink))
+                        end
             		end 
             	elseif self.actionMode == CRAFT_BAG_ACTION_MODE then
             		--craftbag mode
