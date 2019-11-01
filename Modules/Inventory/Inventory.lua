@@ -326,7 +326,6 @@ function BETTERUI.Inventory.Class:TryEquipItem(inventorySlot, isCallingFromActio
 	else
 		equipItemCallback()
 	end
-	
 end
 
 function BETTERUI.Inventory.Class:NewCategoryItem(categoryName, filterType, iconFile, FilterFunct)
