@@ -1858,8 +1858,8 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
             end,
             keybind = "UI_SHORTCUT_SECONDARY",
             visible = function()
-                if self.actionMode == ITEM_LIST_ACTION_MODE then
-                    if self.itemList.selectedData then
+                if self.itemList.selectedData then
+                    if self.actionMode == ITEM_LIST_ACTION_MODE or self.actionMode == CRAFT_BAG_ACTION_MODE then
                         local isQuestItem = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUEST)                                        
                         if not isQuestItem then
                             return true
@@ -1869,8 +1869,8 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
                     else
                         return false
                     end
-                elseif self.actionMode == CRAFT_BAG_ACTION_MODE then
-                    return true
+                else
+                    return false
                 end
             end,
             callback = function()

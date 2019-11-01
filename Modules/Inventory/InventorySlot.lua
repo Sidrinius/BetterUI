@@ -54,9 +54,12 @@ local function TryUseItem(inventorySlot)
         local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
         local usable, onlyFromActionSlot = IsItemUsable(bag, index)
         if usable and not onlyFromActionSlot then
+            ClearCursor()
             CallSecureProtected("UseItem",bag, index) -- the problem with the slots gets solved here!
+            return true
         end
     end
+    return false
 end
 
 local function TryBankItem(inventorySlot)
@@ -156,12 +159,12 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
             end
         end,
         visible =   function()
-                        return slotActions:CheckPrimaryActionVisibility() or self:HasSelectedAction()
+                        return slotActions:CheckPrimaryActionVisibility()
                     end,
     }
 
     local function PrimaryCommandHasBind()
-        return (self.actionName ~= nil) or self:HasSelectedAction()
+        return (self.actionName ~= nil)
     end
 
     local function PrimaryCommandActivate(inventorySlot)
@@ -216,7 +219,7 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
 			if self.actionName == GetString(SI_ITEM_ACTION_BANK_DEPOSIT) then
 				slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_BANK_DEPOSIT), function(...) TryBankItem(inventorySlot) end, "primary", nil, {visibleWhenDead = false})
 			end
-            if CanItemMoveToCraftBag(inventorySlot) and self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
+            if self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) and CanItemMoveToCraftBag(inventorySlot) then
                 slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
             end 
             if self.actionName == GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG) then
