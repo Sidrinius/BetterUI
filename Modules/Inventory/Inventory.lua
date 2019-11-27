@@ -326,6 +326,7 @@ function BETTERUI.Inventory.Class:TryEquipItem(inventorySlot, isCallingFromActio
 	else
 		equipItemCallback()
 	end
+	
 end
 
 function BETTERUI.Inventory.Class:NewCategoryItem(categoryName, filterType, iconFile, FilterFunct)
@@ -1144,25 +1145,20 @@ function BETTERUI.Inventory.HookDestroyItem()
         local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
         local _, stackCount, unitSellPrice = GetItemInfo(bag, index)
         local itemLink = GetItemLink(bag, index)
-        local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("is protected - Please mark as junk then delete!"))
+        local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Please mark as junk first to destroy!"))
         local destroyText = ZO_ERROR_COLOR:Colorize(zo_strformat("You destroy"))
 		local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_SMALL_TEXT)
         SetCursorItemSoundsEnabled(false)
-        if IsItemJunk(bag, index) then
+        if IsItemJunk(bag, index) or BETTERUI.Settings.Modules["Inventory"].quickDestroy then
     		DestroyItem(bag, index)
     		CHAT_SYSTEM:AddMessage(zo_strformat("<<1>> [<<2>>]", destroyText, itemLink))
     		return true
-    	elseif (IsItemFromCrownCrate(bag, index) or IsItemFromCrownStore(bag, index) or unitSellPrice == 0) then
-    		messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
-			messageParams:SetText(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
-			CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
-    		CHAT_SYSTEM:AddMessage(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
-    		return false
     	else
-        	CallSecureProtected("PickupInventoryItem",bag, index)
-        	SetCursorItemSoundsEnabled(true)
-        	CallSecureProtected("PlaceInWorldLeftClick")
-    		return true
+            messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
+            messageParams:SetText(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
+            CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+            CHAT_SYSTEM:AddMessage(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
+            return false
     	end
     end
 end
@@ -1245,7 +1241,7 @@ function BETTERUI.Inventory.HookActionDialog()
                 keybind = "DIALOG_PRIMARY",
                 text = GetString(SI_GAMEPAD_SELECT_OPTION),
             	callback = function(dialog)  
-            		--if (ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction) == GetString(SI_ITEM_ACTION_DESTROY)) then
+      --       		if (ZO_InventorySlotActions:GetRawActionName(self.itemActions.selectedAction) == GetString(SI_ITEM_ACTION_DESTROY)) then
 						-- ZO_InventorySlot_InitiateDestroyItem = function(inventorySlot)
 						-- local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
 						-- local _, actualItemCount = GetItemInfo(bag, index)
@@ -1255,7 +1251,8 @@ function BETTERUI.Inventory.HookActionDialog()
 		    --     		local itemLink = GetItemLink(bag, index)
 		    --     		local dialogName = "DESTROY_ITEM_PROMPT"
 		    --     		ZO_Dialogs_ShowPlatformDialog(dialogName, nil, {mainTextParams = {itemLink, itemCount, GetString(SI_DESTROY_ITEM_CONFIRMATION)}})
-	     --    			end           	
+      --                   end
+      --               end           	
 					if (BETTERUI.Settings.Modules["Inventory"].m_enabled and SCENE_MANAGER.scenes['gamepad_inventory_root']:IsShowing() ) or
 					   (BETTERUI.Settings.Modules["Banking"].m_enabled and SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() ) then
 						CALLBACK_MANAGER:FireCallbacks("BETTERUI_EVENT_ACTION_DIALOG_BUTTON_CONFIRM", dialog)
@@ -1857,8 +1854,8 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
             end,
             keybind = "UI_SHORTCUT_SECONDARY",
             visible = function()
-                if self.itemList.selectedData then
-                    if self.actionMode == ITEM_LIST_ACTION_MODE or self.actionMode == CRAFT_BAG_ACTION_MODE then
+                if self.actionMode == ITEM_LIST_ACTION_MODE then
+                    if self.itemList.selectedData then
                         local isQuestItem = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUEST)                                        
                         if not isQuestItem then
                             return true
@@ -1868,8 +1865,8 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
                     else
                         return false
                     end
-                else
-                    return false
+                elseif self.actionMode == CRAFT_BAG_ACTION_MODE then
+                    return true
                 end
             end,
             callback = function()

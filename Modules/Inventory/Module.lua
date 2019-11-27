@@ -34,6 +34,17 @@ local function Init(mId, moduleName)
 			width = "full",
 			requiresReload = true,
 		},
+		{
+			type = "checkbox",
+			name = "Enable quick destroy functionality",
+			tooltip = "Quickly destroys items without confirmation prompt or needing to mark as junk",
+			getFunc = function() return BETTERUI.Settings.Modules["Inventory"].quickDestroy end,
+			setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].quickDestroy = value
+				changed = true
+				end,
+			width = "full",
+			requiresReload = true,
+		},
         {
             type = "checkbox",
             name = "Enable category wrapping",
@@ -52,7 +63,7 @@ local function Init(mId, moduleName)
         },
 		{
             type = "checkbox",
-            name = "Display character attributes when switching tooltip",
+            name = "Display attributes when switching tooltip",
             tooltip = "Show the character attributes on the switching tooltip rather than seeing the current equipped item",
             getFunc = function() return BETTERUI.Settings.Modules["Inventory"].displayCharAttributes end,
             setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].displayCharAttributes = value end,
@@ -169,6 +180,7 @@ function BETTERUI.Inventory.InitModule(m_options)
 	m_options["showIconIakoniGearChanger"] = true
 	m_options["showIconIakoniGearChangerAllSets"] = false
 	m_options["showIconGamePadBuddyStatusIcon"] = true
+	m_options["quickDestroy"] = false
 
     return m_options
 end

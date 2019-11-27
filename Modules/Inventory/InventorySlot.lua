@@ -40,27 +40,22 @@ local function TryUnequipItem(inventorySlot)
 end
 
 -- Our overwritten TryUseItem allows us to call it securely
-local function TryUseItem(inventorySlot)
-    if inventorySlot then
-        local slotType = ZO_InventorySlot_GetType(inventorySlot)
-        if slotType == SLOT_TYPE_QUEST_ITEM then
+local function TryUseItem(inventorySlot) 
+    local slotType = ZO_InventorySlot_GetType(inventorySlot)
+    if slotType == SLOT_TYPE_QUEST_ITEM then
+        if inventorySlot then
             if inventorySlot.toolIndex then
                 UseQuestTool(inventorySlot.questIndex, inventorySlot.toolIndex)
             elseif inventorySlot.conditionIndex then
                 UseQuestItem(inventorySlot.questIndex, inventorySlot.stepIndex, inventorySlot.conditionIndex)
             end
-        else
-            local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
-            local usable, onlyFromActionSlot = IsItemUsable(bag, index)
-            if usable and not onlyFromActionSlot then
-                ClearCursor()
-                CallSecureProtected("UseItem",bag, index) -- the problem with the slots gets solved here!
-                return true
-            end
         end
-        return false
     else
-        return false
+        local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
+        local usable, onlyFromActionSlot = IsItemUsable(bag, index)
+        if usable and not onlyFromActionSlot then
+            CallSecureProtected("UseItem",bag, index) -- the problem with the slots gets solved here!
+        end
     end
 end
 
@@ -221,7 +216,7 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
 			if self.actionName == GetString(SI_ITEM_ACTION_BANK_DEPOSIT) then
 				slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_BANK_DEPOSIT), function(...) TryBankItem(inventorySlot) end, "primary", nil, {visibleWhenDead = false})
 			end
-            if self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) and CanItemMoveToCraftBag(inventorySlot) then
+            if CanItemMoveToCraftBag(inventorySlot) and self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
                 slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
             end 
             if self.actionName == GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG) then
