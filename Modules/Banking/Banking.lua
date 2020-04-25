@@ -67,15 +67,31 @@ local function GetBestItemCategoryDescription(itemData)
 end
 
 local function GetMarketPrice(itemLink, stackCount)
-	if(stackCount == nil) then stackCount = 1 end
-	
-	if (BETTERUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
-		local mmData = MasterMerchant:itemStats(itemLink, false)
-		if (mmData.avgPrice ~= nil) then
-			return mmData.avgPrice*stackCount
-		end
-	end
-	return 0
+    if(stackCount == nil) then stackCount = 1 end
+
+    if (BETTERUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
+        local mmData = MasterMerchant:itemStats(itemLink, false)
+        if(mmData.avgPrice ~= nil) then
+            return mmData.avgPrice * stackCount
+        end
+    end
+    if (BETTERUI.Settings.Modules["Tooltips"].attIntegration and ArkadiusTradeTools ~= nil) then
+        local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil)
+        if(avgPrice ~= nil or avgPrice ~= 0) then
+            return BETTERUI.roundNumber(avgPrice * stackCount, 2)
+        end
+    end
+    if BETTERUI.Settings.Modules["Tooltips"].ttcIntegration and TamrielTradeCentre ~= nil then
+        local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
+        if priceInfo then
+            if priceInfo.SuggestedPrice then
+                return priceInfo.SuggestedPrice * stackCount
+            else 
+                return priceInfo.Avg * stackCount, 1
+            end
+        end
+    end
+    return 0
 end
 
 local function SetupListing(control, data)

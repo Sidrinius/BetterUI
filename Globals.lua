@@ -3,7 +3,7 @@ BETTERUI = {
 }
 
 BETTERUI.name = "BetterUI"
-BETTERUI.version = "2.71"
+BETTERUI.version = "2.72"
 
 -- Program Global (scope of BETTERUI, though) variable initialization
 BETTERUI.WindowManager = GetWindowManager()
@@ -58,6 +58,11 @@ BETTERUI.DefaultSettings = {
 
 function ddebug(str)
 	return d("|c0066ff[BETTERUI]|r "..str)
+end
+
+function BETTERUI.roundNumber(number, decimals)
+    local power = 10^decimals
+    return math.floor(number * power) / power
 end
 
 -- Thanks to Bart Kiers for this function :)

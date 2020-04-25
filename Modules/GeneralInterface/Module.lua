@@ -11,6 +11,17 @@ local function Init(mId, moduleName)
 	local optionsTable = {
 		{
 			type = "checkbox",
+			name = "Arkadius Trade Tools",
+			tooltip = "Hooks ATT Price info into the item tooltips",
+			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].attIntegration end,
+			setFunc = function(value) BETTERUI.Settings.Modules["Tooltips"].attIntegration = value
+					end,
+			disabled = function() return ArkadiusTradeTools == nil end,
+			width = "full",
+			requiresReload = true,
+		},
+		{
+			type = "checkbox",
 			name = "Master Merchant integration",
 			tooltip = "Hooks Master Merchant into the item tooltips",
 			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].mmIntegration end,
