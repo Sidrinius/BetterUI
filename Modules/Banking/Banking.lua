@@ -1,6 +1,7 @@
 local _
 
 local BANKING_ROW_TEMPLATE = "BETTERUI_GenericEntry_Template"
+local USE_SHORT_CURRENCY_FORMAT = true
 
 local LIST_WITHDRAW = 1
 local LIST_DEPOSIT  = 2
@@ -69,25 +70,25 @@ end
 local function GetMarketPrice(itemLink, stackCount)
     if(stackCount == nil) then stackCount = 1 end
 
-    if (BETTERUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
+    if MasterMerchant ~= nil and BETTERUI.Settings.Modules["Tooltips"].mmIntegration then 
         local mmData = MasterMerchant:itemStats(itemLink, false)
-        if(mmData.avgPrice ~= nil) then
+        if(mmData.avgPrice ~= nil and mmData.avgPrice ~= 0) then
             return mmData.avgPrice * stackCount
         end
     end
-    if (BETTERUI.Settings.Modules["Tooltips"].attIntegration and ArkadiusTradeTools ~= nil) then
+    if ArkadiusTradeTools ~= nil and BETTERUI.Settings.Modules["Tooltips"].attIntegration then 
         local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil)
-        if(avgPrice ~= nil or avgPrice ~= 0) then
-            return BETTERUI.roundNumber(avgPrice * stackCount, 2)
+        if(avgPrice ~= nil and avgPrice ~= 0) then
+            return avgPrice * stackCount
         end
     end
-    if BETTERUI.Settings.Modules["Tooltips"].ttcIntegration and TamrielTradeCentre ~= nil then
+    if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
         local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
-        if priceInfo then
+        if(priceInfo ~= nil and priceInfo ~= 0) then
             if priceInfo.SuggestedPrice then
                 return priceInfo.SuggestedPrice * stackCount
-            else 
-                return priceInfo.Avg * stackCount, 1
+            else
+                return priceInfo.Avg * stackCount
             end
         end
     end
@@ -123,10 +124,7 @@ local function SetupListing(control, data)
         if(setItem and BETTERUI.Settings.Modules["Banking"].showIconSetGear) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_setitem.dds|t" end
 		   
 		if currentItemType == ITEMTYPE_RECIPE and not IsItemLinkRecipeKnown(itemLink) then fullItemName = fullItemName.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
-		if BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon then fullItemName = fullItemName .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
-		if BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger then fullItemName = fullItemName .. BETTERUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex, "Banking")  end
-		if BETTERUI.Settings.Modules["Banking"].showIconAlphaGear then fullItemName = fullItemName .. BETTERUI.Helper.AlphaGear.GetGearSet(bagId, slotIndex, "Banking")  end
-         
+		if BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon then fullItemName = fullItemName .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end        
     end
     control:GetNamedChild("ItemType"):SetText(string.upper(data.itemCategoryName))
     if currentItemType == ITEMTYPE_RECIPE then
@@ -321,7 +319,7 @@ function BETTERUI.Banking.Class:RefreshList()
         data.isEquippedInAnotherCategory = itemData.isEquippedInAnotherCategory
         data.isJunk = itemData.isJunk
 
-        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) or not BETTERUI.Settings.Modules["Inventory"].enableJunk then
+        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) then
          
             if data.bestGamepadItemCategoryName ~= currentBestCategoryName then
                 currentBestCategoryName = data.bestGamepadItemCategoryName
@@ -1209,10 +1207,6 @@ function BETTERUI.Banking.Init()
     BETTERUI.Banking.Window:RefreshList()
 
     SCENE_MANAGER.scenes['gamepad_banking'] = SCENE_MANAGER.scenes['BETTERUI_BANKING']
-	
-	if ((not USE_SHORT_CURRENCY_FORMAT ~= nil) and BETTERUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
-		USE_SHORT_CURRENCY_FORMAT = BETTERUI.Settings.Modules["Inventory"].useShortFormat
-	end
 
     esoSubscriber = IsESOPlusSubscriber()
     --tw = BETTERUI.Banking.Window --dev mode

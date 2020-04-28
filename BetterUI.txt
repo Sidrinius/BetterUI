@@ -4,7 +4,6 @@
 ## Author: prasoc, RockingDice & Goobsnake
 ## Version: 2.72
 ## DependsOn: LibAddonMenu-2.0
-## OptionalDependsOn: AlphaGear
 ## SavedVariables: BetterUISavedVars
  
 Globals.lua

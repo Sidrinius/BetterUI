@@ -35,40 +35,7 @@ local function Init(mId, moduleName)
 				changed = true end,
 			width = "full",
 			requiresReload = true,
-		},
-		{
-			type = "checkbox",
-			name = "Item Icon - Iakoni's Gear Changer",
-			tooltip = "Show the first set number in Iakoni's settings.",
-			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,
-			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger = value
-				changed = true end,
-			width = "full",
-			disabled = function() return BETTERUI.Settings.Modules["Banking"].showIconAlphaGear end,
-			requiresReload = true,
-		},
-		{
-			type = "checkbox",
-			name = "Item Icon - Alpha Gear",
-			tooltip = "Show the first set number in Alpha Gear.",
-			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconAlphaGear end,
-			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconAlphaGear = value
-				changed = true end,
-			width = "full",
-			disabled = function() return BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger end,
-			requiresReload = true,
-		},
-		{
-			type = "checkbox",
-			name = "Show all sets instead",
-			tooltip = "Show all sets if in multiple settings.",
-			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets end,
-			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChangerAllSets = value
-				changed = true end,
-			width = "full",
-			requiresReload = true,
-			disabled = function() return not BETTERUI.Settings.Modules["Banking"].showIconIakoniGearChanger and not BETTERUI.Settings.Modules["Banking"].showIconAlphaGear end,  
-		},		
+		},	
 		{
 			type = "checkbox",
 			name = "Item Icon - GamePadBuddy's Status Indicator",
@@ -88,9 +55,6 @@ function BETTERUI.Banking.InitModule(m_options)
 	m_options["showIconEnchantment"] = true
 	m_options["showIconSetGear"] = true
 	m_options["showIconUnboundItem"] = true
-	m_options["showIconIakoniGearChanger"] = true
-	m_options["showIconIakoniGearChangerAllSets"] = true
-	m_options["showIconAlphaGear"] = true
 	m_options["showIconGamePadBuddyStatusIcon"] = true
 	return m_options
 end

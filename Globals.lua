@@ -41,9 +41,7 @@ BETTERUI.Settings = {}
 
 BETTERUI.Helper = {
 	GamePadBuddy = {},
-	IokaniGearChanger = {},
 	AutoCategory = {},
-	AlphaGear = {},
 }
 
 BETTERUI.DefaultSettings = {
@@ -61,8 +59,12 @@ function ddebug(str)
 end
 
 function BETTERUI.roundNumber(number, decimals)
-    local power = 10^decimals
-    return math.floor(number * power) / power
+	if number ~= nil or number ~= 0 then
+    	local power = 10^decimals
+    	return string.format("%.2f", math.floor(number * power) / power)
+    else
+    	return 0
+    end
 end
 
 -- Thanks to Bart Kiers for this function :)
