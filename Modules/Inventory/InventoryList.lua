@@ -184,30 +184,25 @@ function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
            labelTxt = labelTxt..zo_strformat(" |cFFFFFF(<<1>>)|r",data.stackCount)
         end
 
-        if(BETTERUI.Settings.Modules["CIM"].attributeIcons) then
-            local itemData = GetItemLink(bagId, slotIndex)
+        local itemData = GetItemLink(bagId, slotIndex)
 
-            local setItem, _, _, _, _ = GetItemLinkSetInfo(itemData, false)
-            local hasEnchantment, _, _ = GetItemLinkEnchantInfo(itemData)
+        local setItem, _, _, _, _ = GetItemLinkSetInfo(itemData, false)
+        local hasEnchantment, _, _ = GetItemLinkEnchantInfo(itemData)
 
-            local currentItemType = GetItemLinkItemType(itemData) --GetItemType(bagId, slotIndex)
-            local isRecipeAndUnknown = false
-            if (currentItemType == ITEMTYPE_RECIPE) then
-                isRecipeAndUnknown = not IsItemLinkRecipeKnown(itemData)
-			end
-	
-			local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
+        local currentItemType = GetItemLinkItemType(itemData) --GetItemType(bagId, slotIndex)
+        local isRecipeAndUnknown = false
+        if (currentItemType == ITEMTYPE_RECIPE) then
+            isRecipeAndUnknown = not IsItemLinkRecipeKnown(itemData)
+		end
 
-            if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_stolen.dds|t" end
-			if isUnbound and BETTERUI.Settings.Modules["Inventory"].showIconUnboundItem then labelTxt = labelTxt.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
-            if hasEnchantment and BETTERUI.Settings.Modules["Inventory"].showIconEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
-            if setItem and BETTERUI.Settings.Modules["Inventory"].showIconSetGear then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
-			if BETTERUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon then labelTxt = labelTxt .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
-            --if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_stolen.dds|t" end
-            --if hasEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_enchanted.dds|t" end
-            --if setItem then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_setitem.dds|t" end
-            if isRecipeAndUnknown then labelTxt = labelTxt.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
-        end
+		local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
+
+        if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_stolen.dds|t" end
+		if isUnbound and BETTERUI.Settings.Modules["Inventory"].showIconUnboundItem then labelTxt = labelTxt.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
+        if hasEnchantment and BETTERUI.Settings.Modules["Inventory"].showIconEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
+        if setItem and BETTERUI.Settings.Modules["Inventory"].showIconSetGear then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
+		if BETTERUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon then labelTxt = labelTxt .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
+        if isRecipeAndUnknown then labelTxt = labelTxt.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
 
         label:SetText(labelTxt)
 

@@ -103,15 +103,6 @@ local function Init(mId, moduleName)
             width = "full",
         },
 		{
-			type = "checkbox",
-			name = "Display attribute icons next to the item name",
-			tooltip = "Allows you to see enchanted, set and stolen items quickly",
-			getFunc = function() return BETTERUI.Settings.Modules["CIM"].attributeIcons end,
-			setFunc = function(value) BETTERUI.Settings.Modules["CIM"].attributeIcons = value end,
-			disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
-			width = "full",
-		},
-		{
             type = "dropdown",
             name = "Tooltip font size",
 			tooltip = "Allows more or less item information to be displayed at once in tooltips",

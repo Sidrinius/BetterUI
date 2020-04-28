@@ -101,31 +101,29 @@ local function SetupListing(control, data)
 
     local itemLink = GetItemLink(dS.bagId, dS.slotIndex)
     local currentItemType = GetItemLinkItemType(itemLink) --GetItemType(bagId, slotIndex) 
-    if(BETTERUI.Settings.Modules["CIM"].attributeIcons) then
-        local dS = data
-        local bagId = dS.bagId
-        local slotIndex = dS.slotIndex
-		local isLocked = dS.isPlayerLocked
-        local isBoPTradeable = dS.isBoPTradeable
-        local labelTxt = ""
+    local dS = data
+    local bagId = dS.bagId
+    local slotIndex = dS.slotIndex
+	local isLocked = dS.isPlayerLocked
+    local isBoPTradeable = dS.isBoPTradeable
+    local labelTxt = ""
+
+	if isLocked then labelTxt = labelTxt.. "|t24:24:"..ZO_GAMEPAD_LOCKED_ICON_32.."|t" end
+    if isBoPTradeable then labelTxt = labelTxt.."|t24:24:"..ZO_TRADE_BOP_ICON.."|t" end
+    fullItemName = labelTxt .. fullItemName
 	
-		if isLocked then labelTxt = labelTxt.. "|t24:24:"..ZO_GAMEPAD_LOCKED_ICON_32.."|t" end
-        if isBoPTradeable then labelTxt = labelTxt.."|t24:24:"..ZO_TRADE_BOP_ICON.."|t" end
-        fullItemName = labelTxt .. fullItemName
-		
-        local setItem, _, _, _, _ = GetItemLinkSetInfo(itemLink, false)
-        local hasEnchantment, _, _ = GetItemLinkEnchantInfo(itemLink)
-	
-	
-		local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
-	
-		if isUnbound and BETTERUI.Settings.Modules["Banking"].showIconUnboundItem then fullItemName = fullItemName.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
-        if(hasEnchantment and BETTERUI.Settings.Modules["Banking"].showIconEnchantment) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_enchanted.dds|t" end
-        if(setItem and BETTERUI.Settings.Modules["Banking"].showIconSetGear) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_setitem.dds|t" end
-		   
-		if currentItemType == ITEMTYPE_RECIPE and not IsItemLinkRecipeKnown(itemLink) then fullItemName = fullItemName.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
-		if BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon then fullItemName = fullItemName .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end        
-    end
+    local setItem, _, _, _, _ = GetItemLinkSetInfo(itemLink, false)
+    local hasEnchantment, _, _ = GetItemLinkEnchantInfo(itemLink)
+
+
+	local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
+
+	if isUnbound and BETTERUI.Settings.Modules["Banking"].showIconUnboundItem then fullItemName = fullItemName.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
+    if(hasEnchantment and BETTERUI.Settings.Modules["Banking"].showIconEnchantment) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
+    if(setItem and BETTERUI.Settings.Modules["Banking"].showIconSetGear) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
+	   
+	if currentItemType == ITEMTYPE_RECIPE and not IsItemLinkRecipeKnown(itemLink) then fullItemName = fullItemName.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
+	if BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon then fullItemName = fullItemName .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end        
     control:GetNamedChild("ItemType"):SetText(string.upper(data.itemCategoryName))
     if currentItemType == ITEMTYPE_RECIPE then
         control:GetNamedChild("Stat"):SetText(IsItemLinkRecipeKnown(itemLink) and GetString(SI_BETTERUI_INV_RECIPE_KNOWN) or GetString(SI_BETTERUI_INV_RECIPE_UNKNOWN))
