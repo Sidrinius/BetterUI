@@ -586,7 +586,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
 		end
 
         do
-            if(BETTERUI.Settings.Modules["Inventory"].enableStolen and AreAnyItemsStolen(BAG_BACKPACK)) then
+            if(AreAnyItemsStolen(BAG_BACKPACK)) then
                 local isListEmpty = self:IsItemListEmpty(nil, nil)
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_STOLEN)
@@ -603,7 +603,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
         end
 
         do
-            if(BETTERUI.Settings.Modules["Inventory"].enableJunk and HasAnyJunk(BAG_BACKPACK, false)) then
+            if(HasAnyJunk(BAG_BACKPACK, false)) then
                 local isListEmpty = self:IsItemListEmpty(nil, nil)
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_JUNK)
@@ -824,7 +824,7 @@ function BETTERUI.Inventory.Class:RefreshItemList()
         data.isEquippedInAnotherCategory = itemData.isEquippedInAnotherCategory
         data.isJunk = itemData.isJunk
 
-        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) or not BETTERUI.Settings.Modules["Inventory"].enableJunk then
+        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) then
 		
 			if data.bestGamepadItemCategoryName ~= currentBestCategoryName then
 				currentBestCategoryName = data.bestGamepadItemCategoryName
@@ -918,7 +918,7 @@ function BETTERUI.Inventory.Class:UpdateRightTooltip()
 	
     local equipSlotHasItem = select(2, GetEquippedItemInfo(selectedEquipSlot))
 
-    if selectedItemData and (not equipSlotHasItem or BETTERUI.Settings.Modules["Inventory"].displayCharAttributes) then
+    if selectedItemData and (not equipSlotHasItem) then
         GAMEPAD_TOOLTIPS:LayoutItemStatComparison(GAMEPAD_LEFT_TOOLTIP, selectedItemData.bagId, selectedItemData.slotIndex, selectedEquipSlot)
         GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_INVENTORY_ITEM_COMPARE_TOOLTIP_TITLE))
     elseif GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, BAG_WORN, selectedEquipSlot) then
@@ -1041,12 +1041,10 @@ function BETTERUI.Inventory.Class:InitializeActionsDialog()
 				self:RefreshItemActions()
 
 				--ZO_ClearTable(parametricList)
-				if(BETTERUI.Settings.Modules["Inventory"].enableJunk) then
-					if(self.categoryList:GetTargetData().showJunk ~= nil) then
-						self.itemActions.slotActions.m_slotActions[#self.itemActions.slotActions.m_slotActions+1] = {GetString(SI_BETTERUI_ACTION_UNMARK_AS_JUNK), UnmarkAsJunk, "secondary"}
-					else
-						self.itemActions.slotActions.m_slotActions[#self.itemActions.slotActions.m_slotActions+1] = {GetString(SI_BETTERUI_ACTION_MARK_AS_JUNK), MarkAsJunk, "secondary"}
-					end
+				if(self.categoryList:GetTargetData().showJunk ~= nil) then
+					self.itemActions.slotActions.m_slotActions[#self.itemActions.slotActions.m_slotActions+1] = {GetString(SI_BETTERUI_ACTION_UNMARK_AS_JUNK), UnmarkAsJunk, "secondary"}
+				else
+					self.itemActions.slotActions.m_slotActions[#self.itemActions.slotActions.m_slotActions+1] = {GetString(SI_BETTERUI_ACTION_MARK_AS_JUNK), MarkAsJunk, "secondary"}
 				end
 
 				--self:RefreshItemActions()

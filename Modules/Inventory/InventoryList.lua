@@ -126,25 +126,25 @@ end
 local function GetMarketPrice(itemLink, stackCount)
     if(stackCount == nil) then stackCount = 1 end
 
-    if (BETTERUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
+    if MasterMerchant ~= nil and BETTERUI.Settings.Modules["Tooltips"].mmIntegration then 
         local mmData = MasterMerchant:itemStats(itemLink, false)
-        if(mmData.avgPrice ~= nil) then
+        if(mmData.avgPrice ~= nil and mmData.avgPrice ~= 0) then
             return mmData.avgPrice * stackCount
         end
     end
-    if (BETTERUI.Settings.Modules["Tooltips"].attIntegration and ArkadiusTradeTools ~= nil) then
+    if ArkadiusTradeTools ~= nil and BETTERUI.Settings.Modules["Tooltips"].attIntegration then 
         local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil)
-        if(avgPrice ~= nil or avgPrice ~= 0) then
-            return BETTERUI.roundNumber(avgPrice * stackCount, 2)
+        if(avgPrice ~= nil and avgPrice ~= 0) then
+            return avgPrice * stackCount
         end
     end
-    if BETTERUI.Settings.Modules["Tooltips"].ttcIntegration and TamrielTradeCentre ~= nil then
+    if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
         local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
-		if priceInfo then
+		if(priceInfo ~= nil and priceInfo ~= 0) then
 			if priceInfo.SuggestedPrice then
 				return priceInfo.SuggestedPrice * stackCount
-			else 
-				return priceInfo.Avg * stackCount, 1
+			else
+				return priceInfo.Avg * stackCount
 			end
 		end
 	end
@@ -203,7 +203,6 @@ function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
             if hasEnchantment and BETTERUI.Settings.Modules["Inventory"].showIconEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
             if setItem and BETTERUI.Settings.Modules["Inventory"].showIconSetGear then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
 			if BETTERUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon then labelTxt = labelTxt .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
-			if BETTERUI.Settings.Modules["Inventory"].showIconIakoniGearChanger then labelTxt = labelTxt .. BETTERUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex)  end
             --if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_stolen.dds|t" end
             --if hasEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_enchanted.dds|t" end
             --if setItem then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_setitem.dds|t" end
@@ -496,10 +495,6 @@ function BETTERUI.Inventory.List:Initialize(control, inventoryType, slotType, se
     else
         self.inventoryTypes = { inventoryType }
     end
-
-	if (BETTERUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
-		USE_SHORT_CURRENCY_FORMAT = BETTERUI.Settings.Modules["Inventory"].useShortFormat
-	end
 	
 	local function VendorEntryTemplateSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
         ZO_Inventory_BindSlot(data, slotType, data.slotIndex, data.bagId)

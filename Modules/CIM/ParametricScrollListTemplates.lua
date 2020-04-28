@@ -300,7 +300,7 @@ function BETTERUI_TabBarScrollList:InitializeKeybindStripDescriptors()
             ethereal = true,
             callback = function()
                 if self.active then
-                    self:MovePrevious(BETTERUI.Settings.Modules["Inventory"].enableWrapping)
+                    self:MovePrevious(true)
                 end
             end,
         },
@@ -309,7 +309,7 @@ function BETTERUI_TabBarScrollList:InitializeKeybindStripDescriptors()
             ethereal = true,
             callback = function()
                 if self.active then
-                    self:MoveNext(BETTERUI.Settings.Modules["Inventory"].enableWrapping)
+                    self:MoveNext(true)
                 end
             end,
         },

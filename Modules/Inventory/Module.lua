@@ -14,28 +14,6 @@ local function Init(mId, moduleName)
 	local optionsTable = {
 		{
 			type = "checkbox",
-			name = "Enable \"Junk\" feature",
-			tooltip = "Allows items to be marked as \"junk\" to de-clutter the inventory and allow deletion of protected items",
-			getFunc = function() return BETTERUI.Settings.Modules["Inventory"].enableJunk end,
-			setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].enableJunk = value
-				changed = true
-				end,
-			width = "full",
-			requiresReload = true,
-		},
-		{
-			type = "checkbox",
-			name = "Enable \"Stolen\" inventory category",
-			tooltip = "Displays items marked as \"stolen\" as their own tab category",
-			getFunc = function() return BETTERUI.Settings.Modules["Inventory"].enableStolen end,
-			setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].enableStolen = value
-				changed = true
-				end,
-			width = "full",
-			requiresReload = true,
-		},
-		{
-			type = "checkbox",
 			name = "Enable quick destroy functionality",
 			tooltip = "Quickly destroys items without confirmation prompt or needing to mark as junk",
 			getFunc = function() return BETTERUI.Settings.Modules["Inventory"].quickDestroy end,
@@ -47,47 +25,20 @@ local function Init(mId, moduleName)
 		},
         {
             type = "checkbox",
-            name = "Enable category wrapping",
-            tooltip = "Enables quick access to \"Quickslots\" when you press LB when selecting \"All\"",
-            getFunc = function() return BETTERUI.Settings.Modules["Inventory"].enableWrapping end,
-            setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].enableWrapping = value end,
-            width = "full",
-        },
-        {
-            type = "checkbox",
             name = "Use triggers to move to next item type",
             tooltip = "Rather than skip a certain number of items every trigger press (default global behaviour), this will move to the next item type",
             getFunc = function() return BETTERUI.Settings.Modules["Inventory"].useTriggersForSkip end,
             setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].useTriggersForSkip = value end,
             width = "full",
         },
-		{
-            type = "checkbox",
-            name = "Display attributes when switching tooltip",
-            tooltip = "Show the character attributes on the switching tooltip rather than seeing the current equipped item",
-            getFunc = function() return BETTERUI.Settings.Modules["Inventory"].displayCharAttributes end,
-            setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].displayCharAttributes = value end,
-            width = "full",
-        },
         {
             type = "checkbox",
             name = "Replace \"Value\" with the market's price",
-            tooltip = "Replaces the item \"Value\" with either Master Merchant's price or TTC's market price",
+            tooltip = "Replaces the item \"Value\" with either MM's, ATT's or TTC's average price",
             getFunc = function() return BETTERUI.Settings.Modules["Inventory"].showMarketPrice end,
             setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].showMarketPrice = value end,
             width = "full",
         },
-		{
-			type = "checkbox",
-			name = "Short Currency Format",
-			tooltip = "Automatically formats the value column to shorten large numbers and to display the currency with commas",
-			getFunc = function() return BETTERUI.Settings.Modules["Inventory"].useShortFormat end,
-			setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].useShortFormat = value
-				changed = true
-				end,
-			width = "full",
-			requiresReload = true,
-		},
 		{
 			type = "checkbox",
 			name = "Bind on Equip Protection",
@@ -128,27 +79,6 @@ local function Init(mId, moduleName)
 				changed = true end,
 			width = "full",
 			requiresReload = true,
-		},
-		{
-			type = "checkbox",
-			name = "Item Icon - Iakoni's Gear Changer",
-			tooltip = "Show the first set number in Iakoni's settings",
-			getFunc = function () return BETTERUI.Settings.Modules["Inventory"].showIconIakoniGearChanger end,
-			setFunc = function (value) BETTERUI.Settings.Modules["Inventory"].showIconIakoniGearChanger = value
-				changed = true end,
-			width = "full",
-			requiresReload = true,
-		},
-		{
-			type = "checkbox",
-			name = "Show all sets instead",
-			tooltip = "Show all sets if in multiple Iakoni's settings",
-			getFunc = function () return BETTERUI.Settings.Modules["Inventory"].showIconIakoniGearChangerAllSets end,
-			setFunc = function (value) BETTERUI.Settings.Modules["Inventory"].showIconIakoniGearChangerAllSets = value
-				changed = true end,
-			width = "full",
-			requiresReload = true,
-			disabled = function() return not BETTERUI.Settings.Modules["Inventory"].showIconIakoniGearChanger end,  
 		},		
 		{
 			type = "checkbox",
@@ -166,19 +96,12 @@ local function Init(mId, moduleName)
 end
 
 function BETTERUI.Inventory.InitModule(m_options)
-    m_options["enableWrapping"] = true
     m_options["showMarketPrice"] = false
-    m_options["useTriggersForSkip"] = false
-    m_options["enableJunk"] = true
-    m_options["enableStolen"] = true
-	m_options["displayCharAttributes"] = true
-	m_options["useShortFormat"] = true
+    m_options["useTriggersForSkip"] = false 
 	m_options["bindOnEquipProtection"] = true
-	m_options["showIconEnchantment"] = true
+~ 	m_options["showIconEnchantment"] = true
 	m_options["showIconSetGear"] = true
 	m_options["showIconUnboundItem"] = true
-	m_options["showIconIakoniGearChanger"] = true
-	m_options["showIconIakoniGearChangerAllSets"] = false
 	m_options["showIconGamePadBuddyStatusIcon"] = true
 	m_options["quickDestroy"] = false
 
