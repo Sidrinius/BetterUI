@@ -1,6 +1,6 @@
 _G.mmErrorSuppress = 0
 local _
-
+    
 function BETTERUI.Tooltips.GetNumberOfMatchingItems(itemLink, BAG)
 
     -- Get bag size
@@ -44,7 +44,12 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
             if(priceInfo == nil or priceInfo == 0) then
                 tooltip:AddLine(string.format("TTC Price: NO LISTING DATA"), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
             else
-                local avgPrice = priceInfo.SuggestedPrice
+                local avgPrice
+                if priceInfo.SuggestedPrice then
+                    avgPrice = priceInfo.SuggestedPrice
+                else 
+                    avgPrice = priceInfo.Avg
+                end
                 if stackCount > 1 then 
                     tooltip:AddLine(zo_strformat("TTC Price: <<1>> |t18:18:<<2>>|t,   Stack(<<3>>): <<4>> |t18:18:<<2>>|t ", BETTERUI.DisplayNumber(BETTERUI.roundNumber(avgPrice, 2)), GetCurrencyGamepadIcon(CURT_MONEY), stackCount, BETTERUI.DisplayNumber(BETTERUI.roundNumber(avgPrice * stackCount, 2))), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
                 else
@@ -85,9 +90,9 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
                 tooltip:AddLine(string.format("ATT Price: NO LISTING DATA"), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
             else
                 if stackCount > 1 then 
-                    tooltip:AddLine(zo_strformat("ATT price: <<1>> |t18:18:<<2>>|t,   Stack(<<3>>): <<4>> |t18:18:<<2>>|t ", BETTERUI.DisplayNumber(BETTERUI.roundNumber(avgPrice, 2)), GetCurrencyGamepadIcon(CURT_MONEY), stackCount, BETTERUI.DisplayNumber(BETTERUI.roundNumber(avgPrice * stackCount, 2))), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+                    tooltip:AddLine(zo_strformat("ATT Price: <<1>> |t18:18:<<2>>|t,   Stack(<<3>>): <<4>> |t18:18:<<2>>|t ", BETTERUI.DisplayNumber(BETTERUI.roundNumber(avgPrice, 2)), GetCurrencyGamepadIcon(CURT_MONEY), stackCount, BETTERUI.DisplayNumber(BETTERUI.roundNumber(avgPrice * stackCount, 2))), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
                 else
-                    tooltip:AddLine(zo_strformat("ATT price: <<1>> |t18:18:<<2>>|t ", BETTERUI.DisplayNumber(BETTERUI.roundNumber(avgPrice, 2)), GetCurrencyGamepadIcon(CURT_MONEY)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
+                    tooltip:AddLine(zo_strformat("ATT Price: <<1>> |t18:18:<<2>>|t ", BETTERUI.DisplayNumber(BETTERUI.roundNumber(avgPrice, 2)), GetCurrencyGamepadIcon(CURT_MONEY)), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
                 end
             end
         end
