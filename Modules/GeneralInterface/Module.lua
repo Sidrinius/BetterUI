@@ -137,6 +137,7 @@ function BETTERUI.Tooltips.InitModule(m_options)
     m_options["chatHistory"] = 200
     m_options["showStyleTrait"] = true
 	m_options["removeDeleteDialog"] = false
+	m_options["attIntegration"] = true
 	m_options["mmIntegration"] = true
 	m_options["mmIntegrationErrorSuppress"] = false
 	m_options["ttcIntegration"] = true

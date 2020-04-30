@@ -99,7 +99,7 @@ function BETTERUI.Inventory.InitModule(m_options)
     m_options["showMarketPrice"] = false
     m_options["useTriggersForSkip"] = false 
 	m_options["bindOnEquipProtection"] = true
-~ 	m_options["showIconEnchantment"] = true
+ 	m_options["showIconEnchantment"] = true
 	m_options["showIconSetGear"] = true
 	m_options["showIconUnboundItem"] = true
 	m_options["showIconGamePadBuddyStatusIcon"] = true
