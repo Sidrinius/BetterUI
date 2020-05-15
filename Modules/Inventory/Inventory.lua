@@ -5,14 +5,9 @@ ZO_GAMEPAD_INVENTORY_SCENE_NAME = "gamepad_inventory_root"
 
 BETTERUI.Inventory.Class = ZO_GamepadInventory:Subclass()
 
-local NEW_ICON_TEXTURE = "EsoUI/Art/Miscellaneous/Gamepad/gp_icon_new.dds"
-
 local CATEGORY_ITEM_ACTION_MODE = 1
 local ITEM_LIST_ACTION_MODE = 2
 local CRAFT_BAG_ACTION_MODE = 3
-
-local INVENTORY_TAB_INDEX = 1
-local CRAFT_BAG_TAB_INDEX = 2
 
 local DIALOG_QUEUE_WORKAROUND_TIMEOUT_DURATION = 300
 
@@ -24,24 +19,11 @@ local INVENTORY_CRAFT_BAG_LIST = "craftBagList"
 
 BETTERUI_EQUIP_SLOT_DIALOG = "BETTERUI_EQUIP_SLOT_PROMPT"
 
-
--- This is the structure of an "slotAction" array
-local INDEX_ACTION_NAME = 1
-local INDEX_ACTION_CALLBACK = 2
-local INDEX_ACTION_TYPE = 3
-local INDEX_ACTION_VISIBILITY = 4
-local INDEX_ACTION_OPTIONS = 5
-local PRIMARY_ACTION_KEY = 1
-
--- All of the callbacks that are possible on the "A" button press have to have CallSecureProtected()
-local PRIMARY_ACTION = 1
-
 -- local function copied (and slightly edited for unequipped items!) from "inventoryutils_gamepad.lua"
 local function BETTERUI_GetEquipSlotForEquipType(equipType)
     local equipSlot = nil
     for i, testSlot in ZO_Character_EnumerateOrderedEquipSlots() do
         local locked = IsLockedWeaponSlot(testSlot)
-        local isEquipped = HasItemInSlot(BAG_WORN, testSlot)
          local isCorrectSlot = ZO_Character_DoesEquipSlotUseEquipType(testSlot, equipType)
         if not locked and isCorrectSlot then
               equipSlot = testSlot
@@ -98,28 +80,6 @@ local function SetupCraftBagList(buiList)
 end
 local function SetupCategoryList(list)
     list:AddDataTemplate("BETTERUI_GamepadItemEntryTemplate", ZO_SharedGamepadEntry_OnSetup, ZO_GamepadMenuEntryTemplateParametricListFunction)
-end
-
-
-local function CanUseItemQuestItem(inventorySlot)
-    if inventorySlot then
-        if inventorySlot.toolIndex then
-            return CanUseQuestTool(inventorySlot.questIndex, inventorySlot.toolIndex)
-        elseif inventorySlot.conditionIndex then
-            return CanUseQuestItem(inventorySlot.questIndex, inventorySlot.stepIndex, inventorySlot.conditionIndex)
-        end
-    end
-    return false
-end
-
-local function TryUseQuestItem(inventorySlot)
-    if inventorySlot then
-        if inventorySlot.toolIndex then
-            UseQuestTool(inventorySlot.questIndex, inventorySlot.toolIndex)
-        else
-            UseQuestItem(inventorySlot.questIndex, inventorySlot.stepIndex, inventorySlot.conditionIndex)
-        end
-    end
 end
 
 function BETTERUI_InventoryUtils_MatchWeapons(itemData)
@@ -794,7 +754,7 @@ function BETTERUI.Inventory.Class:RefreshItemList()
 
 	table.sort(filteredDataTable, BETTERUI_GamepadInventory_DefaultItemSortComparator)
 
-    local currentBestCategoryName = nil
+    local currentBestCategoryName
 
     for i, itemData in ipairs(filteredDataTable) do
         local nextItemData = filteredDataTable[i + 1]
@@ -1705,7 +1665,7 @@ function BETTERUI.Inventory.Class:Switch()
         self:SwitchActiveList(INVENTORY_ITEM_LIST)
     else
         self:SwitchActiveList(INVENTORY_CRAFT_BAG_LIST)
-		self:RefreshCraftBagList()
+		--self:RefreshCraftBagList()
     end
 end
 
