@@ -97,7 +97,6 @@ function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
 		if isUnbound and BETTERUI.Settings.Modules["Inventory"].showIconUnboundItem then labelTxt = labelTxt.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
         if hasEnchantment and BETTERUI.Settings.Modules["Inventory"].showIconEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
         if setItem and BETTERUI.Settings.Modules["Inventory"].showIconSetGear then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
-		if BETTERUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon then labelTxt = labelTxt .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
         if isRecipeAndUnknown then labelTxt = labelTxt.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
 
         label:SetText(labelTxt)

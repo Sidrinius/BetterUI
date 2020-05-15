@@ -22,7 +22,7 @@ Modules\CIM\Images\inv_equip_quickslot.dds
 Modules\CIM\Images\inv_stolen.dds
 Modules\CIM\Images\inv_enchanted.dds
 Modules\CIM\Images\inv_setitem.dds
-Modules\CIM\Images\inv_junk.dds
+Modules\CIM\Images\select_tabbar.dds
 Modules\CIM\Templates\GenericHeader.xml
 Modules\CIM\GenericHeader.lua
 Modules\CIM\Templates\GenericFooter.xml
@@ -32,32 +32,6 @@ Modules\CIM\ParametricScrollListTemplates.lua
 Modules\CIM\Templates\InterfaceLibrary.xml
 Modules\CIM\InterfaceLibrary.lua
 Modules\CIM\Module.lua
-
-; Module: Helper
-Modules\Helper\Images\icon_set_1.dds
-Modules\Helper\Images\icon_set_2.dds
-Modules\Helper\Images\icon_set_3.dds
-Modules\Helper\Images\icon_set_4.dds
-Modules\Helper\Images\icon_set_5.dds
-Modules\Helper\Images\icon_set_6.dds
-Modules\Helper\Images\icon_set_7.dds
-Modules\Helper\Images\icon_set_8.dds
-Modules\Helper\Images\icon_set_9.dds
-Modules\Helper\Images\icon_set_10.dds
-Modules\Helper\Images\icon_set_11dds
-Modules\Helper\Images\icon_set_12.dds
-Modules\Helper\Images\icon_set_13.dds
-Modules\Helper\Images\icon_set_14.dds
-Modules\Helper\Images\icon_set_15.dds
-Modules\Helper\Images\icon_set_16.dds
-Modules\Helper\Images\icon_quest_green.dds
-Modules\Helper\Images\icon_quest_white.dds
-Modules\Helper\Images\icon_quest_red.dds
-Modules\Helper\Images\icon_research_researchable.dds
-Modules\Helper\Images\icon_research_duplicated.dds
-Modules\Helper\Images\icon_research_known.dds
-Modules\Helper\Images\icon_research_researching.dds
-Modules\Helper\Helper.lua
 
 ; Module: Inventory Enhanced
 Modules\Inventory\Templates\GamepadInventory.xml
@@ -73,9 +47,7 @@ Modules\GeneralInterface\Module.lua
 
 ; Module: Banking
 Modules\Banking\Images\nav_vert.dds
-Modules\Banking\Images\centre_selector.dds
 Modules\Banking\Images\selectbg.dds
-
 Modules\Banking\Banking.lua
 Modules\Banking\Module.lua
 

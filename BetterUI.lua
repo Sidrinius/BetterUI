@@ -4,7 +4,6 @@ local dirtyModules = false
 
 if BETTERUI == nil then BETTERUI = {} end
 
-
 function BETTERUI.InitModuleOptions()
 
 	local panelData = Init_ModulePanel("Master", "Master Addon Settings")
@@ -91,46 +90,6 @@ function BETTERUI.InitModuleOptions()
 
 	LAM:RegisterAddonPanel("BETTERUI_".."Modules", panelData)
 	LAM:RegisterOptionControls("BETTERUI_".."Modules", optionsTable)
-end
-
-function BETTERUI.GetResearch()
-	BETTERUI.ResearchTraits = {}
-	for i,craftType in pairs(BETTERUI.CONST.CraftingSkillTypes) do
-		BETTERUI.ResearchTraits[craftType] = {}
-		for researchIndex = 1, GetNumSmithingResearchLines(craftType) do
-			local name, icon, numTraits, timeRequiredForNextResearchSecs = GetSmithingResearchLineInfo(craftType, researchIndex)
-			BETTERUI.ResearchTraits[craftType][researchIndex] = {}
-			for traitIndex = 1, numTraits do
-				local traitType, _, known = GetSmithingResearchLineTraitInfo(craftType, researchIndex, traitIndex)
-				BETTERUI.ResearchTraits[craftType][researchIndex][traitIndex] = known
-			end
-		end
-	end
-end
-
-function BETTERUI.PostHook(control, method, fn)
-	if control == nil then return end
-
-	local originalMethod = control[method]
-	control[method] = function(self, ...)
-		originalMethod(self, ...)
-		fn(self, ...)
-	end
-end
-
-function BETTERUI.Hook(control, method, postHookFunction, overwriteOriginal)
-	if control == nil then return end
-	
-	local originalMethod = control[method]
-	control[method] = function(self, ...)
-		if(overwriteOriginal == false) then originalMethod(self, ...) end
-		postHookFunction(self, ...)
-	end
-end
-
-function BETTERUI.RGBToHex(rgba)
-	r,g,b,a = unpack(rgba)
-	return string.format("%02x%02x%02x", r*255, g*255, b*255)
 end
 
 function BETTERUI.ModuleOptions(m_namespace, m_options)

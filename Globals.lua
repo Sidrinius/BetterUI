@@ -28,7 +28,6 @@ BETTERUI.Writs = {
 	List = {}
 }
 
-
 BETTERUI.Banking = {
 	Class = {}
 }
@@ -39,11 +38,6 @@ BETTERUI.Tooltips = {
 
 BETTERUI.Settings = {}
 
-BETTERUI.Helper = {
-	GamePadBuddy = {},
-	AutoCategory = {},
-}
-
 BETTERUI.DefaultSettings = {
 	firstInstall = true,
 	Modules = {
@@ -53,6 +47,16 @@ BETTERUI.DefaultSettings = {
 	}
 }
 
+local CUSTOM_GAMEPAD_ITEM_SORT =
+{
+	sortPriorityName  = { tiebreaker = "bestItemTypeName" },
+	bestItemTypeName = { tiebreaker = "name" },
+	name = { tiebreaker = "requiredLevel" },
+	requiredLevel = { tiebreaker = "requiredChampionPoints", isNumeric = true },
+	requiredChampionPoints = { tiebreaker = "iconFile", isNumeric = true },
+	iconFile = { tiebreaker = "uniqueId" },
+	uniqueId = { isId64 = true },
+}
 
 function ddebug(str)
 	return d("|c0066ff[BETTERUI]|r "..str)
@@ -75,6 +79,63 @@ function BETTERUI.DisplayNumber(number)
 	  -- reverse the int-string back remove an optional comma and put the
 	  -- optional minus and fractional part back
 	  return minus .. int:reverse():gsub("^,", "") .. fraction
+end
+
+function BETTERUI.GetResearch()
+	BETTERUI.ResearchTraits = {}
+	for i,craftType in pairs(BETTERUI.CONST.CraftingSkillTypes) do
+		BETTERUI.ResearchTraits[craftType] = {}
+		for researchIndex = 1, GetNumSmithingResearchLines(craftType) do
+			local name, icon, numTraits, timeRequiredForNextResearchSecs = GetSmithingResearchLineInfo(craftType, researchIndex)
+			BETTERUI.ResearchTraits[craftType][researchIndex] = {}
+			for traitIndex = 1, numTraits do
+				local traitType, _, known = GetSmithingResearchLineTraitInfo(craftType, researchIndex, traitIndex)
+				BETTERUI.ResearchTraits[craftType][researchIndex][traitIndex] = known
+			end
+		end
+	end
+end
+
+function BETTERUI_GamepadInventory_DefaultItemSortComparator(left, right)
+	return ZO_TableOrderingFunction(left, right, "sortPriorityName", CUSTOM_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
+end
+
+function BETTERUI.AutoCategory:GetCustomCategory(itemData)
+	local useCustomCategory = false
+	if AutoCategory and AutoCategory.curSavedVars then
+		useCustomCategory = true
+		local bagId = itemData.bagId
+		local slotIndex = itemData.slotIndex
+		local matched, categoryName, categoryPriority = AutoCategory:MatchCategoryRules(bagId, slotIndex)
+		return useCustomCategory, matched, categoryName, categoryPriority
+	end
+
+	return useCustomCategory, false, "", 0
+end
+
+function BETTERUI.PostHook(control, method, fn)
+	if control == nil then return end
+
+	local originalMethod = control[method]
+	control[method] = function(self, ...)
+		originalMethod(self, ...)
+		fn(self, ...)
+	end
+end
+
+function BETTERUI.Hook(control, method, postHookFunction, overwriteOriginal)
+	if control == nil then return end
+
+	local originalMethod = control[method]
+	control[method] = function(self, ...)
+		if(overwriteOriginal == false) then originalMethod(self, ...) end
+		postHookFunction(self, ...)
+	end
+end
+
+function BETTERUI.RGBToHex(rgba)
+	r,g,b,a = unpack(rgba)
+	return string.format("%02x%02x%02x", r*255, g*255, b*255)
 end
 
 function Init_ModulePanel(moduleName, moduleDesc)

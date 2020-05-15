@@ -35,17 +35,7 @@ local function Init(mId, moduleName)
 				changed = true end,
 			width = "full",
 			requiresReload = true,
-		},	
-		{
-			type = "checkbox",
-			name = "Item Icon - GamePadBuddy's Status Indicator",
-			tooltip = "Show an icon to indicate gear's researchable/known/duplicated/researching/ornate/intricate status.",
-			getFunc = function () return BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon end,
-			setFunc = function (value) BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon = value
-				changed = true end,
-			width = "full",
-			requiresReload = true,
-		},         
+		},
 	}
 	LAM:RegisterAddonPanel("BETTERUI_"..mId, panelData)
 	LAM:RegisterOptionControls("BETTERUI_"..mId, optionsTable)
@@ -55,7 +45,6 @@ function BETTERUI.Banking.InitModule(m_options)
 	m_options["showIconEnchantment"] = true
 	m_options["showIconSetGear"] = true
 	m_options["showIconUnboundItem"] = true
-	m_options["showIconGamePadBuddyStatusIcon"] = true
 	return m_options
 end
 

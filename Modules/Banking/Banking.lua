@@ -172,7 +172,7 @@ function BETTERUI.Banking.Class:RefreshList()
     for i = 1, #filteredDataTable  do
         local itemData = filteredDataTable[i]
         --use custom categories
-        local customCategory, matched, catName, catPriority = BETTERUI.Helper.AutoCategory:GetCustomCategory(itemData)
+        local customCategory, matched, catName, catPriority = BETTERUI.AutoCategory:GetCustomCategory(itemData)
         if customCategory and not matched then
             itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
             itemData.bestItemCategoryName = AC_UNGROUPED_NAME
