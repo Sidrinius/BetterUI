@@ -1,8 +1,5 @@
 local _
 
-local BANKING_ROW_TEMPLATE = "BETTERUI_GenericEntry_Template"
-local USE_SHORT_CURRENCY_FORMAT = true
-
 local LIST_WITHDRAW = 1
 local LIST_DEPOSIT  = 2
 local lastUsedBank = 0
@@ -25,13 +22,6 @@ local function GetCategoryTypeFromWeaponType(bagId, slotIndex)
     elseif weaponType ~= WEAPONTYPE_NONE then
         return GAMEPAD_WEAPON_CATEGORY_UNCATEGORIZED
     end
-end
-
-local function IsTwoHandedWeaponCategory(categoryType)
-    return (categoryType == GAMEPAD_WEAPON_CATEGORY_TWO_HANDED_MELEE or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_DESTRUCTION_STAFF or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_RESTORATION_STAFF or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_TWO_HANDED_BOW)
 end
 
 local function GetBestItemCategoryDescription(itemData)
@@ -65,92 +55,6 @@ local function GetBestItemCategoryDescription(itemData)
 	end
 	
 	return fullDesc
-end
-
-local function GetMarketPrice(itemLink, stackCount)
-    if(stackCount == nil) then stackCount = 1 end
-
-    if MasterMerchant ~= nil and BETTERUI.Settings.Modules["Tooltips"].mmIntegration then 
-        local mmData = MasterMerchant:itemStats(itemLink, false)
-        if(mmData.avgPrice ~= nil and mmData.avgPrice ~= 0) then
-            return mmData.avgPrice * stackCount
-        end
-    end
-    if ArkadiusTradeTools ~= nil and BETTERUI.Settings.Modules["Tooltips"].attIntegration then 
-        local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil)
-        if(avgPrice ~= nil and avgPrice ~= 0) then
-            return avgPrice * stackCount
-        end
-    end
-    if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
-        local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
-        if(priceInfo ~= nil and priceInfo ~= 0) then
-            if priceInfo.SuggestedPrice then
-                return priceInfo.SuggestedPrice * stackCount
-            else
-                return priceInfo.Avg * stackCount
-            end
-        end
-    end
-    return 0
-end
-
-local function SetupListing(control, data)
-    local itemQualityColour = ZO_ColorDef:FromInterfaceColor(INTERFACE_COLOR_TYPE_ITEM_QUALITY_COLORS, data.quality)
-    local fullItemName = itemQualityColour:Colorize(data.name)..(data.stackCount > 1 and " ("..data.stackCount..")" or "")
-
-    local itemLink = GetItemLink(dS.bagId, dS.slotIndex)
-    local currentItemType = GetItemLinkItemType(itemLink) --GetItemType(bagId, slotIndex) 
-    local dS = data
-    local bagId = dS.bagId
-    local slotIndex = dS.slotIndex
-	local isLocked = dS.isPlayerLocked
-    local isBoPTradeable = dS.isBoPTradeable
-    local labelTxt = ""
-
-	if isLocked then labelTxt = labelTxt.. "|t24:24:"..ZO_GAMEPAD_LOCKED_ICON_32.."|t" end
-    if isBoPTradeable then labelTxt = labelTxt.."|t24:24:"..ZO_TRADE_BOP_ICON.."|t" end
-    fullItemName = labelTxt .. fullItemName
-	
-    local setItem, _, _, _, _ = GetItemLinkSetInfo(itemLink, false)
-    local hasEnchantment, _, _ = GetItemLinkEnchantInfo(itemLink)
-
-
-	local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
-
-	if isUnbound and BETTERUI.Settings.Modules["Banking"].showIconUnboundItem then fullItemName = fullItemName.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
-    if(hasEnchantment and BETTERUI.Settings.Modules["Banking"].showIconEnchantment) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
-    if(setItem and BETTERUI.Settings.Modules["Banking"].showIconSetGear) then fullItemName = fullItemName.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
-	   
-	if currentItemType == ITEMTYPE_RECIPE and not IsItemLinkRecipeKnown(itemLink) then fullItemName = fullItemName.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
-	if BETTERUI.Settings.Modules["Banking"].showIconGamePadBuddyStatusIcon then fullItemName = fullItemName .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end        
-    control:GetNamedChild("ItemType"):SetText(string.upper(data.itemCategoryName))
-    if currentItemType == ITEMTYPE_RECIPE then
-        control:GetNamedChild("Stat"):SetText(IsItemLinkRecipeKnown(itemLink) and GetString(SI_BETTERUI_INV_RECIPE_KNOWN) or GetString(SI_BETTERUI_INV_RECIPE_UNKNOWN))
-    elseif IsItemLinkBook(itemLink) then
-        control:GetNamedChild("Stat"):SetText(IsItemLinkBookKnown(itemLink) and GetString(SI_BETTERUI_INV_RECIPE_KNOWN) or GetString(SI_BETTERUI_INV_RECIPE_UNKNOWN))
-    else
-        control:GetNamedChild("Stat"):SetText((data.statValue == 0) and "-" or data.statValue)
-    end
-    control:GetNamedChild("Icon"):ClearIcons()
-    control:GetNamedChild("Label"):SetText(fullItemName)
-    control:GetNamedChild("Icon"):AddIcon(data.iconFile)
-    control:GetNamedChild("Icon"):SetHidden(false)
-    if not data.meetsUsageRequirement then control:GetNamedChild("Icon"):SetColor(1,0,0,1) else control:GetNamedChild("Icon"):SetColor(1,1,1,1) end
-	
-	if(BETTERUI.Settings.Modules["Inventory"].showMarketPrice) then
-		local marketPrice = GetMarketPrice(GetItemLink(data.bagId,data.slotIndex), data.stackCount)
-		if(marketPrice ~= 0) then
-			control:GetNamedChild("Value"):SetColor(1,0.75,0,1)
-			control:GetNamedChild("Value"):SetText(ZO_CurrencyControl_FormatCurrency(math.floor(marketPrice), USE_SHORT_CURRENCY_FORMAT))
-		else
-			control:GetNamedChild("Value"):SetColor(1,1,1,1)
-			control:GetNamedChild("Value"):SetText(data.stackSellPrice)
-		end
-	else
-		control:GetNamedChild("Value"):SetColor(1,1,1,1)
-		control:GetNamedChild("Value"):SetText(ZO_CurrencyControl_FormatCurrency(data.stackSellPrice, USE_SHORT_CURRENCY_FORMAT))
-	end
 end
 
 local function SetupLabelListing(control, data)
@@ -294,10 +198,9 @@ function BETTERUI.Banking.Class:RefreshList()
     
     table.sort(filteredDataTable, BETTERUI_GamepadInventory_DefaultItemSortComparator)
 
-    local currentBestCategoryName = nil
+    local currentBestCategoryName
 
     for i, itemData in ipairs(filteredDataTable) do
-        local nextItemData = filteredDataTable[i + 1]
 
         local data = ZO_GamepadEntryData:New(itemData.name, itemData.iconFile)
         data.InitializeInventoryVisualData = BETTERUI.Inventory.Class.InitializeInventoryVisualData
@@ -409,7 +312,6 @@ function BETTERUI.Banking.Class:Initialize(tlw_name, scene_name)
 	self.list:SetUniversalPostPadding(GAMEPAD_DEFAULT_POST_PADDING * 0.75)    
 
     -- Setup data templates of the lists
-    --self:SetupList(BANKING_ROW_TEMPLATE, SetupListing)
 	SetupItemList(self.list)
     self:AddTemplate("BETTERUI_HeaderRow_Template",SetupLabelListing)
 

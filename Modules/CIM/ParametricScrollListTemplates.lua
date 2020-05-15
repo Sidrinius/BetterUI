@@ -32,12 +32,6 @@ local DEFAULT_EXPECTED_HEADER_HEIGHT = 24
 local function GetControlDimensionForMode(mode, control)
     return mode == PARAMETRIC_SCROLL_LIST_VERTICAL and control:GetHeight() or control:GetWidth()
 end
-local function TransformAnchorOffsetsForMode(mode, offsetX, offsetY)
-    if mode == PARAMETRIC_SCROLL_LIST_VERTICAL then
-        return offsetY, offsetX
-    end
-    return offsetX, offsetY
-end
 
 local function GetStartOfControl(mode, control)
     return mode == PARAMETRIC_SCROLL_LIST_VERTICAL and control:GetTop() or control:GetLeft()
@@ -358,12 +352,7 @@ function BETTERUI_TabBarScrollList:RefreshPips()
     end
     self.pips:RefreshPips(numPips, selectedPipIndex)
 end
-function BETTERUI_TabBarScrollList:UpdateHeaderText()
-    if self.attachedTo ~= nil then
-        local selectedIndex = self.targetSelectedIndex or self.selectedIndex
-        --self.attachedTo:GetNamedChild("TitleContainer"):GetNamedChild("Title"):SetText(self.dataList[selectedIndex].text)
-    end
-end
+
 function BETTERUI_TabBarScrollList:SetSelectedIndex(selectedIndex, allowEvenIfDisabled, forceAnimation)
     BETTERUI_HorizontalParametricScrollList.SetSelectedIndex(self, selectedIndex, allowEvenIfDisabled, forceAnimation)
     self:RefreshPips()
@@ -378,7 +367,6 @@ function BETTERUI_TabBarScrollList:MovePrevious(allowWrapping, suppressFailSound
     end
     if succeeded then
         self.onPlaySoundFunction(ZO_TABBAR_MOVEMENT_TYPES.PAGE_BACK)
-        self:UpdateHeaderText()
     elseif not suppressFailSound then
         self.onPlaySoundFunction(ZO_TABBAR_MOVEMENT_TYPES.PAGE_NAVIGATION_FAILED)
     end
@@ -396,7 +384,6 @@ function BETTERUI_TabBarScrollList:MoveNext(allowWrapping, suppressFailSound)
     end
     if succeeded then
         self.onPlaySoundFunction(ZO_TABBAR_MOVEMENT_TYPES.PAGE_FORWARD)
-        self:UpdateHeaderText()
     elseif not suppressFailSound then
         self.onPlaySoundFunction(ZO_TABBAR_MOVEMENT_TYPES.PAGE_NAVIGATION_FAILED)
     end

@@ -145,7 +145,6 @@ function BETTERUI.LoadModules()
 		BETTERUI.GetResearch()
 
 		if(BETTERUI.Settings.Modules["CIM"].m_enabled) then
-			BETTERUI.CIM.Setup()
 			if(BETTERUI.Settings.Modules["Inventory"].m_enabled) then
 				BETTERUI.Inventory.HookDestroyItem()
 				BETTERUI.Inventory.HookActionDialog()

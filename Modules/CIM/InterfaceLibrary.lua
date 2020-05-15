@@ -1,8 +1,6 @@
 local _
 
-local ACTIVATE_SPINNER = true
 local DEACTIVATE_SPINNER = false
-local DEFAULT_ROW_TEMPLATE = "BETTERUI_GenericEntry_Template"
 
 BETTERUI_TEST_SCENE_NAME = "BETTERUI_BANKING"
 
