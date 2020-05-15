@@ -717,6 +717,7 @@ function BETTERUI.Banking.Class:MoveItem(list, quantity)
 end
 
 function BETTERUI.Banking.Class:CancelWithdrawDeposit(list)
+    local DEACTIVATE_SPINNER = false
     if self.confirmationMode then
         self:UpdateSpinnerConfirmation(DEACTIVATE_SPINNER, list)
     else

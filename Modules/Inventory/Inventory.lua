@@ -1091,7 +1091,6 @@ end
 function BETTERUI.Inventory.HookDestroyItem()
     ZO_InventorySlot_InitiateDestroyItem = function(inventorySlot)
         local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
-        local _, stackCount, unitSellPrice = GetItemInfo(bag, index)
         local itemLink = GetItemLink(bag, index)
         local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Please mark as junk first to destroy!"))
         local destroyText = ZO_ERROR_COLOR:Colorize(zo_strformat("You destroy"))
