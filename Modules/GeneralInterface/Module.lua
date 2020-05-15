@@ -1,9 +1,5 @@
 local _
-local LAM = LibStub:GetLibrary("LibAddonMenu-2.0")
-
-local ZO_ITEM_TOOLTIP_INVENTORY_TITLE_COUNT = "inventory"
-local ZO_ITEM_TOOLTIP_BANK_TITLE_COUNT = "bank"
-local ZO_ITEM_TOOLTIP_INVENTORY_AND_BANK_TITLE_COUNT = "inventoryAndBank"
+local LAM = LibAddonMenu2
 
 local function Init(mId, moduleName)
 	local panelData = Init_ModulePanel(moduleName, "General Interface Settings")

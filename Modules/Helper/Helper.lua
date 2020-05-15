@@ -1,5 +1,5 @@
 local _
-local LAM = LibStub:GetLibrary("LibAddonMenu-2.0")
+local LAM = LibAddonMenu2
   
 function BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)
 	if GamePadBuddy then

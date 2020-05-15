@@ -15,110 +15,6 @@ local DEFAULT_GAMEPAD_ITEM_SORT =
     uniqueId = { isId64 = true },
 }
 
-local function GetCategoryFromItemType(itemType)
-    -- Alchemy
-    if      ITEMTYPE_REAGENT == itemType or
-            ITEMTYPE_POTION_BASE == itemType or
-            ITEMTYPE_POISON_BASE == itemType then
-        return GAMEPAD_ITEM_CATEGORY_ALCHEMY
-
-    -- Bait
-    elseif  ITEMTYPE_LURE == itemType then
-        return GAMEPAD_ITEM_CATEGORY_BAIT
-
-    -- Blacksmith
-    elseif  ITEMTYPE_BLACKSMITHING_RAW_MATERIAL == itemType or
-            ITEMTYPE_BLACKSMITHING_MATERIAL == itemType or
-            ITEMTYPE_BLACKSMITHING_BOOSTER == itemType then
-        return GAMEPAD_ITEM_CATEGORY_BLACKSMITH
-
-    -- Clothier
-    elseif  ITEMTYPE_CLOTHIER_RAW_MATERIAL == itemType or
-            ITEMTYPE_CLOTHIER_MATERIAL == itemType or
-            ITEMTYPE_CLOTHIER_BOOSTER == itemType then
-        return GAMEPAD_ITEM_CATEGORY_CLOTHIER
-
-    -- Consumable
-    elseif  ITEMTYPE_DRINK == itemType or
-            ITEMTYPE_FOOD == itemType or
-            ITEMTYPE_RECIPE == itemType then
-        return GAMEPAD_ITEM_CATEGORY_CONSUMABLE
-
-    -- Constume
-    elseif  ITEMTYPE_COSTUME == itemType then
-        return GAMEPAD_ITEM_CATEGORY_COSTUME
-
-    -- Enchanting
-    elseif  ITEMTYPE_ENCHANTING_RUNE_POTENCY == itemType or
-            ITEMTYPE_ENCHANTING_RUNE_ASPECT == itemType or
-            ITEMTYPE_ENCHANTING_RUNE_ESSENCE == itemType then
-        return GAMEPAD_ITEM_CATEGORY_ENCHANTING
-
-    -- Glyphs
-    elseif  ITEMTYPE_GLYPH_WEAPON == itemType or
-            ITEMTYPE_GLYPH_ARMOR == itemType or
-            ITEMTYPE_GLYPH_JEWELRY == itemType then
-        return GAMEPAD_ITEM_CATEGORY_GLYPHS
-
-    -- Jewelry Crafting
-    elseif  ITEMTYPE_JEWELRYCRAFTING_RAW_MATERIAL == itemType or
-    		ITEMTYPE_JEWELRYCRAFTING_MATERIAL == itemType or
-            ITEMTYPE_JEWELRYCRAFTING_RAW_BOOSTER == itemType or
-            ITEMTYPE_JEWELRYCRAFTING_BOOSTER == itemType then
-        return GAMEPAD_ITEM_CATEGORY_JEWELRYCRAFTING
-
-    -- Potion
-    elseif  ITEMTYPE_POTION == itemType then
-        return GAMEPAD_ITEM_CATEGORY_POTION
-
-    -- Provisioning
-    elseif  ITEMTYPE_INGREDIENT == itemType or
-            ITEMTYPE_ADDITIVE == itemType or
-            ITEMTYPE_SPICE == itemType or
-            ITEMTYPE_FLAVORING == itemType then
-        return GAMEPAD_ITEM_CATEGORY_PROVISIONING
-
-    -- Siege
-    elseif  ITEMTYPE_SIEGE == itemType or
-            ITEMTYPE_AVA_REPAIR == itemType then
-        return GAMEPAD_ITEM_CATEGORY_SIEGE
-
-    -- Spellcrafting
-    elseif  ITEMTYPE_SPELLCRAFTING_TABLET == itemType then
-        return GAMEPAD_ITEM_CATEGORY_SPELLCRAFTING
-
-    -- Style Material
-    elseif  ITEMTYPE_RACIAL_STYLE_MOTIF == itemType or
-            ITEMTYPE_STYLE_MATERIAL == itemType then
-        return GAMEPAD_ITEM_CATEGORY_STYLE_MATERIAL
-
-    -- Soul Gem
-    elseif  ITEMTYPE_SOUL_GEM == itemType then
-        return GAMEPAD_ITEM_CATEGORY_SOUL_GEM
-
-    -- Tool
-    elseif  ITEMTYPE_LOCKPICK == itemType or
-            ITEMTYPE_TOOL == itemType then
-        return GAMEPAD_ITEM_CATEGORY_TOOL
-
-    -- Trait Gem
-    elseif  ITEMTYPE_ARMOR_TRAIT == itemType or
-            ITEMTYPE_WEAPON_TRAIT == itemType then
-        return GAMEPAD_ITEM_CATEGORY_TRAIT_GEM
-
-    -- Trophy
-    elseif  ITEMTYPE_TROPHY == itemType then
-        return GAMEPAD_ITEM_CATEGORY_TROPHY
-
-    -- Woodworking
-    elseif  ITEMTYPE_WOODWORKING_RAW_MATERIAL == itemType or
-            ITEMTYPE_WOODWORKING_MATERIAL == itemType or
-            ITEMTYPE_WOODWORKING_BOOSTER == itemType then
-        return GAMEPAD_ITEM_CATEGORY_WOODWORKING
-    end
-end
-
-
 function BETTERUI_Inventory_DefaultItemSortComparator(left, right)
     return ZO_TableOrderingFunction(left, right, "bestGamepadItemCategoryName", DEFAULT_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
 end
@@ -233,8 +129,6 @@ function BETTERUI_IconSetup(statusIndicator, equippedIcon, data)
         statusIndicator:AddIcon(NEW_ICON_TEXTURE)
         statusIndicator:SetHidden(false)
     end
-
-    local slotIndex = data.dataSource.slotIndex
 
     if data.isEquippedInCurrentCategory or data.isEquippedInAnotherCategory then
         local slotIndex = data.dataSource.slotIndex
@@ -426,13 +320,6 @@ local function GetCategoryTypeFromWeaponType(bagId, slotIndex)
     end
 end
 
-local function IsTwoHandedWeaponCategory(categoryType)
-    return (categoryType == GAMEPAD_WEAPON_CATEGORY_TWO_HANDED_MELEE or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_DESTRUCTION_STAFF or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_RESTORATION_STAFF or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_TWO_HANDED_BOW)
-end
-
 function GetBestItemCategoryDescription(itemData)
 
     local isItemStolen = IsItemStolen(itemData.bagId, itemData.slotIndex)
@@ -505,7 +392,6 @@ function BETTERUI.Inventory.List:Initialize(control, inventoryType, slotType, se
     ZO_Gamepad_AddListTriggerKeybindDescriptors(self.triggerKeybinds, self.list)
 
     local function SelectionChangedCallback(list, selectedData)
-        local selectedControl = list:GetTargetControl()
         if self.selectedDataCallback then
             self.selectedDataCallback(list, selectedData)
         end
@@ -593,7 +479,7 @@ function BETTERUI.Inventory.List:RefreshList()
     self.dataBySlotIndex = {}
 
     local slots = self:GenerateSlotTable()
-    local currentBestCategoryName = nil
+    local currentBestCategoryName
     for i, itemData in ipairs(slots) do
         local entry = ZO_GamepadEntryData:New(itemData.name, itemData.iconFile)
 		self:SetupItemEntry(entry, itemData)

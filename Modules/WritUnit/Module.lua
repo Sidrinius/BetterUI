@@ -1,5 +1,5 @@
 local _
-local LAM = LibStub:GetLibrary("LibAddonMenu-2.0")
+local LAM = LibAddonMenu2
 
 local function Init(mId, moduleName)
 	local panelData = Init_ModulePanel(moduleName, "Writ Settings")
@@ -11,7 +11,6 @@ end
 function BETTERUI.Writs.InitModule(m_options)
     return m_options
 end
-
 
 local function OnCraftStation(eventCode, craftId, sameStation)
 	if eventCode ~= 0 then -- 0 is an invalid code

@@ -1,5 +1,5 @@
 local _
-local LAM = LibStub:GetLibrary("LibAddonMenu-2.0")
+local LAM = LibAddonMenu2
 
 local changed = false
 local function Init(mId, moduleName)

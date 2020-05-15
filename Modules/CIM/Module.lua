@@ -1,5 +1,5 @@
 local _
-local LAM = LibStub:GetLibrary("LibAddonMenu-2.0")
+local LAM = LibAddonMenu2
 
 function BETTERUI.CIM.InitModule(m_options)
 	m_options["triggerSpeed"] = 10

@@ -21,7 +21,7 @@ BETTERUI_EQUIP_SLOT_DIALOG = "BETTERUI_EQUIP_SLOT_PROMPT"
 
 -- local function copied (and slightly edited for unequipped items!) from "inventoryutils_gamepad.lua"
 local function BETTERUI_GetEquipSlotForEquipType(equipType)
-    local equipSlot = nil
+    local equipSlot
     for i, testSlot in ZO_Character_EnumerateOrderedEquipSlots() do
         local locked = IsLockedWeaponSlot(testSlot)
          local isCorrectSlot = ZO_Character_DoesEquipSlotUseEquipType(testSlot, equipType)
@@ -85,10 +85,6 @@ end
 function BETTERUI_InventoryUtils_MatchWeapons(itemData)
     return ZO_InventoryUtils_DoesNewItemMatchFilterType(itemData, ITEMFILTERTYPE_WEAPONS) or
 		   ZO_InventoryUtils_DoesNewItemMatchFilterType(itemData, ITEMFILTERTYPE_CONSUMABLE) -- weapons now include consumables
-end
-
-function BETTERUI_InventoryUtils_All(itemData)
-    return true
 end
 
 local function WrapValue(newValue, maxValue)
@@ -505,7 +501,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
             if usedBagSize > 0 then
                 local name = GetString(SI_BETTERUI_INV_ITEM_EQUIPPED)
                 local iconFile = "esoui/art/inventory/gamepad/gp_inventory_icon_equipped.dds"
-                local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(BETTERUI_InventoryUtils_All, nil, BAG_WORN)
+                local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(true, nil, BAG_WORN)
                 local data = ZO_GamepadEntryData:New(name, iconFile, nil, nil, hasAnyNewItems)
                 data.showEquipped = true
                 data:SetIconTintOnSelection(true)
@@ -551,7 +547,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_STOLEN)
                     local iconFile = "esoui/art/inventory/gamepad/gp_inventory_icon_stolenitem.dds"
-                    local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(BETTERUI_InventoryUtils_All, nil, BAG_BACKPACK)
+                    local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(true, nil, BAG_BACKPACK)
                     local data = ZO_GamepadEntryData:New(name, iconFile, nil, nil, hasAnyNewItems)
                     data.showStolen = true
                     data:SetIconTintOnSelection(true)
@@ -568,7 +564,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_JUNK)
                     local iconFile = "esoui/art/inventory/inventory_tabicon_junk_up.dds"
-                    local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(BETTERUI_InventoryUtils_All, nil, BAG_BACKPACK)
+                    local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(true, nil, BAG_BACKPACK)
                     local data = ZO_GamepadEntryData:New(name, iconFile, nil, nil, hasAnyNewItems)
                     data.showJunk = true
                     data:SetIconTintOnSelection(true)
@@ -757,7 +753,6 @@ function BETTERUI.Inventory.Class:RefreshItemList()
     local currentBestCategoryName
 
     for i, itemData in ipairs(filteredDataTable) do
-        local nextItemData = filteredDataTable[i + 1]
 
         local data = ZO_GamepadEntryData:New(itemData.name, itemData.iconFile)
 		data.InitializeInventoryVisualData = BETTERUI.Inventory.Class.InitializeInventoryVisualData
@@ -939,11 +934,6 @@ function BETTERUI.Inventory.Class:InitializeCraftBagList()
 		    end
 		    self:RefreshActiveKeybinds()
 	    end
-    end
-
-    local function VendorEntryTemplateSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
-        ZO_Inventory_BindSlot(data, slotType, data.slotIndex, data.bagId)
-        BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
     end
 
     self.craftBagList = self:AddList("CraftBag", SetupCraftBagList, BETTERUI.Inventory.CraftList, BAG_VIRTUAL, SLOT_TYPE_CRAFT_BAG_ITEM, OnSelectedDataCallback, nil, nil, nil, false, "BETTERUI_GamepadItemSubEntryTemplate")
@@ -1777,12 +1767,6 @@ end
 --------------
 -- Keybinds --
 --------------
-
-local function IsInventorySlotLockedOrJunk(targetData)
-    local bag, index = ZO_Inventory_GetBagAndIndex(targetData)
-	return (not IsItemPlayerLocked(bag, index) or IsItemJunk(bag, index))
-end
-
 function BETTERUI.Inventory.Class:InitializeKeybindStrip()
 	self.mainKeybindStripDescriptor = {
 		--X Button for Quick Action
