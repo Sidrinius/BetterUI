@@ -305,6 +305,9 @@ end
 
 function BETTERUI.Inventory.Class:RefreshCategoryList()
 
+	local function BETTERUI_InventoryUtils_All()
+		return true
+	end
     --local currentPosition = self.header.tabBar.
 
     self.categoryList:Clear()
@@ -501,7 +504,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
             if usedBagSize > 0 then
                 local name = GetString(SI_BETTERUI_INV_ITEM_EQUIPPED)
                 local iconFile = "esoui/art/inventory/gamepad/gp_inventory_icon_equipped.dds"
-                local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(true, nil, BAG_WORN)
+                local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(BETTERUI_InventoryUtils_All, nil, BAG_WORN)
                 local data = ZO_GamepadEntryData:New(name, iconFile, nil, nil, hasAnyNewItems)
                 data.showEquipped = true
                 data:SetIconTintOnSelection(true)
@@ -547,7 +550,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_STOLEN)
                     local iconFile = "esoui/art/inventory/gamepad/gp_inventory_icon_stolenitem.dds"
-                    local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(true, nil, BAG_BACKPACK)
+                    local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(BETTERUI_InventoryUtils_All, nil, BAG_BACKPACK)
                     local data = ZO_GamepadEntryData:New(name, iconFile, nil, nil, hasAnyNewItems)
                     data.showStolen = true
                     data:SetIconTintOnSelection(true)
@@ -564,7 +567,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_JUNK)
                     local iconFile = "esoui/art/inventory/inventory_tabicon_junk_up.dds"
-                    local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(true, nil, BAG_BACKPACK)
+                    local hasAnyNewItems = SHARED_INVENTORY:AreAnyItemsNew(BETTERUI_InventoryUtils_All, nil, BAG_BACKPACK)
                     local data = ZO_GamepadEntryData:New(name, iconFile, nil, nil, hasAnyNewItems)
                     data.showJunk = true
                     data:SetIconTintOnSelection(true)
