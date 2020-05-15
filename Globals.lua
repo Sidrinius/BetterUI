@@ -47,17 +47,6 @@ BETTERUI.DefaultSettings = {
 	}
 }
 
-local CUSTOM_GAMEPAD_ITEM_SORT =
-{
-	sortPriorityName  = { tiebreaker = "bestItemTypeName" },
-	bestItemTypeName = { tiebreaker = "name" },
-	name = { tiebreaker = "requiredLevel" },
-	requiredLevel = { tiebreaker = "requiredChampionPoints", isNumeric = true },
-	requiredChampionPoints = { tiebreaker = "iconFile", isNumeric = true },
-	iconFile = { tiebreaker = "uniqueId" },
-	uniqueId = { isId64 = true },
-}
-
 function ddebug(str)
 	return d("|c0066ff[BETTERUI]|r "..str)
 end
@@ -97,10 +86,20 @@ function BETTERUI.GetResearch()
 end
 
 function BETTERUI_GamepadInventory_DefaultItemSortComparator(left, right)
+	local CUSTOM_GAMEPAD_ITEM_SORT =
+	{
+		sortPriorityName  = { tiebreaker = "bestItemTypeName" },
+		bestItemTypeName = { tiebreaker = "name" },
+		name = { tiebreaker = "requiredLevel" },
+		requiredLevel = { tiebreaker = "requiredChampionPoints", isNumeric = true },
+		requiredChampionPoints = { tiebreaker = "iconFile", isNumeric = true },
+		iconFile = { tiebreaker = "uniqueId" },
+		uniqueId = { isId64 = true },
+	}
 	return ZO_TableOrderingFunction(left, right, "sortPriorityName", CUSTOM_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
 end
 
-function BETTERUI.AutoCategory:GetCustomCategory(itemData)
+function BETTERUI.GetCustomCategory(itemData)
 	local useCustomCategory = false
 	if AutoCategory and AutoCategory.curSavedVars then
 		useCustomCategory = true

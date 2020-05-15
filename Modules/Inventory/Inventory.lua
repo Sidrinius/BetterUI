@@ -710,7 +710,7 @@ function BETTERUI.Inventory.Class:RefreshItemList()
         for i = 1, #filteredDataTable  do
 			local itemData = filteredDataTable[i]
              --use custom categories
-			local customCategory, matched, catName, catPriority = BETTERUI.AutoCategory:GetCustomCategory(itemData)
+			local customCategory, matched, catName, catPriority = BETTERUI.GetCustomCategory(itemData)
 			if customCategory and not matched then 
 				itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
 				itemData.bestItemCategoryName = AC_UNGROUPED_NAME
