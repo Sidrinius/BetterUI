@@ -151,12 +151,15 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
     }
 
     local function FindSecondaryActionNumber(slotActionName)
-        for ACTION_NUM = 1, 8 do
+        for ACTION_NUM = 1, 9 do
             local secondaryAction = slotActions:GetAction(ACTION_NUM, "secondary", nil)
             if secondaryAction ~= nil then
                 self.actionName = secondaryAction[1]
                 --d(self.actionName)
+                --d(ACTION_NUM)
                 if self.actionName == GetString(slotActionName) then
+                    --d(self.actionName)
+                   -- d(ACTION_NUM)
                     return ACTION_NUM
                 end
             end
@@ -176,6 +179,8 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
             self.actionName = nil
         else
             ZO_InventorySlot_DiscoverSlotActionsFromActionList(inventorySlot, slotActions)
+
+            --SI_ITEM_ACTION_DESTROY
 
             local canUseItem
             local primaryAction = slotActions:GetPrimaryActionName()
@@ -223,7 +228,7 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
             if CanItemMoveToCraftBag(inventorySlot) and self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
                 if canUseItem then
                     slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
-                    slotActions:AddSlotAction(SI_ITEM_ACTION_USE, function() TryUseItem(inventorySlot) end, "secondary")
+                    slotActions:AddSlotAction(SI_ITEM_ACTION_USE, function() TryUseItem(inventorySlot) end, "secondary", nil, {visibleWhenDead = false})
                 else
                     slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
                 end
