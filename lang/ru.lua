@@ -12,13 +12,10 @@ ZO_CreateStringId("SI_BETTERUI_INV_ITEM_STOLEN","похищенный")
 ZO_CreateStringId("SI_BETTERUI_INV_ITEM_FURNISHING","Обстановка")
  
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_TITLE","Экипировать предмет...")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_PROMPT","В какую руку?")
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_MAIN","Правая")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_OFF","Левая")
  
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_MAIN","Правая рука")
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_BACKUP","Левая рука")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_CANCEL","Отмена")
  
 ZO_CreateStringId("SI_BETTERUI_INV_SWITCH_EQUIPSLOT","Сменить оружие")
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_QUICKSLOT_ASSIGN","Назначить")
@@ -32,9 +29,6 @@ ZO_CreateStringId("SI_BETTERUI_INV_ACTION_TO_TEMPLATE","<<1>>")
  
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_CB","Ремесленная сумка")
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_INV","Инвентарь")
- 
--- A little patch to correct the scaling of items displaying the incorrect CP values
-ZO_CreateStringId("SI_ITEM_ABILITY_SCALING_CHAMPION_POINTS_RANGE","Масштабируется с <<X:1>> <<2>> по <<X:1>> <<3>>")
  
 ZO_CreateStringId("SI_BETTERUI_INV_SWITCH_INFO", "Изменить вид") 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP" , "Принять")
@@ -57,12 +51,7 @@ ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_NAME", "Название")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TYPE", "Тип")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TRAIT", "Особенность")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_STAT", "Хар-ка")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_VALUE", "Цена") 
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_SELLER", "Продавец")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TIME_LEFT", "Время")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_DEAL", "Выгода")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_PRICE", "Цена") 
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_EST_VALUE", "Нач. цена") 
+ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_VALUE", "Цена")
 ZO_CreateStringId("SI_BETTERUI_ACTION_UNMARK_AS_JUNK", "Убрать из хлама") 
 ZO_CreateStringId("SI_BETTERUI_ACTION_MARK_AS_JUNK", "Отметить как хлам") 
 ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_KNOWN", "ИЗУЧЕН") 

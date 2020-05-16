@@ -12,13 +12,10 @@ ZO_CreateStringId("SI_BETTERUI_INV_ITEM_STOLEN","盗品")
 ZO_CreateStringId("SI_BETTERUI_INV_ITEM_FURNISHING","家具")
 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_TITLE","アイテムを装備")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_PROMPT","どちらの手に装備しますか？")
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_MAIN","利き手")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_OFF","逆手")
 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_MAIN","利き手")
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_BACKUP","逆手")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_CANCEL","キャンセル")
 
 ZO_CreateStringId("SI_BETTERUI_INV_SWITCH_EQUIPSLOT","武器を切り替え")
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_QUICKSLOT_ASSIGN","クイックスロットに割り当て")
@@ -32,9 +29,6 @@ ZO_CreateStringId("SI_BETTERUI_INV_ACTION_TO_TEMPLATE","<<1>>に移動")
 
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_CB","クラフトバッグ")
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_INV","所持品")
-
--- A little patch to correct the scaling of items displaying the incorrect CP values
-ZO_CreateStringId("SI_ITEM_ABILITY_SCALING_CHAMPION_POINTS_RANGE","<<X:1>><<2>>から<<3>>の間調整される。")
 
 ZO_CreateStringId("SI_BETTERUI_INV_SWITCH_INFO", "情報切り替え") 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP" , "装備")
@@ -58,13 +52,7 @@ ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TYPE", "タイプ")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TRAIT", "特性")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_STAT", "状態")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_VALUE", "値段")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_SELLER", "売り手")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TIME_LEFT", "残り時間")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_DEAL", "取引額")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_PRICE", "価格") 
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_EST_VALUE", "推定額") 
 ZO_CreateStringId("SI_BETTERUI_ACTION_UNMARK_AS_JUNK", "ジャンクから除外") 
 ZO_CreateStringId("SI_BETTERUI_ACTION_MARK_AS_JUNK", "ジャンクに分類")  
 ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_KNOWN", "既知") 
-ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_UNKNOWN", "未知") 
-
+ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_UNKNOWN", "未知")

@@ -12,13 +12,10 @@ ZO_CreateStringId("SI_BETTERUI_INV_ITEM_STOLEN","被盗")
 ZO_CreateStringId("SI_BETTERUI_INV_ITEM_FURNISHING","家具")
 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_TITLE","正在装备...")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_PROMPT","要装备到那只手上?")
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_MAIN","主手")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_OFF","副手")
 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_MAIN","主手")
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_BACKUP","副手")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_CANCEL","取消")
 
 ZO_CreateStringId("SI_BETTERUI_INV_SWITCH_EQUIPSLOT","切换武器")
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_QUICKSLOT_ASSIGN","设定快捷栏")
@@ -32,9 +29,6 @@ ZO_CreateStringId("SI_BETTERUI_INV_ACTION_TO_TEMPLATE","前往 <<1>>")
 
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_CB","材料包")
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_INV","物品栏")
-
--- A little patch to correct the scaling of items displaying the incorrect CP values
-ZO_CreateStringId("SI_ITEM_ABILITY_SCALING_CHAMPION_POINTS_RANGE","从 <<X:1>> <<2>> 缩放到 <<X:1>> <<3>>")
 
 ZO_CreateStringId("SI_BETTERUI_INV_SWITCH_INFO", "切换信息") 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP" , "装备")
@@ -58,11 +52,6 @@ ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TYPE", "类型")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TRAIT", "特性")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_STAT", "状态")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_VALUE", "价值")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_SELLER", "卖家")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TIME_LEFT", "剩余时间")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_DEAL", "成交价值")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_PRICE", "价格") 
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_EST_VALUE", "预计价值") 
 ZO_CreateStringId("SI_BETTERUI_ACTION_UNMARK_AS_JUNK", "去掉垃圾标记") 
 ZO_CreateStringId("SI_BETTERUI_ACTION_MARK_AS_JUNK", "标记为垃圾") 
 ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_KNOWN", "已学会") 
