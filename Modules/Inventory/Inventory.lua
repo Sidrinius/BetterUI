@@ -876,7 +876,7 @@ function BETTERUI.Inventory.Class:UpdateRightTooltip()
 	
     local equipSlotHasItem = select(2, GetEquippedItemInfo(selectedEquipSlot))
 
-    if selectedItemData and (not equipSlotHasItem) then
+    if selectedItemData then
         GAMEPAD_TOOLTIPS:LayoutItemStatComparison(GAMEPAD_LEFT_TOOLTIP, selectedItemData.bagId, selectedItemData.slotIndex, selectedEquipSlot)
         GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_INVENTORY_ITEM_COMPARE_TOOLTIP_TITLE))
     elseif GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, BAG_WORN, selectedEquipSlot) then

@@ -19,33 +19,7 @@ function BETTERUI_Inventory_DefaultItemSortComparator(left, right)
     return ZO_TableOrderingFunction(left, right, "bestGamepadItemCategoryName", DEFAULT_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
 end
 
-local function GetMarketPrice(itemLink, stackCount)
-    if(stackCount == nil) then stackCount = 1 end
 
-    if MasterMerchant ~= nil and BETTERUI.Settings.Modules["Tooltips"].mmIntegration then 
-        local mmData = MasterMerchant:itemStats(itemLink, false)
-        if(mmData.avgPrice ~= nil and mmData.avgPrice ~= 0) then
-            return mmData.avgPrice * stackCount
-        end
-    end
-    if ArkadiusTradeTools ~= nil and BETTERUI.Settings.Modules["Tooltips"].attIntegration then 
-        local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil)
-        if(avgPrice ~= nil and avgPrice ~= 0) then
-            return avgPrice * stackCount
-        end
-    end
-    if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
-        local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
-		if(priceInfo ~= nil and priceInfo ~= 0) then
-			if priceInfo.SuggestedPrice then
-				return priceInfo.SuggestedPrice * stackCount
-			else
-				return priceInfo.Avg * stackCount
-			end
-		end
-	end
-    return 0
-end
 
 
 function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
@@ -255,18 +229,21 @@ function BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectin
     end
 
     -- Replace the "Value" with the market price of the item (in yellow)
-    if(BETTERUI.Settings.Modules["Inventory"].showMarketPrice) then
-        local marketPrice, isAverage = GetMarketPrice(GetItemLink(data.bagId,data.slotIndex), data.stackCount)
-        if(marketPrice ~= 0) then
-			if isAverage then
-				control:GetNamedChild("Value"):SetColor(1,0.5,0.5,1)
-			else
-				control:GetNamedChild("Value"):SetColor(1,0.75,0,1)
-			end
-            control:GetNamedChild("Value"):SetText(ZO_CurrencyControl_FormatCurrency(math.floor(marketPrice), USE_SHORT_CURRENCY_FORMAT))
-        else
-            control:GetNamedChild("Value"):SetColor(1,1,1,1)
-            control:GetNamedChild("Value"):SetText(data.stackSellPrice)
+    if(BETTERUI.Settings.Modules["Inventory"].showMarketPrice) and (SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() or SCENE_MANAGER.scenes['gamepad_inventory_root']:IsShowing()) then
+        local itemLink = GetItemLink(data.bagId,data.slotIndex)
+        if itemLink then
+            local marketPrice, isAverage = BETTERUI.GetMarketPrice(itemLink, data.stackCount)
+            if marketPrice ~= nil and marketPrice > 0 then
+    			if isAverage then
+    				control:GetNamedChild("Value"):SetColor(1,0.5,0.5,1)
+    			else
+    				control:GetNamedChild("Value"):SetColor(1,0.75,0,1)
+    			end
+                control:GetNamedChild("Value"):SetText(ZO_CurrencyControl_FormatCurrency(math.floor(marketPrice), USE_SHORT_CURRENCY_FORMAT))
+            else
+                control:GetNamedChild("Value"):SetColor(1,1,1,1)
+                control:GetNamedChild("Value"):SetText(data.stackSellPrice)
+            end
         end
     else
         control:GetNamedChild("Value"):SetColor(1,1,1,1)

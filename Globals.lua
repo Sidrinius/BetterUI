@@ -52,7 +52,7 @@ function ddebug(str)
 end
 
 function BETTERUI.roundNumber(number, decimals)
-	if number ~= nil or number ~= 0 then
+	if (number ~= nil or number ~= 0) and decimals ~= nil then
     	local power = 10^decimals
     	return string.format("%.2f", math.floor(number * power) / power)
     else
@@ -97,6 +97,38 @@ function BETTERUI_GamepadInventory_DefaultItemSortComparator(left, right)
 		uniqueId = { isId64 = true },
 	}
 	return ZO_TableOrderingFunction(left, right, "sortPriorityName", CUSTOM_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
+end
+
+function BETTERUI.GetMarketPrice(itemLink, stackCount)
+    if itemLink then
+        if(stackCount == nil) then stackCount = 1 end
+
+        if MasterMerchant ~= nil and BETTERUI.Settings.Modules["Tooltips"].mmIntegration then 
+            local mmData = MasterMerchant:itemStats(itemLink, false)
+            if(mmData.avgPrice ~= nil and mmData.avgPrice > 0) then
+                return mmData.avgPrice * stackCount
+            end
+        end
+        if ArkadiusTradeTools ~= nil and BETTERUI.Settings.Modules["Tooltips"].attIntegration then 
+            local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil, nil)
+            if(avgPrice ~= nil and avgPrice > 0) then
+                return avgPrice * stackCount
+            end
+        end
+        if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
+            local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
+    		if(priceInfo ~= nil) then
+    			if priceInfo.Avg then
+    				return priceInfo.Avg * stackCount
+    			else
+    				return priceInfo.SuggestedPrice * stackCount
+    			end
+    		end
+    	end
+    	return 0
+    else
+        return 0
+    end
 end
 
 function BETTERUI.GetCustomCategory(itemData)

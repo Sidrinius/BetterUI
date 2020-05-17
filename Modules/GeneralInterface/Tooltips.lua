@@ -41,7 +41,7 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
 
         if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
             local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
-            if(priceInfo == nil or priceInfo == 0) then
+            if(priceInfo == nil) then
                 tooltip:AddLine(string.format("TTC Price: NO LISTING DATA"), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
             else
                 local avgPrice
@@ -85,7 +85,7 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
     	end
 
         if ArkadiusTradeTools ~= nil and BETTERUI.Settings.Modules["Tooltips"].attIntegration then 
-            local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil)
+            local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil, nil)
             if(avgPrice == nil or avgPrice == 0) then
                 tooltip:AddLine(string.format("ATT Price: NO LISTING DATA"), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
             else
