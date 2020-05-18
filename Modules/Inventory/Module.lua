@@ -13,7 +13,7 @@ local function Init(mId, moduleName)
 		{
 			type = "checkbox",
 			name = "Enable quick destroy functionality",
-			tooltip = "Quickly destroys items without confirmation prompt or needing to mark as junk",
+			tooltip = "**USE WITH CAUTION** Quickly destroys items without a confirmation dialog or needing to mark as junk",
 			getFunc = function() return BETTERUI.Settings.Modules["Inventory"].quickDestroy end,
 			setFunc = function(value) BETTERUI.Settings.Modules["Inventory"].quickDestroy = value
 				changed = true

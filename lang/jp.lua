@@ -56,3 +56,8 @@ ZO_CreateStringId("SI_BETTERUI_ACTION_UNMARK_AS_JUNK", "ジャンクから除外
 ZO_CreateStringId("SI_BETTERUI_ACTION_MARK_AS_JUNK", "ジャンクに分類")  
 ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_KNOWN", "既知") 
 ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_UNKNOWN", "未知")
+ZO_CreateStringId("SI_BETTERUI_MSG_MARK_AS_JUNK_CATEGORY_WARNING", "ジャンクで削除されたアイテムには確認ダイアログがありません！")
+ZO_CreateStringId("SI_BETTERUI_MSG_MARK_AS_JUNK_TO_DESTROY", "最初に、ジャンクとしてマークして破壊してください！")
+ZO_CreateStringId("SI_BETTERUI_MSG_JUNK_CRAFTBAG_ERROR", "最初にアイテムをクラフトバッグから取得する必要があります！")
+ZO_CreateStringId("SI_BETTERUI_MSG_JUNK_ITEMLOCKED_ERROR", "アイテムはロックされており、ジャンクとしてマークできません！")
+ZO_CreateStringId("SI_BETTERUI_MSG_DESTROY", "あなたは破壊する")

@@ -56,3 +56,8 @@ ZO_CreateStringId("SI_BETTERUI_ACTION_UNMARK_AS_JUNK", "Убрать из хла
 ZO_CreateStringId("SI_BETTERUI_ACTION_MARK_AS_JUNK", "Отметить как хлам") 
 ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_KNOWN", "ИЗУЧЕН") 
 ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_UNKNOWN", "НЕ ИЗУЧЕН")
+ZO_CreateStringId("SI_BETTERUI_MSG_MARK_AS_JUNK_CATEGORY_WARNING", "Элемент, удаленный в нежелательной, не имеет диалогового окна подтверждения!")
+ZO_CreateStringId("SI_BETTERUI_MSG_MARK_AS_JUNK_TO_DESTROY", "Пожалуйста, отметьте как мусор первым, чтобы уничтожить!")
+ZO_CreateStringId("SI_BETTERUI_MSG_JUNK_CRAFTBAG_ERROR", "Предмет должен быть сначала извлечен из Craft Bag!")
+ZO_CreateStringId("SI_BETTERUI_MSG_JUNK_ITEMLOCKED_ERROR", "Элемент заблокирован и не может быть помечен как мусор!")
+ZO_CreateStringId("SI_BETTERUI_MSG_DESTROY", "Ты уничтожаешь")

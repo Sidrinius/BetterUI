@@ -143,6 +143,12 @@ function BETTERUI_TabBar_OnTabNext(parent, successful)
         --parent:RefreshItemList()
 		BETTERUI.GenericHeader.SetTitleText(parent.header, parent.categoryList.selectedData.text)
 
+		if parent.categoryList.selectedData.text == GetString(SI_BETTERUI_INV_ITEM_JUNK) then
+			local messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_MARK_AS_JUNK_CATEGORY_WARNING))
+			local message = zo_strformat("<<1>>", messageText)
+			BETTERUI.OnScreenMessage(message)
+		end
+
         parent:ToSavedPosition()
     end
 end
@@ -157,6 +163,12 @@ function BETTERUI_TabBar_OnTabPrev(parent, successful)
 
         --parent:RefreshItemList()
 		BETTERUI.GenericHeader.SetTitleText(parent.header, parent.categoryList.selectedData.text)
+
+		if parent.categoryList.selectedData.text == GetString(SI_BETTERUI_INV_ITEM_JUNK) then
+			local messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_MARK_AS_JUNK_CATEGORY_WARNING))
+			local message = zo_strformat("<<1>>", messageText)
+			BETTERUI.OnScreenMessage(message)
+		end
 
         parent:ToSavedPosition()
     end
@@ -961,25 +973,23 @@ function BETTERUI.Inventory.Class:InitializeActionsDialog()
 				end)
 
 				local function MarkAsJunk()
-        			local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Retrieve item from Craft Bag, then mark as junk!"))
-					local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_SMALL_TEXT)
+					local message
+        			local messageText
     				if self.actionMode == CRAFT_BAG_ACTION_MODE then
-    					messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
-						messageParams:SetText(zo_strformat("<<1>>", warningText))
-						CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+						messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_JUNK_CRAFTBAG_ERROR))
+						message = zo_strformat("<<1>>", messageText)
+						BETTERUI.OnScreenMessage(message)
     				else
 						local target = GAMEPAD_INVENTORY.itemList:GetTargetData()
-						local isjunk = IsItemPlayerLocked(target.bagId, target.slotIndex)
-						if(isjunk == false) then
+						local isLocked = IsItemPlayerLocked(target.bagId, target.slotIndex)
+						if(isLocked == false) then
 							SetItemIsJunk(target.bagId, target.slotIndex, true)
 							self:RefreshItemList()
 						else
-							warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Item is currently locked and cannot be marked as junk!"))
-    						messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
-							messageParams:SetText(zo_strformat("<<1>>", warningText))
-							CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+							messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_JUNK_ITEMLOCKED_ERROR))
+							message = zo_strformat("<<1>>", messageText)
+							BETTERUI.OnScreenMessage(message)
 						end
-
 					end
 				end
 				local function UnmarkAsJunk()
@@ -1095,19 +1105,20 @@ function BETTERUI.Inventory.HookDestroyItem()
     ZO_InventorySlot_InitiateDestroyItem = function(inventorySlot)
         local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
         local itemLink = GetItemLink(bag, index)
-        local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Please mark as junk first to destroy!"))
-        local destroyText = ZO_ERROR_COLOR:Colorize(zo_strformat("You destroy"))
-		local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_SMALL_TEXT)
+		local message
+		local messageText
         SetCursorItemSoundsEnabled(false)
         if IsItemJunk(bag, index) or BETTERUI.Settings.Modules["Inventory"].quickDestroy then
+			messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_DESTROY))
+			message = zo_strformat("<<1>> [<<2>>]", messageText, itemLink)
     		DestroyItem(bag, index)
-    		CHAT_SYSTEM:AddMessage(zo_strformat("<<1>> [<<2>>]", destroyText, itemLink))
+    		CHAT_SYSTEM:AddMessage(message)
     		return true
     	else
-            messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
-            messageParams:SetText(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
-            CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
-            CHAT_SYSTEM:AddMessage(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
+			messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_MARK_AS_JUNK_TO_DESTROY))
+			message = zo_strformat("[<<1>>] <<2>>", itemLink, messageText)
+			BETTERUI.OnScreenMessage(message)
+            CHAT_SYSTEM:AddMessage(message)
             return false
     	end
     end
@@ -1325,7 +1336,7 @@ function BETTERUI.Inventory.Class:InitializeEquipSlotDialog()
 		local equipType = dialog.data[1].dataSource.equipType
 		local itemName = GetItemName(dialog.data[1].dataSource.bagId, dialog.data[1].dataSource.slotIndex)
 		local itemLink = GetItemLink(dialog.data[1].dataSource.bagId, dialog.data[1].dataSource.slotIndex)
-		local itemQuality = GetItemLinkQuality(itemLink)
+		local itemQuality = GetItemLinkFunctionalQuality(itemLink)
 		local itemColor = GetItemQualityColor(itemQuality)
 		itemName = itemColor:Colorize(itemName)
 	        local str = ""
