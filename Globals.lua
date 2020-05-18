@@ -42,7 +42,7 @@ BETTERUI.DefaultSettings = {
 	firstInstall = true,
 	Modules = {
 		["*"] = { -- Module setting template
-			m_enabled = false
+			m_enabled = true
 		}
 	}
 }
@@ -58,6 +58,13 @@ function BETTERUI.roundNumber(number, decimals)
     else
     	return 0
     end
+end
+
+function BETTERUI.OnScreenMessage(message)
+	local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_LARGE_TEXT)
+	messageParams:SetCSAType(CENTER_SCREEN_ANNOUNCE_TYPE_COUNTDOWN)
+	messageParams:SetText(message)
+	CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
 end
 
 -- Thanks to Bart Kiers for this function :)
