@@ -12,13 +12,10 @@ ZO_CreateStringId("SI_BETTERUI_INV_ITEM_STOLEN","Stolen")
 ZO_CreateStringId("SI_BETTERUI_INV_ITEM_FURNISHING","Furnishings")
 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_TITLE","Equipping item...")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_PROMPT","Which hand should it go into?")
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_MAIN","Main")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIPSLOT_OFF","Off")
 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_MAIN","Main Hand")
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_BACKUP","Off Hand")
-ZO_CreateStringId("SI_BETTERUI_INV_EQUIP_PROMPT_CANCEL","Cancel")
 
 ZO_CreateStringId("SI_BETTERUI_INV_SWITCH_EQUIPSLOT","Switch Weapons")
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_QUICKSLOT_ASSIGN","Assign Quickslot")
@@ -32,9 +29,6 @@ ZO_CreateStringId("SI_BETTERUI_INV_ACTION_TO_TEMPLATE","Go To <<1>>")
 
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_CB","Crafting Bag")
 ZO_CreateStringId("SI_BETTERUI_INV_ACTION_INV","Inventory")
-
--- A little patch to correct the scaling of items displaying the incorrect CP values
-ZO_CreateStringId("SI_ITEM_ABILITY_SCALING_CHAMPION_POINTS_RANGE","Scaling from <<X:1>> <<2>> to <<X:1>> <<3>>")
 
 ZO_CreateStringId("SI_BETTERUI_INV_SWITCH_INFO", "Switch Info") 
 ZO_CreateStringId("SI_BETTERUI_INV_EQUIP" , "Equip")
@@ -58,13 +52,12 @@ ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TYPE", "Type")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TRAIT", "Trait")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_STAT", "Stat")
 ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_VALUE", "Value")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_SELLER", "Seller")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_TIME_LEFT", "Time Left")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_DEAL", "Deal")
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_PRICE", "Price") 
-ZO_CreateStringId("SI_BETTERUI_BANKING_COLUMN_EST_VALUE", "Est. Value") 
 ZO_CreateStringId("SI_BETTERUI_ACTION_UNMARK_AS_JUNK", "Unmark as Junk") 
 ZO_CreateStringId("SI_BETTERUI_ACTION_MARK_AS_JUNK", "Mark as Junk")  
 ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_KNOWN", "KNOWN") 
-ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_UNKNOWN", "UNKNOWN") 
-
+ZO_CreateStringId("SI_BETTERUI_INV_RECIPE_UNKNOWN", "UNKNOWN")
+ZO_CreateStringId("SI_BETTERUI_MSG_MARK_AS_JUNK_CATEGORY_WARNING", "Item's deleted in Junk have no confirmation dialog!")
+ZO_CreateStringId("SI_BETTERUI_MSG_MARK_AS_JUNK_TO_DESTROY", "Please mark as junk first to destroy!")
+ZO_CreateStringId("SI_BETTERUI_MSG_JUNK_CRAFTBAG_ERROR", "Item must be retrieved from Craft Bag first!")
+ZO_CreateStringId("SI_BETTERUI_MSG_JUNK_ITEMLOCKED_ERROR", "Item is locked and cannot be marked as junk!")
+ZO_CreateStringId("SI_BETTERUI_MSG_DESTROY", "You destroy")

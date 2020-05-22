@@ -1,15 +1,6 @@
 INVENTORY_SLOT_ACTIONS_USE_CONTEXT_MENU = true
 INVENTORY_SLOT_ACTIONS_PREVENT_CONTEXT_MENU = false
 
-local INDEX_ACTION_NAME = 1
-local INDEX_ACTION_CALLBACK = 2
-local INDEX_ACTION_TYPE = 3
-local INDEX_ACTION_VISIBILITY = 4
-local INDEX_ACTION_OPTIONS = 5
-
-local PRIMARY_ACTION_KEY = 1
-local SECONDARY_ACTION_KEY = 2
-
 -- Main class definition is here
 -- Note: these classes WILL be removed in the near future!
 
@@ -22,7 +13,7 @@ local function BETTERUI_AddSlotPrimary(self, actionStringId, actionCallback, act
 	    return not IsUnitDead("player")
 	end
 
-	-- The following line inserts a row into the FIRST slotAction table, which corresponds to PRIMARY_ACTION_KEY
+	-- The following line inserts a row into the FIRST slotAction table, which corresponds to ACTION_KEY
     table.insert(self.m_slotActions, 1, { actionName, actionCallback, actionType, visibilityFunction, options })
     self.m_hasActions = true
 
@@ -149,7 +140,6 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
         order = 500,
         callback = function()
             if self.selectedAction then
-                --CallSecureProtected('function', self.itemActions:DoSelectedAction())
                 self:DoSelectedAction()
             else
                 slotActions:DoPrimaryAction()
@@ -159,6 +149,22 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
                         return slotActions:CheckPrimaryActionVisibility() or self:HasSelectedAction()
                     end,
     }
+
+    local function FindSecondaryActionNumber(slotActionName)
+        for ACTION_NUM = 1, 9 do
+            local secondaryAction = slotActions:GetAction(ACTION_NUM, "secondary", nil)
+            if secondaryAction ~= nil then
+                self.actionName = secondaryAction[1]
+                --d(self.actionName)
+                --d(ACTION_NUM)
+                if self.actionName == GetString(slotActionName) then
+                    --d(self.actionName)
+                   -- d(ACTION_NUM)
+                    return ACTION_NUM
+                end
+            end
+        end
+    end
 
     local function PrimaryCommandHasBind()
         return (self.actionName ~= nil) or self:HasSelectedAction()
@@ -174,35 +180,38 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
         else
             ZO_InventorySlot_DiscoverSlotActionsFromActionList(inventorySlot, slotActions)
 
-			--self.actionName = slotActions:GetPrimaryActionName()
+            --SI_ITEM_ACTION_DESTROY
 
-            -- Instead of deleting it at add time, let's delete it now!
-            local primaryAction = slotActions:GetAction(PRIMARY_ACTION_KEY, "primary", nil)
-            local secondaryAction = slotActions:GetAction(SECONDARY_ACTION_KEY, "secondary", nil)
+            local canUseItem
+            local primaryAction = slotActions:GetPrimaryActionName()
 
-            if primaryAction and primaryAction[INDEX_ACTION_NAME] then
-                self.actionName = primaryAction[INDEX_ACTION_NAME]
-
+            if primaryAction then
+                self.actionName = primaryAction
                 if self.actionName == GetString(SI_ITEM_ACTION_USE) or 
-					self.actionName == GetString(SI_ITEM_ACTION_EQUIP) or 
+                    self.actionName == GetString(SI_ITEM_ACTION_EQUIP) or 
                     self.actionName == GetString(SI_ITEM_ACTION_UNEQUIP) or 
-					self.actionName == GetString(SI_ITEM_ACTION_BANK_WITHDRAW) or 
-					self.actionName == GetString(SI_ITEM_ACTION_BANK_DEPOSIT) or 
+                    self.actionName == GetString(SI_ITEM_ACTION_BANK_WITHDRAW) or 
+                    self.actionName == GetString(SI_ITEM_ACTION_BANK_DEPOSIT) or
+                    self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) or
                     self.actionName == GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG) then
-                    table.remove(slotActions.m_slotActions, PRIMARY_ACTION_KEY)
+                    table.remove(slotActions.m_slotActions, 1)
+                    if CanItemMoveToCraftBag(inventorySlot) and self.actionName == GetString(SI_ITEM_ACTION_USE) then
+                        canUseItem = true
+                        table.remove(slotActions.m_slotActions, FindSecondaryActionNumber(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG))
+                    end
                 end
-            elseif CanItemMoveToCraftBag(inventorySlot) and secondaryAction and secondaryAction[INDEX_ACTION_NAME] then
-                self.actionName = secondaryAction[INDEX_ACTION_NAME]
-               -- d(self.actionName)
-                if self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
-                    table.remove(slotActions.m_slotActions, SECONDARY_ACTION_KEY)
-                end
-            else
-				self.actionName = slotActions:GetPrimaryActionName()
-			end
+            elseif CanItemMoveToCraftBag(inventorySlot) then
+                    canUseItem = false
+                    self.actionName = GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG)
+                    table.remove(slotActions.m_slotActions, FindSecondaryActionNumber(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG))
+            else 
+                -- Needed for scenarios of stowing or moving all items in a category to the craftbag/bank and transitioning on an item that has no primaryAction (nil) - Removes action from controller button display
+                self.actionName = primaryAction
+            end
+
 			-- Now check if the slot that has been found for the current item needs to be replaced with the CSP ones
 			if self.actionName == GetString(SI_ITEM_ACTION_USE) then
-				slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_USE), function(...) TryUseItem(inventorySlot) end, "primary", nil, {visibleWhenDead = false})
+                slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_USE), function(...) TryUseItem(inventorySlot) end, "primary", nil, {visibleWhenDead = false})
 			end
 			if self.actionName == GetString(SI_ITEM_ACTION_EQUIP) then
 				slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_EQUIP), function(...) GAMEPAD_INVENTORY:TryEquipItem(inventorySlot, ZO_Dialogs_IsShowingDialog()) end, "primary", nil, {visibleWhenDead = false})
@@ -217,7 +226,12 @@ function BETTERUI.Inventory.SlotActions:Initialize(alignmentOverride, additional
 				slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_BANK_DEPOSIT), function(...) TryBankItem(inventorySlot) end, "primary", nil, {visibleWhenDead = false})
 			end
             if CanItemMoveToCraftBag(inventorySlot) and self.actionName == GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG) then
-                slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
+                if canUseItem then
+                    slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
+                    slotActions:AddSlotAction(SI_ITEM_ACTION_USE, function() TryUseItem(inventorySlot) end, "secondary", nil, {visibleWhenDead = false})
+                else
+                    slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_ADD_ITEMS_TO_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_VIRTUAL) end, "primary", nil, {visibleWhenDead = false})
+                end
             end 
             if self.actionName == GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG) then
                 slotActions:AddSlotPrimaryAction(GetString(SI_ITEM_ACTION_REMOVE_ITEMS_FROM_CRAFT_BAG), function(...) TryMoveToInventoryorCraftBag(inventorySlot, BAG_BACKPACK) end, "primary", nil, {visibleWhenDead = false})

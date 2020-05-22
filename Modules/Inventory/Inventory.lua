@@ -5,14 +5,9 @@ ZO_GAMEPAD_INVENTORY_SCENE_NAME = "gamepad_inventory_root"
 
 BETTERUI.Inventory.Class = ZO_GamepadInventory:Subclass()
 
-local NEW_ICON_TEXTURE = "EsoUI/Art/Miscellaneous/Gamepad/gp_icon_new.dds"
-
 local CATEGORY_ITEM_ACTION_MODE = 1
 local ITEM_LIST_ACTION_MODE = 2
 local CRAFT_BAG_ACTION_MODE = 3
-
-local INVENTORY_TAB_INDEX = 1
-local CRAFT_BAG_TAB_INDEX = 2
 
 local DIALOG_QUEUE_WORKAROUND_TIMEOUT_DURATION = 300
 
@@ -24,24 +19,11 @@ local INVENTORY_CRAFT_BAG_LIST = "craftBagList"
 
 BETTERUI_EQUIP_SLOT_DIALOG = "BETTERUI_EQUIP_SLOT_PROMPT"
 
-
--- This is the structure of an "slotAction" array
-local INDEX_ACTION_NAME = 1
-local INDEX_ACTION_CALLBACK = 2
-local INDEX_ACTION_TYPE = 3
-local INDEX_ACTION_VISIBILITY = 4
-local INDEX_ACTION_OPTIONS = 5
-local PRIMARY_ACTION_KEY = 1
-
--- All of the callbacks that are possible on the "A" button press have to have CallSecureProtected()
-local PRIMARY_ACTION = 1
-
 -- local function copied (and slightly edited for unequipped items!) from "inventoryutils_gamepad.lua"
 local function BETTERUI_GetEquipSlotForEquipType(equipType)
-    local equipSlot = nil
+    local equipSlot
     for i, testSlot in ZO_Character_EnumerateOrderedEquipSlots() do
         local locked = IsLockedWeaponSlot(testSlot)
-        local isEquipped = HasItemInSlot(BAG_WORN, testSlot)
          local isCorrectSlot = ZO_Character_DoesEquipSlotUseEquipType(testSlot, equipType)
         if not locked and isCorrectSlot then
               equipSlot = testSlot
@@ -100,35 +82,9 @@ local function SetupCategoryList(list)
     list:AddDataTemplate("BETTERUI_GamepadItemEntryTemplate", ZO_SharedGamepadEntry_OnSetup, ZO_GamepadMenuEntryTemplateParametricListFunction)
 end
 
-
-local function CanUseItemQuestItem(inventorySlot)
-    if inventorySlot then
-        if inventorySlot.toolIndex then
-            return CanUseQuestTool(inventorySlot.questIndex, inventorySlot.toolIndex)
-        elseif inventorySlot.conditionIndex then
-            return CanUseQuestItem(inventorySlot.questIndex, inventorySlot.stepIndex, inventorySlot.conditionIndex)
-        end
-    end
-    return false
-end
-
-local function TryUseQuestItem(inventorySlot)
-    if inventorySlot then
-        if inventorySlot.toolIndex then
-            UseQuestTool(inventorySlot.questIndex, inventorySlot.toolIndex)
-        else
-            UseQuestItem(inventorySlot.questIndex, inventorySlot.stepIndex, inventorySlot.conditionIndex)
-        end
-    end
-end
-
 function BETTERUI_InventoryUtils_MatchWeapons(itemData)
     return ZO_InventoryUtils_DoesNewItemMatchFilterType(itemData, ITEMFILTERTYPE_WEAPONS) or
 		   ZO_InventoryUtils_DoesNewItemMatchFilterType(itemData, ITEMFILTERTYPE_CONSUMABLE) -- weapons now include consumables
-end
-
-function BETTERUI_InventoryUtils_All(itemData)
-    return true
 end
 
 local function WrapValue(newValue, maxValue)
@@ -187,6 +143,12 @@ function BETTERUI_TabBar_OnTabNext(parent, successful)
         --parent:RefreshItemList()
 		BETTERUI.GenericHeader.SetTitleText(parent.header, parent.categoryList.selectedData.text)
 
+		if parent.categoryList.selectedData.text == GetString(SI_BETTERUI_INV_ITEM_JUNK) then
+			local messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_MARK_AS_JUNK_CATEGORY_WARNING))
+			local message = zo_strformat("<<1>>", messageText)
+			BETTERUI.OnScreenMessage(message)
+		end
+
         parent:ToSavedPosition()
     end
 end
@@ -201,6 +163,12 @@ function BETTERUI_TabBar_OnTabPrev(parent, successful)
 
         --parent:RefreshItemList()
 		BETTERUI.GenericHeader.SetTitleText(parent.header, parent.categoryList.selectedData.text)
+
+		if parent.categoryList.selectedData.text == GetString(SI_BETTERUI_INV_ITEM_JUNK) then
+			local messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_MARK_AS_JUNK_CATEGORY_WARNING))
+			local message = zo_strformat("<<1>>", messageText)
+			BETTERUI.OnScreenMessage(message)
+		end
 
         parent:ToSavedPosition()
     end
@@ -349,6 +317,9 @@ end
 
 function BETTERUI.Inventory.Class:RefreshCategoryList()
 
+	local function BETTERUI_InventoryUtils_All()
+		return true
+	end
     --local currentPosition = self.header.tabBar.
 
     self.categoryList:Clear()
@@ -586,7 +557,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
 		end
 
         do
-            if(BETTERUI.Settings.Modules["Inventory"].enableStolen and AreAnyItemsStolen(BAG_BACKPACK)) then
+            if(AreAnyItemsStolen(BAG_BACKPACK)) then
                 local isListEmpty = self:IsItemListEmpty(nil, nil)
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_STOLEN)
@@ -603,7 +574,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
         end
 
         do
-            if(BETTERUI.Settings.Modules["Inventory"].enableJunk and HasAnyJunk(BAG_BACKPACK, false)) then
+            if(HasAnyJunk(BAG_BACKPACK, false)) then
                 local isListEmpty = self:IsItemListEmpty(nil, nil)
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_JUNK)
@@ -754,7 +725,7 @@ function BETTERUI.Inventory.Class:RefreshItemList()
         for i = 1, #filteredDataTable  do
 			local itemData = filteredDataTable[i]
              --use custom categories
-			local customCategory, matched, catName, catPriority = BETTERUI.Helper.AutoCategory:GetCustomCategory(itemData)
+			local customCategory, matched, catName, catPriority = BETTERUI.GetCustomCategory(itemData)
 			if customCategory and not matched then 
 				itemData.bestItemTypeName = zo_strformat(SI_INVENTORY_HEADER, GetBestItemCategoryDescription(itemData))
 				itemData.bestItemCategoryName = AC_UNGROUPED_NAME
@@ -794,10 +765,9 @@ function BETTERUI.Inventory.Class:RefreshItemList()
 
 	table.sort(filteredDataTable, BETTERUI_GamepadInventory_DefaultItemSortComparator)
 
-    local currentBestCategoryName = nil
+    local currentBestCategoryName
 
     for i, itemData in ipairs(filteredDataTable) do
-        local nextItemData = filteredDataTable[i + 1]
 
         local data = ZO_GamepadEntryData:New(itemData.name, itemData.iconFile)
 		data.InitializeInventoryVisualData = BETTERUI.Inventory.Class.InitializeInventoryVisualData
@@ -824,7 +794,7 @@ function BETTERUI.Inventory.Class:RefreshItemList()
         data.isEquippedInAnotherCategory = itemData.isEquippedInAnotherCategory
         data.isJunk = itemData.isJunk
 
-        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) or not BETTERUI.Settings.Modules["Inventory"].enableJunk then
+        if (not data.isJunk and not showJunkCategory) or (data.isJunk and showJunkCategory) then
 		
 			if data.bestGamepadItemCategoryName ~= currentBestCategoryName then
 				currentBestCategoryName = data.bestGamepadItemCategoryName
@@ -918,7 +888,7 @@ function BETTERUI.Inventory.Class:UpdateRightTooltip()
 	
     local equipSlotHasItem = select(2, GetEquippedItemInfo(selectedEquipSlot))
 
-    if selectedItemData and (not equipSlotHasItem or BETTERUI.Settings.Modules["Inventory"].displayCharAttributes) then
+    if selectedItemData then
         GAMEPAD_TOOLTIPS:LayoutItemStatComparison(GAMEPAD_LEFT_TOOLTIP, selectedItemData.bagId, selectedItemData.slotIndex, selectedEquipSlot)
         GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_INVENTORY_ITEM_COMPARE_TOOLTIP_TITLE))
     elseif GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, BAG_WORN, selectedEquipSlot) then
@@ -981,11 +951,6 @@ function BETTERUI.Inventory.Class:InitializeCraftBagList()
 	    end
     end
 
-    local function VendorEntryTemplateSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
-        ZO_Inventory_BindSlot(data, slotType, data.slotIndex, data.bagId)
-        BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
-    end
-
     self.craftBagList = self:AddList("CraftBag", SetupCraftBagList, BETTERUI.Inventory.CraftList, BAG_VIRTUAL, SLOT_TYPE_CRAFT_BAG_ITEM, OnSelectedDataCallback, nil, nil, nil, false, "BETTERUI_GamepadItemSubEntryTemplate")
     self.craftBagList:SetNoItemText(GetString(SI_GAMEPAD_INVENTORY_CRAFT_BAG_EMPTY))
     self.craftBagList:SetAlignToScreenCenter(true, 30)
@@ -1008,25 +973,23 @@ function BETTERUI.Inventory.Class:InitializeActionsDialog()
 				end)
 
 				local function MarkAsJunk()
-        			local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Retrieve item from Craft Bag, then mark as junk!"))
-					local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_SMALL_TEXT)
+					local message
+        			local messageText
     				if self.actionMode == CRAFT_BAG_ACTION_MODE then
-    					messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
-						messageParams:SetText(zo_strformat("<<1>>", warningText))
-						CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+						messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_JUNK_CRAFTBAG_ERROR))
+						message = zo_strformat("<<1>>", messageText)
+						BETTERUI.OnScreenMessage(message)
     				else
 						local target = GAMEPAD_INVENTORY.itemList:GetTargetData()
-						local isjunk = IsItemPlayerLocked(target.bagId, target.slotIndex)
-						if(isjunk == false) then
+						local isLocked = IsItemPlayerLocked(target.bagId, target.slotIndex)
+						if(isLocked == false) then
 							SetItemIsJunk(target.bagId, target.slotIndex, true)
 							self:RefreshItemList()
 						else
-							warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Item is currently locked and cannot be marked as junk!"))
-    						messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
-							messageParams:SetText(zo_strformat("<<1>>", warningText))
-							CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+							messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_JUNK_ITEMLOCKED_ERROR))
+							message = zo_strformat("<<1>>", messageText)
+							BETTERUI.OnScreenMessage(message)
 						end
-
 					end
 				end
 				local function UnmarkAsJunk()
@@ -1041,12 +1004,10 @@ function BETTERUI.Inventory.Class:InitializeActionsDialog()
 				self:RefreshItemActions()
 
 				--ZO_ClearTable(parametricList)
-				if(BETTERUI.Settings.Modules["Inventory"].enableJunk) then
-					if(self.categoryList:GetTargetData().showJunk ~= nil) then
-						self.itemActions.slotActions.m_slotActions[#self.itemActions.slotActions.m_slotActions+1] = {GetString(SI_BETTERUI_ACTION_UNMARK_AS_JUNK), UnmarkAsJunk, "secondary"}
-					else
-						self.itemActions.slotActions.m_slotActions[#self.itemActions.slotActions.m_slotActions+1] = {GetString(SI_BETTERUI_ACTION_MARK_AS_JUNK), MarkAsJunk, "secondary"}
-					end
+				if(self.categoryList:GetTargetData().showJunk ~= nil) then
+					self.itemActions.slotActions.m_slotActions[#self.itemActions.slotActions.m_slotActions+1] = {GetString(SI_BETTERUI_ACTION_UNMARK_AS_JUNK), UnmarkAsJunk, "secondary"}
+				else
+					self.itemActions.slotActions.m_slotActions[#self.itemActions.slotActions.m_slotActions+1] = {GetString(SI_BETTERUI_ACTION_MARK_AS_JUNK), MarkAsJunk, "secondary"}
 				end
 
 				--self:RefreshItemActions()
@@ -1143,21 +1104,21 @@ end
 function BETTERUI.Inventory.HookDestroyItem()
     ZO_InventorySlot_InitiateDestroyItem = function(inventorySlot)
         local bag, index = ZO_Inventory_GetBagAndIndex(inventorySlot)
-        local _, stackCount, unitSellPrice = GetItemInfo(bag, index)
         local itemLink = GetItemLink(bag, index)
-        local warningText = ZO_ERROR_COLOR:Colorize(zo_strformat("Please mark as junk first to destroy!"))
-        local destroyText = ZO_ERROR_COLOR:Colorize(zo_strformat("You destroy"))
-		local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_SMALL_TEXT)
+		local message
+		local messageText
         SetCursorItemSoundsEnabled(false)
         if IsItemJunk(bag, index) or BETTERUI.Settings.Modules["Inventory"].quickDestroy then
+			messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_DESTROY))
+			message = zo_strformat("<<1>> [<<2>>]", messageText, itemLink)
     		DestroyItem(bag, index)
-    		CHAT_SYSTEM:AddMessage(zo_strformat("<<1>> [<<2>>]", destroyText, itemLink))
+    		CHAT_SYSTEM:AddMessage(message)
     		return true
     	else
-            messageParams:SetCSAType(ZO_HIGH_TIER_CENTER_SCREEN_ANNOUNCE) 
-            messageParams:SetText(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
-            CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
-            CHAT_SYSTEM:AddMessage(zo_strformat("[<<1>>] <<2>>", itemLink, warningText))
+			messageText = ZO_ERROR_COLOR:Colorize(GetString(SI_BETTERUI_MSG_MARK_AS_JUNK_TO_DESTROY))
+			message = zo_strformat("[<<1>>] <<2>>", itemLink, messageText)
+			BETTERUI.OnScreenMessage(message)
+            CHAT_SYSTEM:AddMessage(message)
             return false
     	end
     end
@@ -1375,7 +1336,7 @@ function BETTERUI.Inventory.Class:InitializeEquipSlotDialog()
 		local equipType = dialog.data[1].dataSource.equipType
 		local itemName = GetItemName(dialog.data[1].dataSource.bagId, dialog.data[1].dataSource.slotIndex)
 		local itemLink = GetItemLink(dialog.data[1].dataSource.bagId, dialog.data[1].dataSource.slotIndex)
-		local itemQuality = GetItemLinkQuality(itemLink)
+		local itemQuality = GetItemLinkFunctionalQuality(itemLink)
 		local itemColor = GetItemQualityColor(itemQuality)
 		itemName = itemColor:Colorize(itemName)
 	        local str = ""
@@ -1707,7 +1668,7 @@ function BETTERUI.Inventory.Class:Switch()
         self:SwitchActiveList(INVENTORY_ITEM_LIST)
     else
         self:SwitchActiveList(INVENTORY_CRAFT_BAG_LIST)
-		self:RefreshCraftBagList()
+		--self:RefreshCraftBagList()
     end
 end
 
@@ -1819,12 +1780,6 @@ end
 --------------
 -- Keybinds --
 --------------
-
-local function IsInventorySlotLockedOrJunk(targetData)
-    local bag, index = ZO_Inventory_GetBagAndIndex(targetData)
-	return (not IsItemPlayerLocked(bag, index) or IsItemJunk(bag, index))
-end
-
 function BETTERUI.Inventory.Class:InitializeKeybindStrip()
 	self.mainKeybindStripDescriptor = {
 		--X Button for Quick Action

@@ -8,21 +8,11 @@
 -- Alias the control names to make the code less verbose and more readable.
 local TABBAR            = ZO_GAMEPAD_HEADER_CONTROLS.TABBAR
 local TITLE             = ZO_GAMEPAD_HEADER_CONTROLS.TITLE
-local CENTER_BASELINE   = ZO_GAMEPAD_HEADER_CONTROLS.CENTER_BASELINE
 local TITLE_BASELINE    = ZO_GAMEPAD_HEADER_CONTROLS.TITLE_BASELINE
 local DIVIDER_SIMPLE    = ZO_GAMEPAD_HEADER_CONTROLS.DIVIDER_SIMPLE
 local DIVIDER_PIPPED    = ZO_GAMEPAD_HEADER_CONTROLS.DIVIDER_PIPPED
 
-local DEFAULT_LAYOUT        = ZO_GAMEPAD_HEADER_LAYOUTS.DATA_PAIRS_SEPARATE
-local FIRST_DATA_CONTROL    = DATA1HEADER
-local LAST_DATA_CONTROL     = DATA1HEADER
-
 local GENERIC_HEADER_INFO_LABEL_HEIGHT = 33
-local GENERIC_HEADER_INFO_DATA_HEIGHT = 50
-local GENERIC_HEADER_INFO_FONT_HEIGHT_DISPARITY = 4 -- This is used to align the baselines of the headers and their texts; will need to update if fonts change
-local ROW_OFFSET_Y = GENERIC_HEADER_INFO_LABEL_HEIGHT + 10
-local DATA_OFFSET_X = 5
-local HEADER_OFFSET_X = 29
 
 BETTERUI_GAMEPAD_CONTENT_HEADER_DIVIDER_INFO_BOTTOM_PADDING_Y = GENERIC_HEADER_INFO_LABEL_HEIGHT
 BETTERUI_GAMEPAD_CONTENT_DIVIDER_INFO_PADDING_Y = 50
@@ -82,7 +72,6 @@ end
 local TEXT_ALIGN_RIGHT = 2
 
 function BETTERUI.GenericHeader.AddToList(control, data)
-    local tabBarControl = control.controls[TABBAR]
     control.tabBar:AddEntry("BETTERUI_GamepadTabBarTemplate", data)
 end
 
@@ -135,10 +124,6 @@ function BETTERUI.GenericHeader.SetBackupEquippedIcons(control, equipMain, equip
     if(equipMain ~= "") then equipMainControl:SetTexture(equipMain) else equipMainControl:SetTexture(DEFAULT_INVSLOT_ICON) end
     if(equipOff ~= "") then equipOffControl:SetTexture(equipOff) else equipOffControl:SetTexture(DEFAULT_INVSLOT_ICON)  end
     if(equipPoison ~= "") then equipPoisonControl:SetTexture(equipPoison) else equipPoisonControl:SetTexture(DEFAULT_INVSLOT_ICON)  end
-end
-
-function BETTERUI.GenericHeader.RefreshData()
-    -- blank, ready for overriding
 end
 
 function BETTERUI.GenericHeader.Refresh(control, data, blockTabBarCallbacks)

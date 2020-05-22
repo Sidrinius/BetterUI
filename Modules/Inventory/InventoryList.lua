@@ -15,141 +15,11 @@ local DEFAULT_GAMEPAD_ITEM_SORT =
     uniqueId = { isId64 = true },
 }
 
-local function GetCategoryFromItemType(itemType)
-    -- Alchemy
-    if      ITEMTYPE_REAGENT == itemType or
-            ITEMTYPE_POTION_BASE == itemType or
-            ITEMTYPE_POISON_BASE == itemType then
-        return GAMEPAD_ITEM_CATEGORY_ALCHEMY
-
-    -- Bait
-    elseif  ITEMTYPE_LURE == itemType then
-        return GAMEPAD_ITEM_CATEGORY_BAIT
-
-    -- Blacksmith
-    elseif  ITEMTYPE_BLACKSMITHING_RAW_MATERIAL == itemType or
-            ITEMTYPE_BLACKSMITHING_MATERIAL == itemType or
-            ITEMTYPE_BLACKSMITHING_BOOSTER == itemType then
-        return GAMEPAD_ITEM_CATEGORY_BLACKSMITH
-
-    -- Clothier
-    elseif  ITEMTYPE_CLOTHIER_RAW_MATERIAL == itemType or
-            ITEMTYPE_CLOTHIER_MATERIAL == itemType or
-            ITEMTYPE_CLOTHIER_BOOSTER == itemType then
-        return GAMEPAD_ITEM_CATEGORY_CLOTHIER
-
-    -- Consumable
-    elseif  ITEMTYPE_DRINK == itemType or
-            ITEMTYPE_FOOD == itemType or
-            ITEMTYPE_RECIPE == itemType then
-        return GAMEPAD_ITEM_CATEGORY_CONSUMABLE
-
-    -- Constume
-    elseif  ITEMTYPE_COSTUME == itemType then
-        return GAMEPAD_ITEM_CATEGORY_COSTUME
-
-    -- Enchanting
-    elseif  ITEMTYPE_ENCHANTING_RUNE_POTENCY == itemType or
-            ITEMTYPE_ENCHANTING_RUNE_ASPECT == itemType or
-            ITEMTYPE_ENCHANTING_RUNE_ESSENCE == itemType then
-        return GAMEPAD_ITEM_CATEGORY_ENCHANTING
-
-    -- Glyphs
-    elseif  ITEMTYPE_GLYPH_WEAPON == itemType or
-            ITEMTYPE_GLYPH_ARMOR == itemType or
-            ITEMTYPE_GLYPH_JEWELRY == itemType then
-        return GAMEPAD_ITEM_CATEGORY_GLYPHS
-
-    -- Jewelry Crafting
-    elseif  ITEMTYPE_JEWELRYCRAFTING_RAW_MATERIAL == itemType or
-    		ITEMTYPE_JEWELRYCRAFTING_MATERIAL == itemType or
-            ITEMTYPE_JEWELRYCRAFTING_RAW_BOOSTER == itemType or
-            ITEMTYPE_JEWELRYCRAFTING_BOOSTER == itemType then
-        return GAMEPAD_ITEM_CATEGORY_JEWELRYCRAFTING
-
-    -- Potion
-    elseif  ITEMTYPE_POTION == itemType then
-        return GAMEPAD_ITEM_CATEGORY_POTION
-
-    -- Provisioning
-    elseif  ITEMTYPE_INGREDIENT == itemType or
-            ITEMTYPE_ADDITIVE == itemType or
-            ITEMTYPE_SPICE == itemType or
-            ITEMTYPE_FLAVORING == itemType then
-        return GAMEPAD_ITEM_CATEGORY_PROVISIONING
-
-    -- Siege
-    elseif  ITEMTYPE_SIEGE == itemType or
-            ITEMTYPE_AVA_REPAIR == itemType then
-        return GAMEPAD_ITEM_CATEGORY_SIEGE
-
-    -- Spellcrafting
-    elseif  ITEMTYPE_SPELLCRAFTING_TABLET == itemType then
-        return GAMEPAD_ITEM_CATEGORY_SPELLCRAFTING
-
-    -- Style Material
-    elseif  ITEMTYPE_RACIAL_STYLE_MOTIF == itemType or
-            ITEMTYPE_STYLE_MATERIAL == itemType then
-        return GAMEPAD_ITEM_CATEGORY_STYLE_MATERIAL
-
-    -- Soul Gem
-    elseif  ITEMTYPE_SOUL_GEM == itemType then
-        return GAMEPAD_ITEM_CATEGORY_SOUL_GEM
-
-    -- Tool
-    elseif  ITEMTYPE_LOCKPICK == itemType or
-            ITEMTYPE_TOOL == itemType then
-        return GAMEPAD_ITEM_CATEGORY_TOOL
-
-    -- Trait Gem
-    elseif  ITEMTYPE_ARMOR_TRAIT == itemType or
-            ITEMTYPE_WEAPON_TRAIT == itemType then
-        return GAMEPAD_ITEM_CATEGORY_TRAIT_GEM
-
-    -- Trophy
-    elseif  ITEMTYPE_TROPHY == itemType then
-        return GAMEPAD_ITEM_CATEGORY_TROPHY
-
-    -- Woodworking
-    elseif  ITEMTYPE_WOODWORKING_RAW_MATERIAL == itemType or
-            ITEMTYPE_WOODWORKING_MATERIAL == itemType or
-            ITEMTYPE_WOODWORKING_BOOSTER == itemType then
-        return GAMEPAD_ITEM_CATEGORY_WOODWORKING
-    end
-end
-
-
 function BETTERUI_Inventory_DefaultItemSortComparator(left, right)
     return ZO_TableOrderingFunction(left, right, "bestGamepadItemCategoryName", DEFAULT_GAMEPAD_ITEM_SORT, ZO_SORT_ORDER_UP)
 end
 
-local function GetMarketPrice(itemLink, stackCount)
-    if(stackCount == nil) then stackCount = 1 end
 
-    if (BETTERUI.Settings.Modules["Tooltips"].mmIntegration and MasterMerchant ~= nil) then
-        local mmData = MasterMerchant:itemStats(itemLink, false)
-        if(mmData.avgPrice ~= nil) then
-            return mmData.avgPrice * stackCount
-        end
-    end
-    if (BETTERUI.Settings.Modules["Tooltips"].attIntegration and ArkadiusTradeTools ~= nil) then
-        local avgPrice = ArkadiusTradeTools.Modules.Sales:GetAveragePricePerItem(itemLink, nil)
-        if(avgPrice ~= nil or avgPrice ~= 0) then
-            return BETTERUI.roundNumber(avgPrice * stackCount, 2)
-        end
-    end
-    if BETTERUI.Settings.Modules["Tooltips"].ttcIntegration and TamrielTradeCentre ~= nil then
-        local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
-		if priceInfo then
-			if priceInfo.SuggestedPrice then
-				return priceInfo.SuggestedPrice * stackCount
-			else 
-				return priceInfo.Avg * stackCount, 1
-			end
-		end
-	end
-    return 0
-end
 
 
 function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
@@ -184,31 +54,24 @@ function BETTERUI_SharedGamepadEntryLabelSetup(label, data, selected)
            labelTxt = labelTxt..zo_strformat(" |cFFFFFF(<<1>>)|r",data.stackCount)
         end
 
-        if(BETTERUI.Settings.Modules["CIM"].attributeIcons) then
-            local itemData = GetItemLink(bagId, slotIndex)
+        local itemData = GetItemLink(bagId, slotIndex)
 
-            local setItem, _, _, _, _ = GetItemLinkSetInfo(itemData, false)
-            local hasEnchantment, _, _ = GetItemLinkEnchantInfo(itemData)
+        local setItem, _, _, _, _ = GetItemLinkSetInfo(itemData, false)
+        local hasEnchantment, _, _ = GetItemLinkEnchantInfo(itemData)
 
-            local currentItemType = GetItemLinkItemType(itemData) --GetItemType(bagId, slotIndex)
-            local isRecipeAndUnknown = false
-            if (currentItemType == ITEMTYPE_RECIPE) then
-                isRecipeAndUnknown = not IsItemLinkRecipeKnown(itemData)
-			end
-	
-			local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
+        local currentItemType = GetItemLinkItemType(itemData) --GetItemType(bagId, slotIndex)
+        local isRecipeAndUnknown = false
+        if (currentItemType == ITEMTYPE_RECIPE) then
+            isRecipeAndUnknown = not IsItemLinkRecipeKnown(itemData)
+		end
 
-            if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_stolen.dds|t" end
-			if isUnbound and BETTERUI.Settings.Modules["Inventory"].showIconUnboundItem then labelTxt = labelTxt.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
-            if hasEnchantment and BETTERUI.Settings.Modules["Inventory"].showIconEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
-            if setItem and BETTERUI.Settings.Modules["Inventory"].showIconSetGear then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
-			if BETTERUI.Settings.Modules["Inventory"].showIconGamePadBuddyStatusIcon then labelTxt = labelTxt .. BETTERUI.Helper.GamePadBuddy.GetItemStatusIndicator(bagId, slotIndex)  end
-			if BETTERUI.Settings.Modules["Inventory"].showIconIakoniGearChanger then labelTxt = labelTxt .. BETTERUI.Helper.IokaniGearChanger.GetGearSet(bagId, slotIndex)  end
-            --if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_stolen.dds|t" end
-            --if hasEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_enchanted.dds|t" end
-            --if setItem then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/Inventory/Images/inv_setitem.dds|t" end
-            if isRecipeAndUnknown then labelTxt = labelTxt.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
-        end
+		local isUnbound = not IsItemBound(bagId, slotIndex) and not data.stolen and data.quality ~= ITEM_QUALITY_TRASH
+
+        if data.stolen then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_stolen.dds|t" end
+		if isUnbound and BETTERUI.Settings.Modules["Inventory"].showIconUnboundItem then labelTxt = labelTxt.." |t16:16:/esoui/art/guild/gamepad/gp_ownership_icon_guildtrader.dds|t" end
+        if hasEnchantment and BETTERUI.Settings.Modules["Inventory"].showIconEnchantment then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_enchanted.dds|t" end
+        if setItem and BETTERUI.Settings.Modules["Inventory"].showIconSetGear then labelTxt = labelTxt.." |t16:16:/BetterUI/Modules/CIM/Images/inv_setitem.dds|t" end
+        if isRecipeAndUnknown then labelTxt = labelTxt.." |t16:16:/esoui/art/inventory/gamepad/gp_inventory_icon_craftbag_provisioning.dds|t" end
 
         label:SetText(labelTxt)
 
@@ -239,8 +102,6 @@ function BETTERUI_IconSetup(statusIndicator, equippedIcon, data)
         statusIndicator:AddIcon(NEW_ICON_TEXTURE)
         statusIndicator:SetHidden(false)
     end
-
-    local slotIndex = data.dataSource.slotIndex
 
     if data.isEquippedInCurrentCategory or data.isEquippedInAnotherCategory then
         local slotIndex = data.dataSource.slotIndex
@@ -368,18 +229,21 @@ function BETTERUI_SharedGamepadEntry_OnSetup(control, data, selected, reselectin
     end
 
     -- Replace the "Value" with the market price of the item (in yellow)
-    if(BETTERUI.Settings.Modules["Inventory"].showMarketPrice) then
-        local marketPrice, isAverage = GetMarketPrice(GetItemLink(data.bagId,data.slotIndex), data.stackCount)
-        if(marketPrice ~= 0) then
-			if isAverage then
-				control:GetNamedChild("Value"):SetColor(1,0.5,0.5,1)
-			else
-				control:GetNamedChild("Value"):SetColor(1,0.75,0,1)
-			end
-            control:GetNamedChild("Value"):SetText(ZO_CurrencyControl_FormatCurrency(math.floor(marketPrice), USE_SHORT_CURRENCY_FORMAT))
-        else
-            control:GetNamedChild("Value"):SetColor(1,1,1,1)
-            control:GetNamedChild("Value"):SetText(data.stackSellPrice)
+    if(BETTERUI.Settings.Modules["Inventory"].showMarketPrice) and (SCENE_MANAGER.scenes['gamepad_banking']:IsShowing() or SCENE_MANAGER.scenes['gamepad_inventory_root']:IsShowing()) then
+        local itemLink = GetItemLink(data.bagId,data.slotIndex)
+        if itemLink then
+            local marketPrice, isAverage = BETTERUI.GetMarketPrice(itemLink, data.stackCount)
+            if marketPrice ~= nil and marketPrice > 0 then
+    			if isAverage then
+    				control:GetNamedChild("Value"):SetColor(1,0.5,0.5,1)
+    			else
+    				control:GetNamedChild("Value"):SetColor(1,0.75,0,1)
+    			end
+                control:GetNamedChild("Value"):SetText(ZO_CurrencyControl_FormatCurrency(math.floor(marketPrice), USE_SHORT_CURRENCY_FORMAT))
+            else
+                control:GetNamedChild("Value"):SetColor(1,1,1,1)
+                control:GetNamedChild("Value"):SetText(data.stackSellPrice)
+            end
         end
     else
         control:GetNamedChild("Value"):SetColor(1,1,1,1)
@@ -430,13 +294,6 @@ local function GetCategoryTypeFromWeaponType(bagId, slotIndex)
     elseif weaponType ~= WEAPONTYPE_NONE then
         return GAMEPAD_WEAPON_CATEGORY_UNCATEGORIZED
     end
-end
-
-local function IsTwoHandedWeaponCategory(categoryType)
-    return (categoryType == GAMEPAD_WEAPON_CATEGORY_TWO_HANDED_MELEE or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_DESTRUCTION_STAFF or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_RESTORATION_STAFF or
-            categoryType == GAMEPAD_WEAPON_CATEGORY_TWO_HANDED_BOW)
 end
 
 function GetBestItemCategoryDescription(itemData)
@@ -496,10 +353,6 @@ function BETTERUI.Inventory.List:Initialize(control, inventoryType, slotType, se
     else
         self.inventoryTypes = { inventoryType }
     end
-
-	if (BETTERUI.Settings.Modules["Inventory"].useShortFormat ~= nil) then
-		USE_SHORT_CURRENCY_FORMAT = BETTERUI.Settings.Modules["Inventory"].useShortFormat
-	end
 	
 	local function VendorEntryTemplateSetup(control, data, selected, selectedDuringRebuild, enabled, activated)
         ZO_Inventory_BindSlot(data, slotType, data.slotIndex, data.bagId)
@@ -515,7 +368,6 @@ function BETTERUI.Inventory.List:Initialize(control, inventoryType, slotType, se
     ZO_Gamepad_AddListTriggerKeybindDescriptors(self.triggerKeybinds, self.list)
 
     local function SelectionChangedCallback(list, selectedData)
-        local selectedControl = list:GetTargetControl()
         if self.selectedDataCallback then
             self.selectedDataCallback(list, selectedData)
         end
@@ -603,7 +455,7 @@ function BETTERUI.Inventory.List:RefreshList()
     self.dataBySlotIndex = {}
 
     local slots = self:GenerateSlotTable()
-    local currentBestCategoryName = nil
+    local currentBestCategoryName
     for i, itemData in ipairs(slots) do
         local entry = ZO_GamepadEntryData:New(itemData.name, itemData.iconFile)
 		self:SetupItemEntry(entry, itemData)

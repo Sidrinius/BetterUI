@@ -1,9 +1,5 @@
 local _
-local LAM = LibStub:GetLibrary("LibAddonMenu-2.0")
-
-local ZO_ITEM_TOOLTIP_INVENTORY_TITLE_COUNT = "inventory"
-local ZO_ITEM_TOOLTIP_BANK_TITLE_COUNT = "bank"
-local ZO_ITEM_TOOLTIP_INVENTORY_AND_BANK_TITLE_COUNT = "inventoryAndBank"
+local LAM = LibAddonMenu2
 
 local function Init(mId, moduleName)
 	local panelData = Init_ModulePanel(moduleName, "General Interface Settings")
@@ -103,15 +99,6 @@ local function Init(mId, moduleName)
             width = "full",
         },
 		{
-			type = "checkbox",
-			name = "Display attribute icons next to the item name",
-			tooltip = "Allows you to see enchanted, set and stolen items quickly",
-			getFunc = function() return BETTERUI.Settings.Modules["CIM"].attributeIcons end,
-			setFunc = function(value) BETTERUI.Settings.Modules["CIM"].attributeIcons = value end,
-			disabled = function() return not BETTERUI.Settings.Modules["CIM"].m_enabled end,
-			width = "full",
-		},
-		{
             type = "dropdown",
             name = "Tooltip font size",
 			tooltip = "Allows more or less item information to be displayed at once in tooltips",
@@ -146,6 +133,7 @@ function BETTERUI.Tooltips.InitModule(m_options)
     m_options["chatHistory"] = 200
     m_options["showStyleTrait"] = true
 	m_options["removeDeleteDialog"] = false
+	m_options["attIntegration"] = true
 	m_options["mmIntegration"] = true
 	m_options["mmIntegrationErrorSuppress"] = false
 	m_options["ttcIntegration"] = true
