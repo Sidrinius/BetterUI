@@ -22,13 +22,16 @@ BETTERUI_EQUIP_SLOT_DIALOG = "BETTERUI_EQUIP_SLOT_PROMPT"
 -- local function copied (and slightly edited for unequipped items!) from "inventoryutils_gamepad.lua"
 local function BETTERUI_GetEquipSlotForEquipType(equipType)
     local equipSlot
-    for i, testSlot in ZO_Character_EnumerateOrderedEquipSlots() do
-        local locked = IsLockedWeaponSlot(testSlot)
-         local isCorrectSlot = ZO_Character_DoesEquipSlotUseEquipType(testSlot, equipType)
-        if not locked and isCorrectSlot then
-              equipSlot = testSlot
-              break
-         end
+	for i, testSlot in ZO_Character_EnumerateOrderedEquipSlots() do
+		local locked = IsLockedWeaponSlot(testSlot)
+		local isCorrectSlot = ZO_Character_DoesEquipSlotUseEquipType(testSlot, equipType)
+		local isActive = IsActiveCombatRelatedEquipmentSlot(testSlot)
+		if not locked and isCorrectSlot and isActive then --Main Hand
+			equipSlot = testSlot
+			break
+		else
+			equipSlot = testSlot -- Used for Backup weapon sets as they return false for isActive
+		end
     end
     return equipSlot
 end
@@ -322,6 +325,18 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
 	end
     --local currentPosition = self.header.tabBar.
 
+	local function IsStolenAndNotJunk()
+		local usedBagSize = GetNumBagUsedSlots(BAG_BACKPACK)
+
+		for i = 1, usedBagSize do
+			local findJunk = IsItemJunk(BAG_BACKPACK, i)
+			local findStolen = IsItemStolen(BAG_BACKPACK, i)
+			if findStolen and not findJunk then
+				return true
+			end
+		end
+	end
+
     self.categoryList:Clear()
     self.header.tabBar:Clear()
 
@@ -557,7 +572,7 @@ function BETTERUI.Inventory.Class:RefreshCategoryList()
 		end
 
         do
-            if(AreAnyItemsStolen(BAG_BACKPACK)) then
+			if IsStolenAndNotJunk() then
                 local isListEmpty = self:IsItemListEmpty(nil, nil)
                 if not isListEmpty then
                     local name = GetString(SI_BETTERUI_INV_ITEM_STOLEN)
@@ -685,11 +700,9 @@ function BETTERUI.Inventory.Class:RefreshItemList()
 
     local function IsStolenItem(itemData)
         local isStolen = itemData.stolen
-        if optFilterFunction then
-            return isStolen and optFilterFunction(itemData)
-        else
-            return isStolen
-        end
+		if isStolen then
+			return isStolen
+		end
     end
 
     local targetCategoryData = self.categoryList:GetTargetData()
@@ -717,7 +730,7 @@ function BETTERUI.Inventory.Class:RefreshItemList()
         if showEquippedCategory then
             filteredDataTable = SHARED_INVENTORY:GenerateFullSlotData(comparator, BAG_WORN)
         elseif showStolenCategory then
-            filteredDataTable = SHARED_INVENTORY:GenerateFullSlotData(IsStolenItem, BAG_BACKPACK)
+			filteredDataTable = SHARED_INVENTORY:GenerateFullSlotData(IsStolenItem, BAG_BACKPACK)
         else
             filteredDataTable = SHARED_INVENTORY:GenerateFullSlotData(comparator, BAG_BACKPACK, BAG_WORN)
         end
@@ -858,10 +871,12 @@ function BETTERUI.Inventory.Class:UpdateItemLeftTooltip(selectedData)
         		end
 		    end
 
-		    if not showRightTooltip then
-    			GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
-    		else
-    			self:UpdateRightTooltip()
+			if not showRightTooltip then
+				GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, selectedData.bagId, selectedData.slotIndex)
+			else
+				if selectedData.bagId ~= nil and selectedData.slotIndex ~= nil then
+					self:UpdateRightTooltip(selectedData)
+				end
     		end 
         end
         if selectedData.isEquippedInCurrentCategory or selectedData.isEquippedInAnotherCategory or selectedData.equipSlot then
@@ -873,8 +888,8 @@ function BETTERUI.Inventory.Class:UpdateItemLeftTooltip(selectedData)
     end
 end
 
-function BETTERUI.Inventory.Class:UpdateRightTooltip()
-    local selectedItemData = self.currentlySelectedData
+function BETTERUI.Inventory.Class:UpdateRightTooltip(selectedData)
+    local selectedItemData = selectedData
 	--local selectedEquipSlot = BETTERUI_GetEquipSlotForEquipType(selectedItemData.dataSource.equipType)
 	local selectedEquipSlot
 
@@ -885,12 +900,12 @@ function BETTERUI.Inventory.Class:UpdateRightTooltip()
 	else
 		selectedEquipSlot = 0
 	end
-	
-    local equipSlotHasItem = select(2, GetEquippedItemInfo(selectedEquipSlot))
 
-    if selectedItemData then
-        GAMEPAD_TOOLTIPS:LayoutItemStatComparison(GAMEPAD_LEFT_TOOLTIP, selectedItemData.bagId, selectedItemData.slotIndex, selectedEquipSlot)
-        GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_INVENTORY_ITEM_COMPARE_TOOLTIP_TITLE))
+    --local equipSlotHasItem = select(2, GetEquippedItemInfo(selectedEquipSlot))
+
+    if selectedItemData ~= nil then
+		GAMEPAD_TOOLTIPS:LayoutItemStatComparison(GAMEPAD_LEFT_TOOLTIP, selectedItemData.bagId, selectedItemData.slotIndex, selectedEquipSlot)
+		GAMEPAD_TOOLTIPS:SetStatusLabelText(GAMEPAD_LEFT_TOOLTIP, GetString(SI_GAMEPAD_INVENTORY_ITEM_COMPARE_TOOLTIP_TITLE))
     elseif GAMEPAD_TOOLTIPS:LayoutBagItem(GAMEPAD_LEFT_TOOLTIP, BAG_WORN, selectedEquipSlot) then
     	BETTERUI.Inventory.UpdateTooltipEquippedText(GAMEPAD_LEFT_TOOLTIP, slotIndex)
     end
