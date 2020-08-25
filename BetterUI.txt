@@ -3,7 +3,7 @@
 ## APIVersion: 100031 100032
 ## Author: Goobsnake
 ## Contributers: prasoc, RockingDice
-## Version: 2.73
+## Version: 2.74
 ## DependsOn: LibAddonMenu-2.0
 ## SavedVariables: BetterUISavedVars
  
