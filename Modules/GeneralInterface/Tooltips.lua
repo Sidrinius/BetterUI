@@ -40,7 +40,8 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
         end
 
         if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
-            local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
+            local itemInfo = TamrielTradeCentre_ItemInfo:New(itemLink)
+            local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemInfo)
             if(priceInfo == nil) then
                 tooltip:AddLine(string.format("TTC Price: NO LISTING DATA"), { fontSize = 24, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_1 }, tooltip:GetStyle("title"))
             else
