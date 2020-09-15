@@ -1282,8 +1282,13 @@ function BETTERUI.Inventory.Class:OnStateChanged(oldState, newState)
 		end
 		
     elseif newState == SCENE_HIDDEN then
-        self:SwitchActiveList(nil)
+        --self:SwitchActiveList(nil)
         BETTERUI.CIM.SetTooltipWidth(BETTERUI_ZO_GAMEPAD_DEFAULT_PANEL_WIDTH)
+		GAMEPAD_TOOLTIPS:Reset(GAMEPAD_LEFT_TOOLTIP)
+		GAMEPAD_TOOLTIPS:Reset(GAMEPAD_RIGHT_TOOLTIP)
+		BETTERUI_GamepadInventoryTopLevel:SetHidden(true)
+		self:Deactivate()
+		self:DeactivateHeader()
 
         self.listWaitingOnDestroyRequest = nil
         self:TryClearNewStatusOnHidden()
@@ -1846,9 +1851,12 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
             		local isQuestItem = ZO_InventoryUtils_DoesNewItemMatchFilterType(self.itemList.selectedData, ITEMFILTERTYPE_QUEST)                    
                     local filterType = GetItemFilterTypeInfo(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
             		if isQuickslot then
+						BETTERUI_INV_SCENE_NAME = "gamepad_inventory_root"
                 			--assign
-                        --self:ShowQuickslot()
-                        local validSlot = GetFirstFreeValidSlotForItem(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
+						self:OnStateChanged(SCENE_SHOWING, SCENE_HIDDEN)
+						SCENE_MANAGER:Toggle(BETTERUI_INV_SCENE_NAME)
+                        QuickMenu:StartInteraction()
+--[[                        local validSlot = GetFirstFreeValidSlotForItem(self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex)
                         if validSlot then
                             CallSecureProtected('SelectSlotItem', self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex, validSlot)
                         else
@@ -1860,7 +1868,7 @@ function BETTERUI.Inventory.Class:InitializeKeybindStrip()
                                 CallSecureProtected('SelectSlotItem', self.itemList.selectedData.bagId, self.itemList.selectedData.slotIndex, 12)
                             end
                         end
-                        zo_callLater(function() self:RefreshItemList() end, 250)
+                        zo_callLater(function() self:RefreshItemList() end, 250)]]
             		elseif not isQuestItem and filterType ~= ITEMFILTERTYPE_QUEST and filterType == ITEMFILTERTYPE_WEAPONS or filterType == ITEMFILTERTYPE_ARMOR or filterType == ITEMFILTERTYPE_JEWELRY then
             			--switch compare
             			self:SwitchInfo()
