@@ -1,4 +1,4 @@
-_G.mmErrorSuppress = 0
+_G.gsErrorSuppress = 0
 local _
     
 function BETTERUI.Tooltips.GetNumberOfMatchingItems(itemLink, BAG)
@@ -39,6 +39,18 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
             stackCount = GetSlotStackSize(bagId, slotIndex)
         end
 
+        -- Turning on error suppression for guildstore browse/sell when using various item value tools like MM, ATT, etc.
+        -- Lua errors happen outside of this add-on
+        if BETTERUI.Settings.Modules["Tooltips"].guildStoreErrorSuppress then 
+            if SCENE_MANAGER.scenes['gamepad_trading_house']:IsShowing() and gsErrorSuppress == 0 then
+                EVENT_MANAGER:UnregisterForEvent("ErrorFrame", EVENT_LUA_ERROR)
+                gsErrorSuppress = 1
+            elseif not SCENE_MANAGER.scenes['gamepad_trading_house']:IsShowing() and gsErrorSuppress == 1 then
+                EVENT_MANAGER:RegisterForEvent("ErrorFrame", EVENT_LUA_ERROR)
+                gsErrorSuppress = 0
+            end
+        end 
+
         if TamrielTradeCentre ~= nil and BETTERUI.Settings.Modules["Tooltips"].ttcIntegration then
             local itemInfo = TamrielTradeCentre_ItemInfo:New(itemLink)
             local priceInfo = TamrielTradeCentrePrice:GetPriceInfo(itemInfo)
@@ -60,16 +72,6 @@ local function AddInventoryPostInfo(tooltip, itemLink, bagId, slotIndex, storeSt
         end
 
     	if MasterMerchant ~= nil and BETTERUI.Settings.Modules["Tooltips"].mmIntegration then 
-            -- Turning on error suppression for MasterMerchant guildstore browse/sell (Hacky work around for now)
-            if BETTERUI.Settings.Modules["Tooltips"].mmIntegrationErrorSuppress then 
-                if SCENE_MANAGER.scenes['gamepad_trading_house']:IsShowing() and mmErrorSuppress == 0 then
-                    EVENT_MANAGER:UnregisterForEvent("ErrorFrame", EVENT_LUA_ERROR)
-                    mmErrorSuppress = 1
-                elseif not SCENE_MANAGER.scenes['gamepad_trading_house']:IsShowing() and mmErrorSuppress == 1 then
-                    EVENT_MANAGER:RegisterForEvent("ErrorFrame", EVENT_LUA_ERROR)
-                    mmErrorSuppress = 0
-                end
-            end 
 
             local mmData = MasterMerchant:itemStats(itemLink, false)
 
