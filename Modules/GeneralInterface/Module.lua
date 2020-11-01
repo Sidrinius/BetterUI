@@ -12,7 +12,7 @@ local function Init(mId, moduleName)
 			getFunc = function() return BETTERUI.Settings.Modules["Tooltips"].guildStoreErrorSuppress end,
 			setFunc = function(value) BETTERUI.Settings.Modules["Tooltips"].guildStoreErrorSuppress = value
 		            end,
-            disabled = function() return ArkadiusTradeTools == nil or MasterMerchant == nil end,
+            disabled = function() return ArkadiusTradeTools == nil and MasterMerchant == nil end,
 			width = "full",
 			requiresReload = true,
 		},
