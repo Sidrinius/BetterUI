@@ -940,7 +940,7 @@ function BETTERUI.Inventory.Class:InitializeItemList()
 		    self:PrepareNextClearNewStatus(selectedData)
 		    --self.itemList:RefreshVisible()
 		    --self:UpdateRightTooltip()
-		    self:RefreshActiveKeybinds()
+			self:RefreshKeybinds()
 	    end
     end)
 
@@ -962,7 +962,7 @@ function BETTERUI.Inventory.Class:InitializeCraftBagList()
 			    self:SetSelectedInventoryData(selectedData)
 			    self.craftBagList:RefreshVisible()
 		    end
-		    self:RefreshActiveKeybinds()
+		    self:RefreshKeybinds()
 	    end
     end
 
@@ -1057,7 +1057,7 @@ function BETTERUI.Inventory.Class:InitializeActionsDialog()
 		if self.scene:IsShowing() then 
 			--d("tt inv action finish")
 			-- make sure to wipe out the keybinds added by 
-    		self:SetActiveKeybinds(self.currentKeybindDescriptor)
+    		self:SetActiveKeybinds(self.mainKeybindStripDescriptor)
 		 
 			--restore the selected inventory item
 			if self.actionMode == CATEGORY_ITEM_ACTION_MODE then
@@ -1074,7 +1074,7 @@ function BETTERUI.Inventory.Class:InitializeActionsDialog()
 				self:RefreshItemActions()
 			end
 			--refresh so keybinds react to newly selected item
-			self:RefreshActiveKeybinds()
+			self:RefreshKeybinds()
 
 			self:OnUpdate()
 			if self.actionMode == CATEGORY_ITEM_ACTION_MODE then
@@ -1578,7 +1578,7 @@ function BETTERUI.Inventory.Class:OnDeferredInitialize()
                 if currentList == self.categoryList then
                     self:RefreshCategoryList()
                 elseif currentList == self.itemList then
-                    KEYBIND_STRIP:UpdateKeybindButton(self.currentKeybindDescriptor) 
+                    self:RefreshKeybinds()
                 end
                 RefreshSelectedData() --dialog will refresh selected when it hides, so only do it if it's not showing
                 self:RefreshHeader(BLOCK_TABBAR_CALLBACK)
@@ -1758,7 +1758,7 @@ function BETTERUI.Inventory.Class:SwitchActiveList(listDescriptor)
 
 			--TriggerTutorial(TUTORIAL_TRIGGER_CRAFT_BAG_OPENED)
 		end 
-		self:RefreshActiveKeybinds()
+		self:RefreshKeybinds()
 	else
 		self.actionMode = nil
 	end
